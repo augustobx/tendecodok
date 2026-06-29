@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tendeco-web
+    restart: unless-stopped
+    ports:
+      # Nginx Proxy Manager apuntará a http://<HOST_IP>:3001
+      - "3001:3000"
+    environment:
+      # Conexión exclusiva a través del nombre de servicio 'db' (Regla 1 y 5)
+      - DATABASE_URL=mysql://root:rootpassword@db:3306/tendecosistem
+      # Se inyectan las demás variables si es necesario usando env_file:
+      # env_file:
+      #   - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - tendeco_net
+
+  db:
+    image: mysql:8.0
+    container_name: tendeco-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=tendecosistem
+    volumes:
+      # Volumen local mapeado para persistencia (Regla 4)
+      - tendeco_db_data:/var/lib/mysql
+    # No exponemos 'ports' hacia el exterior por seguridad. 
+    # Solo abrimos puertos internamente para los contenedores de la misma red (Regla 1).
+    expose:
+      - "3306"
+    networks:
+      - tendeco_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  tendeco_net:
+    driver: bridge
+
+volumes:
+  tendeco_db_data:
