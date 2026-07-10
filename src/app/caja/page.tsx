@@ -3,11 +3,12 @@
 import { useState, useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import {
-    Wallet, Plus, Minus, Lock, Unlock, AlertCircle,
+    Wallet, Plus, Minus, Lock, Unlock, AlertCircle, X,
     CreditCard, Landmark, ArrowRightLeft, DollarSign, Loader2, Clock, CalendarDays
 } from "lucide-react";
 
 import { getCajaActiva, abrirCaja, cerrarCaja, registrarMovimientoManual, getHistorialCajas } from "@/app/actions/caja";
+import { buscarClientes } from "@/app/actions/ventas";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,11 @@ export default function CajaDiariaPage() {
     const [tipoMov, setTipoMov] = useState<"INGRESO_MANUAL" | "EGRESO_MANUAL">("EGRESO_MANUAL");
     const [montoMov, setMontoMov] = useState("");
     const [descMov, setDescMov] = useState("");
+    
+    // Cliente para ingresos
+    const [clienteQuery, setClienteQuery] = useState("");
+    const [clientesResultados, setClientesResultados] = useState<any[]>([]);
+    const [clienteSeleccionado, setClienteSeleccionado] = useState<any | null>(null);
 
     const [cajaHistoricaSeleccionada, setCajaHistoricaSeleccionada] = useState<any | null>(null);
     const [showModalHistorial, setShowModalHistorial] = useState(false);
@@ -80,6 +86,18 @@ export default function CajaDiariaPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (!clienteQuery) {
+            setClientesResultados([]);
+            return;
+        }
+        const timer = setTimeout(async () => {
+            const res = await buscarClientes(clienteQuery);
+            setClientesResultados(res);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [clienteQuery]);
+
     // Efecto para recargar datos si el admin cambia de sucursal
     useEffect(() => {
         if (sucursalActivaId) {
@@ -104,11 +122,11 @@ export default function CajaDiariaPage() {
     const handleMovimientoManual = () => {
         if (!montoMov || !descMov) return toast.error("Complete el monto y la descripción.");
         startTransition(async () => {
-            const res = await registrarMovimientoManual(caja.id, tipoMov, Number(montoMov), descMov);
+            const res = await registrarMovimientoManual(caja.id, tipoMov, Number(montoMov), descMov, clienteSeleccionado?.id);
             if (res.success) {
                 toast.success("Movimiento registrado correctamente.");
                 setShowModalMovimiento(false);
-                setMontoMov(""); setDescMov("");
+                setMontoMov(""); setDescMov(""); setClienteQuery(""); setClienteSeleccionado(null);
                 cargarDatos(sucursalActivaId);
             } else toast.error(res.error);
         });
@@ -296,7 +314,10 @@ export default function CajaDiariaPage() {
                 </div>
                 <div className="flex gap-3 w-full md:w-auto">
                     <Button variant="outline" className="flex-1 md:w-auto border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium shadow-sm" onClick={() => { setTipoMov('EGRESO_MANUAL'); setShowModalMovimiento(true); }}>
-                        <ArrowRightLeft className="h-4 w-4 mr-2 text-orange-500" /> Retiro / Gasto
+                        <Minus className="h-4 w-4 mr-2 text-orange-500" /> Gasto
+                    </Button>
+                    <Button variant="outline" className="flex-1 md:w-auto border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium shadow-sm" onClick={() => { setTipoMov('INGRESO_MANUAL'); setShowModalMovimiento(true); }}>
+                        <Plus className="h-4 w-4 mr-2 text-emerald-500" /> Ingreso
                     </Button>
                     <Button className="flex-1 md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm" onClick={() => setShowModalCierre(true)}>
                         <Lock className="h-4 w-4 mr-2" /> Cerrar Turno
@@ -395,22 +416,67 @@ export default function CajaDiariaPage() {
         {/* MODAL RETIRO / INGRESO */}
         {showModalMovimiento && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
-                <Card className="w-full max-w-sm shadow-xl border border-slate-200 dark:border-zinc-800">
+                <Card className="w-full max-w-sm shadow-xl border border-slate-200 dark:border-zinc-800 overflow-visible">
                     <CardHeader className="bg-slate-50/50 dark:bg-zinc-900 border-b border-slate-100 dark:border-zinc-800 p-4">
-                        <CardTitle className="text-base flex items-center gap-2"><ArrowRightLeft className="text-orange-500 h-4 w-4" /> Registrar Salida</CardTitle>
+                        <CardTitle className="text-base flex items-center gap-2">
+                            {tipoMov === 'INGRESO_MANUAL' ? <Plus className="text-emerald-500 h-4 w-4" /> : <Minus className="text-orange-500 h-4 w-4" />} 
+                            {tipoMov === 'INGRESO_MANUAL' ? 'Registrar Ingreso' : 'Registrar Salida'}
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                         <div className="space-y-1.5">
-                            <Label className="font-semibold text-sm">Monto a retirar ($)</Label>
+                            <Label className="font-semibold text-sm">Monto ($)</Label>
                             <Input type="number" autoFocus value={montoMov} onChange={e => setMontoMov(e.target.value)} className="h-11 text-lg font-bold text-center border-slate-200" />
                         </div>
+                        {tipoMov === 'INGRESO_MANUAL' && (
+                            <div className="space-y-1.5 relative">
+                                <Label className="font-semibold text-sm">Cliente (Opcional)</Label>
+                                {!clienteSeleccionado ? (
+                                    <>
+                                        <Input 
+                                            placeholder="Buscar cliente..." 
+                                            value={clienteQuery} 
+                                            onChange={e => setClienteQuery(e.target.value)} 
+                                            className="h-10" 
+                                        />
+                                        {clientesResultados.length > 0 && (
+                                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 shadow-lg rounded-md max-h-40 overflow-y-auto z-[60]">
+                                                {clientesResultados.map(c => (
+                                                    <div 
+                                                        key={c.id} 
+                                                        className="p-2 text-sm hover:bg-slate-100 cursor-pointer text-slate-800"
+                                                        onClick={() => {
+                                                            setClienteSeleccionado(c);
+                                                            setClienteQuery("");
+                                                            setClientesResultados([]);
+                                                        }}
+                                                    >
+                                                        {c.nombre_razon_social}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-between p-2 bg-indigo-50 border border-indigo-100 rounded-md">
+                                        <span className="text-sm font-medium text-indigo-700">{clienteSeleccionado.nombre_razon_social}</span>
+                                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-indigo-100" onClick={() => setClienteSeleccionado(null)}>
+                                            <X className="h-4 w-4 text-indigo-600" />
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         <div className="space-y-1.5">
-                            <Label className="font-semibold text-sm">Motivo del retiro</Label>
-                            <Input value={descMov} onChange={e => setDescMov(e.target.value)} placeholder="Ej: Pago a proveedor..." className="bg-slate-50 h-10" />
+                            <Label className="font-semibold text-sm">Motivo / Descripción</Label>
+                            <Input value={descMov} onChange={e => setDescMov(e.target.value)} placeholder="Ej: Adelanto, pago deuda..." className="bg-slate-50 h-10" />
                         </div>
                         <div className="flex gap-2 pt-2">
-                            <Button variant="ghost" onClick={() => setShowModalMovimiento(false)} className="w-1/3">Cancelar</Button>
-                            <Button onClick={handleMovimientoManual} disabled={isPending} className="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-medium">Guardar Retiro</Button>
+                            <Button variant="ghost" onClick={() => {
+                                setShowModalMovimiento(false);
+                                setClienteQuery(""); setClienteSeleccionado(null);
+                            }} className="w-1/3">Cancelar</Button>
+                            <Button onClick={handleMovimientoManual} disabled={isPending} className="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-medium">Guardar</Button>
                         </div>
                     </CardContent>
                 </Card>

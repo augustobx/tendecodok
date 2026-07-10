@@ -215,3 +215,106 @@ export async function getReporteVolumetrico(fechaInicio: string, fechaFin: strin
         return { success: false, error: "Error al generar reporte de volumen." };
     }
 }
+
+// ==========================================
+// REPORTE FINANCIERO PROFESIONAL
+// ==========================================
+export async function getReporteFinanciero(filtros: {
+    fechaDesde?: string;
+    fechaHasta?: string;
+    listaPrecioId?: number;
+}) {
+    try {
+        const whereClause: any = {};
+        
+        if (filtros.fechaDesde || filtros.fechaHasta) {
+            whereClause.fecha_emision = {};
+            if (filtros.fechaDesde) {
+                whereClause.fecha_emision.gte = new Date(filtros.fechaDesde);
+            }
+            if (filtros.fechaHasta) {
+                const hasta = new Date(filtros.fechaHasta);
+                hasta.setHours(23, 59, 59, 999);
+                whereClause.fecha_emision.lte = hasta;
+            }
+        }
+        
+        if (filtros.listaPrecioId) {
+            whereClause.listaPrecioId = filtros.listaPrecioId;
+        }
+
+        const ventas = await prisma.venta.findMany({
+            where: whereClause,
+            include: {
+                detalles: {
+                    include: {
+                        producto: true
+                    }
+                },
+                listaPrecio: true,
+                cliente: true
+            },
+            orderBy: {
+                fecha_emision: 'desc'
+            }
+        });
+
+        let ingresosTotales = 0;
+        let costoTotal = 0;
+        let impuestosTotales = 0;
+        let descuentosTotales = 0;
+        
+        const detallesReporte = ventas.map(venta => {
+            let costoVenta = 0;
+            let descuentoVenta = venta.descuento_global || 0;
+            
+            venta.detalles.forEach(det => {
+                const cantNeta = det.cantidad - (det.cantidad_devuelta || 0);
+                const costoUnitario = det.precio_costo > 0 ? det.precio_costo : (det.producto?.precio_costo || 0);
+                costoVenta += costoUnitario * cantNeta;
+                descuentoVenta += (det.precio_unitario - det.precio_final) * cantNeta;
+            });
+            
+            ingresosTotales += venta.total;
+            costoTotal += costoVenta;
+            impuestosTotales += venta.importe_iva || 0;
+            descuentosTotales += descuentoVenta;
+            
+            const ingresoSinIva = venta.total - (venta.importe_iva || 0);
+            const gananciaBrutaVenta = ingresoSinIva - costoVenta;
+            
+            return {
+                id: venta.id,
+                fecha: venta.fecha_emision,
+                comprobante: `${venta.tipo_comprobante.replace('_', ' ')} ${String(venta.punto_venta).padStart(4, '0')}-${String(venta.numero_comprobante).padStart(8, '0')}`,
+                cliente: venta.cliente.nombre_razon_social,
+                lista_precio: venta.listaPrecio.nombre,
+                total: venta.total,
+                costo: costoVenta,
+                impuestos: venta.importe_iva || 0,
+                descuentos: descuentoVenta,
+                ganancia_neta: gananciaBrutaVenta
+            };
+        });
+
+        const gananciaBrutaTotal = ingresosTotales - impuestosTotales - costoTotal;
+        const gananciaNetaTotal = gananciaBrutaTotal;
+
+        return {
+            success: true,
+            data: {
+                kpis: {
+                    ingresosTotales,
+                    costoTotal,
+                    impuestosTotales,
+                    descuentosTotales,
+                    gananciaBrutaTotal,
+                    gananciaNetaTotal
+                },
+                detalles: detallesReporte
+            }
+        };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}

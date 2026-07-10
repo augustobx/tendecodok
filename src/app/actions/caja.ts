@@ -79,21 +79,37 @@ export async function abrirCaja(saldo_inicial: number, sucursalId: number) {
 }
 
 // 4. Retiros o Ingresos Manuales (Gastos)
-export async function registrarMovimientoManual(cajaId: number, tipo: "INGRESO_MANUAL" | "EGRESO_MANUAL", monto: number, descripcion: string) {
+export async function registrarMovimientoManual(cajaId: number, tipo: "INGRESO_MANUAL" | "EGRESO_MANUAL", monto: number, descripcion: string, clienteId?: number) {
     try {
         if (monto <= 0) throw new Error("El monto debe ser mayor a 0.");
 
         const session = await getClientSession();
         const usuarioId = (session as any)?.id ? Number((session as any).id) : null;
 
-        await prisma.movimientoCaja.create({
-            data: {
-                cajaId,
-                tipo,
-                metodo_pago: 'CONTADO',
-                monto,
-                descripcion,
-                usuarioId: usuarioId
+        await prisma.$transaction(async (tx) => {
+            await tx.movimientoCaja.create({
+                data: {
+                    cajaId,
+                    tipo,
+                    metodo_pago: 'CONTADO',
+                    monto,
+                    descripcion,
+                    usuarioId: usuarioId,
+                    clienteId: clienteId || null
+                }
+            });
+
+            if (clienteId && tipo === 'INGRESO_MANUAL') {
+                await tx.movimientoCuentaCorriente.create({
+                    data: {
+                        clienteId: clienteId,
+                        tipo: 'ABONO',
+                        monto: monto,
+                        metodo_pago: 'CONTADO',
+                        notas: descripcion || 'Abono en Caja Diaria',
+                        usuarioId: usuarioId
+                    }
+                });
             }
         });
 

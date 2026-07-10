@@ -112,6 +112,8 @@ export async function registrarVenta(data: any) {
             for (const item of data.carrito) {
                 const prod = await tx.producto.findUnique({ where: { id: item.productoId } });
                 if (!prod) throw new Error(`Producto ID ${item.productoId} no encontrado.`);
+                
+                item._costo = prod.precio_costo;
 
                 const stockUbi = await tx.stockUbicacion.findUnique({
                     where: { productoId_depositoId: { productoId: item.productoId, depositoId: data.depositoId } }
@@ -279,6 +281,7 @@ export async function registrarVenta(data: any) {
                             productoId: item.productoId,
                             cantidad: item.cantidad,
                             precio_unitario: item.precio_unitario,
+                            precio_costo: item._costo || 0,
                             descuento_individual: item.descuento_individual,
                             precio_final: item.precio_final,
                             subtotal: item.subtotal
@@ -489,4 +492,24 @@ export async function procesarDevolucion(data: {
         console.error("Error en devolución:", error);
         return { success: false, error: error.message || "Error al procesar la devolución" };
     }
+}
+
+// ==========================================
+// 8. STOCK EN TIEMPO REAL (POLLING)
+// ==========================================
+export async function getStockBatch(productoIds: number[], depositoId: number) {
+    if (!productoIds.length || !depositoId) return [];
+    
+    const stocks = await prisma.stockUbicacion.findMany({
+        where: {
+            productoId: { in: productoIds },
+            depositoId: depositoId
+        },
+        select: {
+            productoId: true,
+            cantidad: true
+        }
+    });
+    
+    return stocks;
 }

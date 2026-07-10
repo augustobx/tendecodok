@@ -159,6 +159,7 @@ model Cliente {
   ventas              Venta[]
   presupuestos        Presupuesto[]
   movimientos_cc      MovimientoCuentaCorriente[]
+  movimientos_caja    MovimientoCaja[]
 
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
@@ -244,6 +245,7 @@ model DetalleVenta {
 
   cantidad             Float
   precio_unitario      Float
+  precio_costo         Float    @default(0)
   descuento_individual Float    @default(0)
   precio_final         Float
   subtotal             Float
@@ -422,6 +424,9 @@ model MovimientoCaja {
 
   usuarioId         Int?
   usuario           Usuario?   @relation(fields: [usuarioId], references: [id])
+  
+  clienteId         Int?
+  cliente           Cliente?   @relation(fields: [clienteId], references: [id])
 }
 
 enum EstadoCaja {

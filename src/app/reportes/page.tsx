@@ -6,6 +6,7 @@ import {
     Package, Users, Wallet, DollarSign, ArrowUpRight, ArrowDownRight, Tag,
     LineChart, ArrowUpCircle, Droplets
 } from "lucide-react";
+import Link from "next/link";
 
 import { getReporteMaestro, getReporteVolumetrico } from "@/app/actions/reportes";
 
@@ -303,7 +304,22 @@ export default function ReportesMaestrosPage() {
                 VISTA 4: FINANZAS (Medios de pago y composición)
                 ========================================================= */}
             {tabActiva === "FINANZAS" && (
-                <div className="max-w-3xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="max-w-3xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+                    {/* ACCESO AL MÓDULO FINANCIERO PROFESIONAL */}
+                    <Card className="bg-emerald-600 border-emerald-700 shadow-sm text-white">
+                        <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 className="text-xl font-bold flex items-center gap-2"><DollarSign className="h-6 w-6" /> Módulo Financiero Profesional</h3>
+                                <p className="text-emerald-100 text-sm mt-1">Análisis profundo de Ganancia Bruta, CMV, Impuestos y Rentabilidad Neta.</p>
+                            </div>
+                            <Link href="/reportes/financiero" className="w-full md:w-auto">
+                                <Button className="bg-white text-emerald-700 hover:bg-slate-100 font-bold w-full md:w-auto shadow-sm">
+                                    Abrir Módulo Avanzado <ArrowUpRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </Link>
+                        </CardContent>
+                    </Card>
+
                     <Card className="shadow-sm border-slate-200">
                         <CardHeader className="bg-slate-50 border-b border-slate-100 p-5">
                             <CardTitle className="text-base text-slate-800 flex items-center gap-2"><Wallet className="h-5 w-5 text-indigo-500" /> Composición de los Ingresos</CardTitle>

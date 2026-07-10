@@ -202,14 +202,42 @@ export async function emitirComprobanteAFIP(
         console.log("Datos a enviar a AFIP:", data);
 
         // Envío real a los servidores de AFIP
-        const res = await afip.ElectronicBilling.createVoucher(data);
+        let res: any;
+        try {
+            res = await afip.ElectronicBilling.createVoucher(data);
+        } catch (voucherError: any) {
+            console.error("Error al enviar comprobante a AFIP (posible timeout), intentando rescatarlo...", voucherError.message || voucherError);
+            
+            try {
+                // Consultamos a AFIP si el comprobante que intentamos emitir fue registrado de todas formas
+                const info = await afip.ElectronicBilling.getVoucherInfo(numeroAEnviar, puntoVenta, cbteTipo);
+                
+                if (info && info.CodAutorizacion) {
+                    console.log("¡Comprobante rescatado del limbo exitosamente! CAE:", info.CodAutorizacion);
+                    // Simulamos la respuesta original de createVoucher para que el flujo siga
+                    res = {
+                        CAE: info.CodAutorizacion,
+                        CAEFchVto: info.FchVto
+                    };
+                } else {
+                    // Si responde pero no tiene CAE válido, es un error real, fallamos.
+                    throw voucherError;
+                }
+            } catch (recoveryError) {
+                // Si la consulta de rescate falla (ej. el comprobante realmente no existe),
+                // lanzamos el error ORIGINAL para no confundir al usuario.
+                throw voucherError;
+            }
+        }
+
+        const vtoData = res.CAEFchVto || "20000101";
 
         return {
             cae: res.CAE,
             cae_vto: new Date(
-                res.CAEFchVto.substring(0, 4) + '-' +
-                res.CAEFchVto.substring(4, 6) + '-' +
-                res.CAEFchVto.substring(6, 8)
+                vtoData.substring(0, 4) + '-' +
+                vtoData.substring(4, 6) + '-' +
+                vtoData.substring(6, 8)
             ),
             numero_factura: numeroAEnviar,
             importe_neto: subtotalNeto,

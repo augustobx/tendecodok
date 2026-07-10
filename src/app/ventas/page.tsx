@@ -8,7 +8,7 @@ import {
     CheckSquare, Square, AlertTriangle, CreditCard, MessageSquare, Eye
 } from "lucide-react";
 
-import { buscarClientes, buscarProductos, previsualizarProximoComprobante, registrarVenta, getConsumidorFinal } from "@/app/actions/ventas";
+import { buscarClientes, buscarProductos, previsualizarProximoComprobante, registrarVenta, getConsumidorFinal, getStockBatch } from "@/app/actions/ventas";
 import { getListasPrecio, getSucursales } from "@/app/actions/configuracion";
 import { getPresupuestoById } from "@/app/actions/presupuestos";
 import { crearCliente, getResumenFinancieroCliente } from "@/app/actions/clientes";
@@ -201,6 +201,34 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
             setResumenFinanciero(null);
         }
     }, [clienteSeleccionado?.id]);
+
+    // ==========================================
+    // POLLING DE STOCK EN TIEMPO REAL
+    // ==========================================
+    useEffect(() => {
+        if (!depositoActivoId || carrito.length === 0) return;
+        
+        const interval = setInterval(async () => {
+            const ids = carrito.map(item => item.productoId);
+            const stocks = await getStockBatch(ids, depositoActivoId);
+            if (stocks && stocks.length > 0) {
+                setCarrito(prev => {
+                    let cambiado = false;
+                    const nuevo = prev.map(item => {
+                        const stockActualizado = stocks.find((s:any) => s.productoId === item.productoId);
+                        if (stockActualizado && stockActualizado.cantidad !== item.stock_actual) {
+                            cambiado = true;
+                            return { ...item, stock_actual: stockActualizado.cantidad };
+                        }
+                        return item;
+                    });
+                    return cambiado ? nuevo : prev;
+                });
+            }
+        }, 5000); // 5 segundos
+        
+        return () => clearInterval(interval);
+    }, [carrito, depositoActivoId]);
 
     // ==========================================
     // ACCIONES
