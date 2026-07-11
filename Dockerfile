@@ -3,7 +3,7 @@ FROM node:20-alpine AS base
 # Se requiere openssl y libc6-compat para Prisma en Alpine
 RUN apk add --no-cache openssl libc6-compat
 
-# Dependencias
+# --- 1. Dependencias ---
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
@@ -12,7 +12,7 @@ RUN npm ci
 # Generamos el cliente de Prisma para que quede en node_modules
 RUN npx prisma generate
 
-# Build de la aplicación
+# --- 2. Build de la aplicación ---
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -20,7 +20,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# Runner (Producción)
+# --- 3. Runner (Producción) ---
 FROM base AS runner
 WORKDIR /app
 
@@ -31,23 +31,18 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copiamos la aplicación compilada, dependencias y archivos estáticos
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
-# REGLA 3: Mantener herramientas de BD en el runner (Copiamos prisma)
-COPY --from=builder /app/prisma ./prisma
-
-# Asignar permisos al usuario no-root sobre el directorio de trabajo
-RUN chown -R nextjs:nodejs /app
+# REGLA DE ORO: Copiamos y asignamos permisos en el mismo comando (--chown)
+# Esto evita que Docker duplique el peso de los archivos en una capa nueva
+COPY --chown=nextjs:nodejs --from=builder /app/public ./public
+COPY --chown=nextjs:nodejs --from=builder /app/.next ./.next
+COPY --chown=nextjs:nodejs --from=builder /app/node_modules ./node_modules
+COPY --chown=nextjs:nodejs --from=builder /app/package.json ./package.json
+COPY --chown=nextjs:nodejs --from=builder /app/prisma ./prisma
 
 USER nextjs
 
 # Exponer el puerto interno requerido (por defecto en Next.js es el 3000)
 EXPOSE 3000
-
 ENV PORT=3000
 
 # El entrypoint ejecutará las migraciones de producción (si las hay) y luego levantará la app
