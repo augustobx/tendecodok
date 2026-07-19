@@ -148,9 +148,7 @@ export const getColumns = (
     header: () => <div className="text-right text-[10px] uppercase font-bold text-slate-400 whitespace-nowrap">P. {lista.nombre}</div>,
     cell: ({ row }) => {
       const pivot = row.original.listas_precios?.find(lp => lp.listaPrecioId === lista.id);
-      if (!pivot) return <div className="text-right text-slate-300">-</div>;
-
-      const margenFinal = pivot.margen_personalizado ?? lista.margen_defecto;
+      const margenFinal = pivot?.margen_personalizado ?? lista.margen_defecto;
       const precioFinal = calcularPrecioConCascada(
         row.original.precio_costo,
         row.original.descuento_proveedor || 0,

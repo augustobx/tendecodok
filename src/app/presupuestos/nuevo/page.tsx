@@ -78,7 +78,6 @@ export default function NuevoPresupuestoPage() {
         if (!listaPrecioSeleccionada) return toast.error("Seleccione una lista de precios.");
         const listaIDNum = Number(listaPrecioSeleccionada);
         const pivot = prod.listas_precios?.find((p: any) => p.listaPrecioId === listaIDNum);
-        if (!pivot) return toast.error("Este producto no está habilitado para la lista seleccionada.");
 
         const listaGlobal = listasGlobales.find(l => l.id === listaIDNum);
         const margenFinal = pivot?.margen_personalizado ?? listaGlobal?.margen_defecto ?? 0;
@@ -300,13 +299,12 @@ export default function NuevoPresupuestoPage() {
                                     const listaGlobal = listasGlobales.find(l => l.id === listaIDNum);
                                     const margenFinal = (pivot?.margen_personalizado ?? listaGlobal?.margen_defecto ?? 0);
                                     const precio = calcularPrecioConCascada(prod.precio_costo, prod.descuento_proveedor, prod.alicuota_iva, prod.proveedor?.aumento_porcentaje || 0, prod.marca?.aumento_porcentaje || 0, prod.categoria?.aumento_porcentaje || 0, margenFinal);
-                                    const sinLista = !pivot;
                                     return (
-                                        <div key={prod.id} className={`flex justify-between items-center p-3 rounded-xl border bg-white shadow-sm ${sinLista ? 'opacity-50 border-amber-200' : 'border-slate-200 hover:border-emerald-200'}`}>
+                                        <div key={prod.id} className="flex justify-between items-center p-3 rounded-xl border bg-white shadow-sm border-slate-200 hover:border-emerald-200">
                                             <div><p className="font-semibold text-sm">{prod.nombre_producto}</p><Badge variant="outline" className="text-[10px] mt-1">Stock: {formatCantidad(prod.stock_actual, prod.tipo_medicion)} {getUnidadLabel(prod.tipo_medicion)}</Badge></div>
                                             <div className="flex items-center gap-4">
-                                                <div className="text-right"><p className="text-[10px] text-slate-400 uppercase font-bold">Precio</p><p className="font-black text-lg">{sinLista ? "-" : `$${precio.toFixed(2)}`}</p></div>
-                                                <Button onClick={() => handleAgregarAlCarrito(prod)} size="sm" disabled={sinLista} className="bg-emerald-600 hover:bg-emerald-700 text-white h-9"><Plus className="h-4 w-4 mr-1" /> Añadir</Button>
+                                                <div className="text-right"><p className="text-[10px] text-slate-400 uppercase font-bold">Precio</p><p className="font-black text-lg">${precio.toFixed(2)}</p></div>
+                                                <Button onClick={() => handleAgregarAlCarrito(prod)} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white h-9"><Plus className="h-4 w-4 mr-1" /> Añadir</Button>
                                             </div>
                                         </div>
                                     );

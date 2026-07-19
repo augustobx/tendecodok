@@ -12,6 +12,7 @@ import {
   calcularCostoNeto,
   calcularCostoIva,
   calcularPrecioConCascada,
+  calcularPrecioConCascadaRaw,
   getStepParaMedicion,
   type TipoMedicionType,
 } from "@/lib/utils";
@@ -53,6 +54,32 @@ interface ProductoFormProps {
   marcas?: Marca[];
   listasGlobales: ListaPrecioGlobal[];
   depositos?: any[];
+}
+
+function PrecioInversoInput({ isActive, precioFinal, onPriceChange }: { isActive: boolean, precioFinal: number, onPriceChange: (val: number) => void }) {
+  const [localValue, setLocalValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    if (!isFocused) {
+      setLocalValue((precioFinal || 0).toFixed(2));
+    }
+  }, [precioFinal, isFocused]);
+
+  return (
+    <Input 
+      type="number" step="0.01" disabled={!isActive}
+      value={localValue}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => {
+        setIsFocused(false);
+        const val = Number(localValue);
+        if (!isNaN(val)) onPriceChange(val);
+      }}
+      onChange={(e) => setLocalValue(e.target.value)}
+      className="pl-8 font-bold text-lg text-indigo-500 bg-indigo-500/10 border-indigo-500/20 focus-visible:ring-indigo-500" 
+    />
+  );
 }
 
 export function ProductoForm({ initialData, providers: initialProviders, categorias: initialCategorias, marcas: initialMarcas, listasGlobales: initialListas, depositos: arrDepositos }: ProductoFormProps) {
@@ -419,8 +446,24 @@ export function ProductoForm({ initialData, providers: initialProviders, categor
                         <Label className="text-xs uppercase text-muted-foreground">Precio Público</Label>
                         <div className="relative">
                           <span className="absolute left-3 top-2 text-indigo-500 font-medium">$</span>
-                          <Input type="text" readOnly value={isActive ? (precioFinal || 0).toFixed(2) : "0.00"}
-                            className="pl-8 font-bold text-lg text-indigo-500 bg-indigo-500/10 border-indigo-500/20 focus-visible:ring-transparent" />
+                          <PrecioInversoInput 
+                            isActive={isActive}
+                            precioFinal={precioFinal}
+                            onPriceChange={(newPrice) => {
+                              if (newPrice > 0) {
+                                const costoCascada = calcularPrecioConCascadaRaw(
+                                  Number(precioCosto), Number(descuentoProveedor), Number(alicuotaIva),
+                                  aumProv, aumMarca, aumCat, 0
+                                );
+                                if (costoCascada > 0) {
+                                  let newMargin = ((newPrice / costoCascada) - 1) * 100;
+                                  setValue(`listas_precios.${index}.margen_personalizado`, Number(newMargin.toFixed(4)));
+                                }
+                              } else {
+                                setValue(`listas_precios.${index}.margen_personalizado`, null);
+                              }
+                            }}
+                          />
                         </div>
                       </div>
                     </div>

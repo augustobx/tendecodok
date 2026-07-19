@@ -117,12 +117,26 @@ export default function TicketPrintPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {venta.detalles.map((det: any) => (
+                        {Object.values(venta.detalles.reduce((acc: any, det: any) => {
+                            const nombre = det.producto.nombre_producto;
+                            if (!acc[nombre]) {
+                                acc[nombre] = {
+                                    id: det.id,
+                                    nombre_producto: nombre,
+                                    cantidad: 0,
+                                    subtotal: 0,
+                                    descuento_individual: det.descuento_individual
+                                };
+                            }
+                            acc[nombre].cantidad += det.cantidad;
+                            acc[nombre].subtotal += det.subtotal;
+                            // Asumimos que si tienen descuentos diferentes se agruparon en el carrito con 0, pero si tienen, mostramos el del primero.
+                            return acc;
+                        }, {})).map((det: any) => (
                             <tr key={det.id} className="align-top">
                                 <td className="py-1">{det.cantidad}</td>
                                 <td className="py-1 pr-1">
-                                    {det.producto.nombre_producto}
-                                    {/* Solo se muestra el descuento si el toggle está activado */}
+                                    {det.nombre_producto}
                                     {mostrarDescuentos && det.descuento_individual > 0 && (
                                         <span className="block text-[10px]">(Desc. {det.descuento_individual}%)</span>
                                     )}

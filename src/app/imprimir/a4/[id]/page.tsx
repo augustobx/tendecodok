@@ -150,7 +150,15 @@ export default function FacturaA4PrintPage({ params }: { params: Promise<{ id: s
                         </tr>
                     </thead>
                     <tbody>
-                        {venta.detalles?.map((det: any, index: number) => {
+                        {Object.values((venta.detalles || []).reduce((acc: any, det: any) => {
+                            const nombre = det.producto?.nombre_producto || "Producto Desconocido";
+                            if (!acc[nombre]) {
+                                acc[nombre] = { ...det, cantidad: 0, subtotal: 0 };
+                            }
+                            acc[nombre].cantidad += det.cantidad;
+                            acc[nombre].subtotal += det.subtotal;
+                            return acc;
+                        }, {})).map((det: any, index: number) => {
                             let itemUnitario = det.precio_unitario;
                             let itemSubtotal = det.subtotal;
                             if (venta.tipo_comprobante === "FACTURA_A") {

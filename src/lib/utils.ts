@@ -34,7 +34,7 @@ export function calcularPrecioFinal(costoIva: number, porcentajeMarcacion: numbe
  * 5. + Aumento Categoría %
  * 6. + Margen Lista de Precios %
  */
-export function calcularPrecioConCascada(
+export function calcularPrecioConCascadaRaw(
   precioCosto: number,
   descuentoProveedor: number,
   alicuotaIva: number,
@@ -50,6 +50,22 @@ export function calcularPrecioConCascada(
   const conAumCat = conAumMarca * (1 + (aumentoCategoria || 0) / 100);
   const precioFinal = conAumCat * (1 + (margenLista || 0) / 100);
   return precioFinal;
+}
+
+export function calcularPrecioConCascada(
+  precioCosto: number,
+  descuentoProveedor: number,
+  alicuotaIva: number,
+  aumentoProveedor: number,
+  aumentoMarca: number,
+  aumentoCategoria: number,
+  margenLista: number
+): number {
+  const precioSinRedondear = calcularPrecioConCascadaRaw(
+    precioCosto, descuentoProveedor, alicuotaIva, aumentoProveedor, aumentoMarca, aumentoCategoria, margenLista
+  );
+  // Redondeo hacia arriba a la decena más cercana (Opcion B)
+  return Math.ceil(precioSinRedondear / 10) * 10;
 }
 
 // ==========================================

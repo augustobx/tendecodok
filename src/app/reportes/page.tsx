@@ -61,6 +61,7 @@ export default function ReportesMaestrosPage() {
     // Utilidad para calcular el máximo de una lista (para las barras de progreso)
     const maxCantProd = Math.max(...ranks.topProductosVendidos.map((p: any) => p.cantidad), 1);
     const maxRentProd = Math.max(...ranks.topProductosRentables.map((p: any) => p.rentabilidad), 1);
+    const maxRecaudoProv = Math.max(...ranks.topProveedores.map((p: any) => p.recaudado), 1);
     const maxClienteComp = Math.max(...ranks.topClientes.map((c: any) => c.comprado), 1);
 
     return (
@@ -186,7 +187,7 @@ export default function ReportesMaestrosPage() {
                 VISTA 2: PRODUCTOS (La cruda realidad del stock)
                 ========================================================= */}
             {tabActiva === "PRODUCTOS" && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
                     {/* TOP RENTABLES */}
                     <Card className="shadow-sm border-emerald-200">
@@ -224,6 +225,26 @@ export default function ReportesMaestrosPage() {
                                         </div>
                                         <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                                             <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${(p.cantidad / maxCantProd) * 100}%` }}></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+
+                        {/* TOP PROVEEDORES */}
+                        <Card className="shadow-sm border-indigo-200">
+                            <CardHeader className="bg-indigo-50 border-b border-indigo-100 p-5">
+                                <CardTitle className="text-base text-indigo-800 flex items-center gap-2"><TrendingUp className="h-5 w-5" /> Top Proveedores (Recaudación)</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-5 space-y-4">
+                                {ranks.topProveedores.slice(0, 7).map((p: any, index: number) => (
+                                    <div key={index} className="space-y-1.5">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="font-bold text-slate-700 truncate max-w-[70%]">{p.nombre}</span>
+                                            <span className="font-bold text-slate-500">${p.recaudado.toFixed(2)}</span>
+                                        </div>
+                                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                            <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${(p.recaudado / maxRecaudoProv) * 100}%` }}></div>
                                         </div>
                                     </div>
                                 ))}

@@ -19,7 +19,7 @@ export async function getReporteMaestro(filtros: { fecha_desde?: string; fecha_h
             where: dateFilter,
             include: {
                 cliente: true,
-                detalles: { include: { producto: true } }
+                detalles: { include: { producto: { include: { proveedor: true } } } }
             }
         });
 
@@ -67,6 +67,7 @@ export async function getReporteMaestro(filtros: { fecha_desde?: string; fecha_h
         const ingresosPorMedio: Record<string, number> = {};
 
         const rankingProductos: Record<number, { nombre: string, cantidad: number, recaudado: number, rentabilidad: number }> = {};
+        const rankingProveedores: Record<number, { nombre: string, cantidad: number, recaudado: number }> = {};
         const rankingClientes: Record<number, { nombre: string, comprado: number, adeudado: number }> = {};
 
         ventas.forEach(v => {
@@ -96,6 +97,16 @@ export async function getReporteMaestro(filtros: { fecha_desde?: string; fecha_h
                 rankingProductos[prodId].cantidad += det.cantidad;
                 rankingProductos[prodId].recaudado += det.subtotal;
                 rankingProductos[prodId].rentabilidad += rentabilidadLinea;
+                
+                // Proveedores
+                const provId = det.producto.proveedorId;
+                if (provId && det.producto.proveedor) {
+                    if (!rankingProveedores[provId]) {
+                        rankingProveedores[provId] = { nombre: det.producto.proveedor.nombre, cantidad: 0, recaudado: 0 };
+                    }
+                    rankingProveedores[provId].cantidad += det.cantidad;
+                    rankingProveedores[provId].recaudado += det.subtotal;
+                }
             });
         });
 
@@ -125,6 +136,7 @@ export async function getReporteMaestro(filtros: { fecha_desde?: string; fecha_h
         }).sort((a, b) => a.cantidad - b.cantidad).slice(0, 15);
 
         const topClientes = Object.values(rankingClientes).sort((a, b) => b.comprado - a.comprado).slice(0, 15);
+        const topProveedores = Object.values(rankingProveedores).sort((a, b) => b.recaudado - a.recaudado).slice(0, 15);
         const topDeudores = Object.values(rankingClientes).sort((a, b) => b.adeudado - a.adeudado).filter(c => c.adeudado > 0).slice(0, 15);
 
         return {
@@ -148,6 +160,7 @@ export async function getReporteMaestro(filtros: { fecha_desde?: string; fecha_h
                     topProductosRentables,
                     productosMenosVendidos,
                     topClientes,
+                    topProveedores,
                     topDeudores
                 }
             }

@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import {
     Search, ShoppingCart, Trash2, User, FileText, CheckCircle2, Loader2,
     Plus, X, PackageSearch, Truck, StickyNote, UserPlus, Printer,
-    CheckSquare, Square, AlertTriangle, CreditCard, MessageSquare, Eye
+    CheckSquare, Square, AlertTriangle, CreditCard, MessageSquare, Eye,
+    ChevronDown, Settings2
 } from "lucide-react";
 
 import { buscarClientes, buscarProductos, previsualizarProximoComprobante, registrarVenta, getConsumidorFinal, getStockBatch } from "@/app/actions/ventas";
@@ -28,6 +29,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { FastEditForm } from "@/components/ventas/fast-edit-form";
 
 export default function PuntoDeVentaPage() { return <PuntoDeVentaTabsPage />; }
 
@@ -114,6 +116,11 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                 if (sucursal && sucursal.depositos.length > 0) {
                     setDepositoActivoId(sucursal.depositos[0].id);
                 }
+            } else if (sucursalesResult.length > 0) {
+                setSucursalActivaId(sucursalesResult[0].id);
+                if (sucursalesResult[0].depositos.length > 0) {
+                    setDepositoActivoId(sucursalesResult[0].depositos[0].id);
+                }
             }
 
             // === CARGAR PRESUPUESTO SI HAY PARÁMETRO ===
@@ -169,7 +176,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
     }, [sucursalActivaId, sucursales]);
 
     const fetchNumeros = async () => {
-        const comp = await previsualizarProximoComprobante(tipoComprobante, 1);
+        const comp = await previsualizarProximoComprobante(tipoComprobante);
         setComprobanteNumeros({ punto_venta: comp.punto_venta, numero_str: comp.numero_str, proximoNumero: comp.proximoNumero });
     };
 
@@ -274,10 +281,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
         const listaIDNum = Number(listaPrecioSeleccionada);
         const pivot = producto.listas_precios?.find((p: any) => p.listaPrecioId === listaIDNum);
 
-        // === VALIDACIÓN DE LISTA ===
-        if (!pivot) {
-            return toast.error("Este producto no está habilitado para la lista seleccionada.");
-        }
+        // === VALIDACIÓN DE LISTA REMOVIDA ===
 
         const depoPivot = producto.stocks?.find((s: any) => s.depositoId === depositoActivoId);
         const stockFisico = depoPivot ? depoPivot.cantidad : 0;
@@ -288,16 +292,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
 
         // === VALIDACIÓN DE STOCK ===
         if (stockEfectivo <= 0) {
-            if (cantEnOtrosCarritos > 0) {
-                if (!window.confirm(`ATENCIÓN: Cuentas con ${stockFisico} en stock físico, pero ${cantEnOtrosCarritos} unidades están apartadas en otras pestañas. Stock libre es ${stockEfectivo}. ¿Forzar venta en negativo?`)) {
-                    return;
-                }
-            } else {
-                if (!window.confirm(`El producto "${producto.nombre_producto}" tiene stock en 0 o negativo (${stockEfectivo}) en el depósito activo. ¿Desea continuar de todos modos?`)) {
-                    return;
-                }
-            }
-            toast.warning(`Vendiendo por debajo del límite de stock.`);
+            return toast.error(`Stock insuficiente para ${producto.nombre_producto}. No quedan unidades libres.`);
         }
 
         const listaGlobal = listasGlobales.find(l => l.id === listaIDNum);
@@ -330,7 +325,21 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
             _rawProducto: producto
         };
 
-        setCarrito([...carrito, nuevoItem]);
+        const nuevosItems = [...carrito, nuevoItem];
+        
+        // Sincronizar precios de productos con el mismo nombre al máximo
+        const itemsConMismoNombre = nuevosItems.filter(i => i.nombre === producto.nombre_producto);
+        const maxPrecio = Math.max(...itemsConMismoNombre.map(i => i.precio_unitario));
+        
+        nuevosItems.forEach(i => {
+            if (i.nombre === producto.nombre_producto) {
+                i.precio_unitario = maxPrecio;
+                i.precio_final = Number((maxPrecio * (1 - (i.descuento_individual / 100))).toFixed(2));
+                i.subtotal = Number((i.cantidad * i.precio_final).toFixed(2));
+            }
+        });
+
+        setCarrito(nuevosItems);
         setProductoQuery("");
         setShowProductoModal(false);
         toast.success("Agregado al carrito");
@@ -371,6 +380,20 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                 };
             });
 
+            // Sincronizar precios por nombre
+            const maxPrecios = new Map();
+            nuevoCarrito.forEach(i => {
+                const max = maxPrecios.get(i.nombre) || 0;
+                if (i.precio_unitario > max) maxPrecios.set(i.nombre, i.precio_unitario);
+            });
+            
+            nuevoCarrito.forEach(i => {
+                const maxPrecio = maxPrecios.get(i.nombre);
+                i.precio_unitario = maxPrecio;
+                i.precio_final = Number((maxPrecio * (1 - (i.descuento_individual / 100))).toFixed(2));
+                i.subtotal = Number((i.cantidad * i.precio_final).toFixed(2));
+            });
+
             setCarrito(nuevoCarrito);
             toast.info("Precios actualizados", { description: "Se recalcularon todos los productos según la nueva lista." });
         }
@@ -382,8 +405,21 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
         const item = nuevosItems[index];
 
         if (campo === "cantidad") {
-            item.cantidad = numValue;
-            item.subtotal = numValue * item.precio_final;
+            if (numValue < 0) return;
+            
+            const depoPivot = item._rawProducto?.stocks?.find((s: any) => s.depositoId === depositoActivoId);
+            const stockFisico = depoPivot ? depoPivot.cantidad : 0;
+            
+            const cantEnOtrosCarritos = (allOtherCarts || []).filter((x:any) => x.productoId === item.productoId).reduce((acc:any, x:any) => acc + x.cantidad, 0);
+            const stockMaximoPermitido = stockFisico - cantEnOtrosCarritos;
+            
+            if (numValue > stockMaximoPermitido) {
+                toast.error(`Solo hay ${stockMaximoPermitido} unidades disponibles libres en stock para este proveedor.`);
+                item.cantidad = stockMaximoPermitido;
+            } else {
+                item.cantidad = numValue;
+            }
+            item.subtotal = item.cantidad * item.precio_final;
         }
         else if (campo === "descuento_individual") {
             item.descuento_individual = numValue;
@@ -573,7 +609,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
     };
 
     return (
-        <div className="flex flex-col gap-4 w-full h-full min-h-[calc(100vh-6rem)] relative">
+        <div className="flex flex-col gap-4 w-full h-full min-h-0 relative">
 
             {/* HEADER MODERNO CON SELECTOR DE SUCURSAL */}
             <div className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm shrink-0">
@@ -634,10 +670,10 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 min-h-0">
 
                 {/* PANEL IZQUIERDO: CARRITO */}
-                <div className="lg:col-span-8 flex flex-col gap-4">
+                <div className="lg:col-span-8 flex flex-col gap-4 min-h-0">
                     <Card className="flex-1 shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col overflow-hidden">
                         <div className="p-4 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center shrink-0">
                             <h3 className="font-semibold text-lg">Detalle de Compra</h3>
@@ -712,60 +748,49 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                 </div>
 
                 {/* PANEL DERECHO: CLIENTE Y FACTURACIÓN */}
-                <div className="lg:col-span-4 flex flex-col gap-4">
+                <div className="lg:col-span-4 flex flex-col min-h-0">
 
-                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shrink-0">
-                        <CardHeader className="py-3 px-4 border-b border-slate-100 dark:border-zinc-800 flex flex-row items-center justify-between">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-slate-700 dark:text-slate-200">
-                                <User className="h-4 w-4 text-slate-400" /> Cliente y Tarifario
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4 space-y-4">
+                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex-1 flex flex-col min-h-0">
+                        {/* --- CABECERA: CLIENTE --- */}
+                        <div className="p-2.5 border-b border-slate-100 dark:border-zinc-800 shrink-0">
+                            <p className="text-xs font-semibold flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-2"><User className="h-3.5 w-3.5" /> Cliente y Tarifario</p>
                             {!clienteSeleccionado ? (
-                                <Button onClick={() => setShowClienteModal(true)} variant="outline" className="w-full h-12 border-dashed hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 transition-all text-slate-500 font-medium">
-                                    <Search className="w-4 h-4 mr-2" /> Buscar Cliente
+                                <Button onClick={() => setShowClienteModal(true)} variant="outline" className="w-full h-9 border-dashed hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 transition-all text-slate-500 font-medium text-xs">
+                                    <Search className="w-3.5 h-3.5 mr-1.5" /> Buscar Cliente
                                 </Button>
                             ) : (
-                                <div className="bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-lg p-3 relative flex flex-col gap-2">
-                                    <Button variant="ghost" size="sm" onClick={handleLimpiarCliente} className="absolute right-1 top-1 h-6 text-[10px] text-slate-400 hover:text-red-500 font-medium">Cambiar</Button>
-                                    <div>
-                                        <p className="font-bold text-base text-slate-900 dark:text-slate-100 pr-12 truncate">{clienteSeleccionado.nombre_razon_social}</p>
-                                        <p className="text-xs font-mono text-slate-500 mt-0.5">DNI/CUIT: {clienteSeleccionado.dni_cuit || "Consumidor Final"}</p>
-                                    </div>
-
+                                <div className="bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-lg px-2.5 py-2 relative">
+                                    <Button variant="ghost" size="sm" onClick={handleLimpiarCliente} className="absolute right-1 top-0.5 h-5 text-[10px] text-slate-400 hover:text-red-500 font-medium px-1.5">Cambiar</Button>
+                                    <p className="font-bold text-sm text-slate-900 dark:text-slate-100 pr-14 truncate leading-tight">{clienteSeleccionado.nombre_razon_social}</p>
+                                    <p className="text-[11px] font-mono text-slate-500">{clienteSeleccionado.dni_cuit || "Consumidor Final"}</p>
                                     {cargandoResumen ? (
-                                        <div className="flex items-center gap-2 mt-1 px-2 py-1.5 bg-slate-100 dark:bg-zinc-800 rounded-md w-fit">
+                                        <div className="flex items-center gap-1.5 mt-1">
                                             <Loader2 className="h-3 w-3 animate-spin text-slate-400" />
-                                            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Verificando saldos...</span>
+                                            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Verificando...</span>
                                         </div>
                                     ) : resumenFinanciero && (
-                                        <div className="mt-1 flex items-center gap-2">
+                                        <div className="mt-1.5">
                                             {resumenFinanciero.deuda > 0 ? (
-                                                <button onClick={() => setShowResumenModal(true)} type="button" className="flex items-center gap-1.5 px-2.5 py-1.5 bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-700 dark:text-red-400 rounded-md transition-colors border border-red-200 dark:border-red-500/20 w-fit">
-                                                    <AlertTriangle className="h-3.5 w-3.5" />
-                                                    <span className="text-[11px] font-black uppercase tracking-wider">TIPO: DEUDOR por ${resumenFinanciero.deuda.toFixed(2)}</span>
+                                                <button onClick={() => setShowResumenModal(true)} type="button" className="flex items-center gap-1 px-2 py-1 bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 rounded text-[10px] font-black uppercase tracking-wider border border-red-200 dark:border-red-500/20">
+                                                    <AlertTriangle className="h-3 w-3" /> DEUDOR ${resumenFinanciero.deuda.toFixed(2)}
                                                 </button>
                                             ) : resumenFinanciero.saldo_a_favor > 0 ? (
-                                                <button onClick={() => setShowResumenModal(true)} type="button" className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-100 dark:bg-emerald-500/10 hover:bg-emerald-200 dark:hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-md transition-colors border border-emerald-200 dark:border-emerald-500/20 w-fit">
-                                                    <CheckCircle2 className="h-3.5 w-3.5" />
-                                                    <span className="text-[11px] font-black uppercase tracking-wider">SALDO A FAVOR: ${resumenFinanciero.saldo_a_favor.toFixed(2)}</span>
+                                                <button onClick={() => setShowResumenModal(true)} type="button" className="flex items-center gap-1 px-2 py-1 bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded text-[10px] font-black uppercase tracking-wider border border-emerald-200 dark:border-emerald-500/20">
+                                                    <CheckCircle2 className="h-3 w-3" /> FAVOR ${resumenFinanciero.saldo_a_favor.toFixed(2)}
                                                 </button>
                                             ) : (
-                                                <button onClick={() => setShowResumenModal(true)} type="button" className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-600 dark:text-slate-400 rounded-md transition-colors border border-slate-200 dark:border-zinc-700 w-fit">
-                                                    <CheckSquare className="h-3.5 w-3.5" />
-                                                    <span className="text-[11px] font-bold uppercase tracking-wider">CUENTA AL DÍA (SALDO $0)</span>
+                                                <button onClick={() => setShowResumenModal(true)} type="button" className="flex items-center gap-1 px-2 py-1 bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-slate-400 rounded text-[10px] font-bold uppercase tracking-wider border border-slate-200 dark:border-zinc-700">
+                                                    <CheckSquare className="h-3 w-3" /> AL DÍA ($0)
                                                 </button>
                                             )}
                                         </div>
                                     )}
                                 </div>
                             )}
-
-                            <div className="space-y-1.5 pt-1">
-                                <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Lista de Precios Aplicada</Label>
+                            <div className="mt-2">
                                 <Select value={listaPrecioSeleccionada} onValueChange={(v) => handleCambioLista(v || "")} disabled={!clienteSeleccionado}>
-                                    <SelectTrigger className="bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700 font-medium h-9">
-                                        <SelectValue placeholder="Seleccione una lista...">{listaSeleccionadaObj ? listaSeleccionadaObj.nombre : "Seleccione una lista..."}</SelectValue>
+                                    <SelectTrigger className="bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700 font-medium h-8 text-xs">
+                                        <SelectValue placeholder="Lista de precios...">{listaSeleccionadaObj ? listaSeleccionadaObj.nombre : "Lista de precios..."}</SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
                                         {listasGlobales.map(l => (<SelectItem key={l.id} value={String(l.id)}>{l.nombre}</SelectItem>))}
@@ -777,194 +802,190 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                              clienteSeleccionado.condicion_iva !== "Responsable Inscripto" && 
                              clienteSeleccionado.condicion_iva !== "RESPONSABLE_INSCRIPTO" &&
                              clienteSeleccionado.condicion_iva !== "Monotributo" && (
-                                <div className="p-3 bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 text-xs font-bold rounded-lg border border-red-200 dark:border-red-500/20">
-                                    El cliente no es Responsable Inscripto o Monotributista. No se podrá emitir Factura A en AFIP.
+                                <div className="mt-2 p-2 bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 text-[11px] font-bold rounded border border-red-200 dark:border-red-500/20">
+                                    No se podrá emitir Factura A: cliente no es Resp. Inscripto / Monotributista.
                                 </div>
                             )}
-                        </CardContent>
-                    </Card>
+                        </div>
 
-                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex-1 flex flex-col">
-                        <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        {/* --- CUERPO: COBRO --- */}
+                        <div className="p-2.5 flex-1 flex flex-col min-h-0 overflow-y-auto space-y-2">
 
-                            <div className="space-y-3">
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="envio" checked={requiereEnvio} onCheckedChange={(val) => setRequiereEnvio(!!val)} className="border-slate-300 data-[state=checked]:bg-indigo-600" />
-                                    <Label htmlFor="envio" className="cursor-pointer font-medium text-sm flex items-center gap-1 text-slate-600 dark:text-slate-300">
-                                        <Truck className="h-3 w-3 text-slate-400" /> Envío a domicilio
-                                    </Label>
+                            <details className="group border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800/50 rounded-lg overflow-hidden shrink-0 [&::-webkit-details-marker]:hidden">
+                                <summary className="flex items-center justify-between px-2.5 py-2 font-semibold text-[10px] uppercase tracking-wider text-slate-500 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors list-none">
+                                    <div className="flex items-center gap-1.5"><Settings2 className="h-3.5 w-3.5 text-indigo-500" /> Envío, Notas y Detalles</div>
+                                    <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
+                                </summary>
+                                <div className="p-3 pt-2 space-y-2.5 border-t border-slate-100 dark:border-zinc-700/50 bg-white dark:bg-zinc-900">
+                                    <div className="flex items-center space-x-2">
+                                        <Checkbox id="envio" checked={requiereEnvio} onCheckedChange={(val) => setRequiereEnvio(!!val)} className="border-slate-300 data-[state=checked]:bg-indigo-600" />
+                                        <Label htmlFor="envio" className="cursor-pointer font-medium text-xs flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                                            <Truck className="h-3 w-3 text-slate-400" /> Envío a domicilio
+                                        </Label>
+                                    </div>
+                                    {requiereEnvio && (
+                                        <Input placeholder="Dirección de entrega..." value={direccionEnvio} onChange={e => setDireccionEnvio(e.target.value)} className="h-8 text-xs bg-slate-50 dark:bg-zinc-800/50" />
+                                    )}
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1"><StickyNote className="h-3 w-3" /> Notas</Label>
+                                        <Textarea placeholder="Ej: Entregar por la tarde..." value={detallesVenta} onChange={e => setDetallesVenta(e.target.value)} className="resize-none h-12 bg-slate-50 dark:bg-zinc-800/50 text-xs border-slate-200 dark:border-zinc-700" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Comentario</Label>
+                                        <Input placeholder="Ej: Cliente frecuente, dio seña..." value={comentarioVenta} onChange={e => setComentarioVenta(e.target.value)} className="h-8 text-xs bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
+                                    </div>
                                 </div>
-                                {requiereEnvio && (
-                                    <Input placeholder="Dirección de entrega..." value={direccionEnvio} onChange={e => setDireccionEnvio(e.target.value)} className="h-9 text-sm bg-slate-50 dark:bg-zinc-800/50" />
-                                )}
+                            </details>
 
-                                <div className="space-y-1.5 pt-2">
-                                    <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1"><StickyNote className="h-3 w-3" /> Notas de Venta</Label>
-                                    <Textarea placeholder="Ej: Entregar por la tarde..." value={detallesVenta} onChange={e => setDetallesVenta(e.target.value)} className="resize-none h-14 bg-slate-50 dark:bg-zinc-800/50 text-sm border-slate-200 dark:border-zinc-700" />
-                                </div>
-
-                                {/* === COMENTARIO DE VENTA (NUEVO) === */}
-                                <div className="space-y-1.5">
-                                    <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Comentario interno</Label>
-                                    <Input placeholder="Ej: Cliente frecuente, dio seña..." value={comentarioVenta} onChange={e => setComentarioVenta(e.target.value)} className="h-9 text-sm bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
+                            {/* Subtotal + Descuento en linea */}
+                            <div className="flex items-center justify-between text-xs shrink-0">
+                                <span className="text-slate-500 font-medium">Subtotal</span>
+                                <span className="font-mono font-semibold">${subtotalCarrito.toFixed(2)}</span>
+                            </div>
+                            <div className="flex items-center justify-between shrink-0">
+                                <span className="text-xs font-medium text-slate-500">Dto. %</span>
+                                <div className="flex items-center gap-1.5">
+                                    {descuentoGlobal > 0 && (
+                                        <span className="text-[10px] text-emerald-600 font-semibold">-${montoDescuentoGlobal.toFixed(2)}</span>
+                                    )}
+                                    <div className="relative">
+                                        <Input type="number" value={descuentoGlobal || ""} onChange={(e) => setDescuentoGlobal(Number(e.target.value))} className="w-16 h-7 pr-5 text-right text-xs font-medium bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
+                                        <span className="absolute right-1.5 top-1 text-slate-400 text-[10px]">%</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <Separator className="bg-slate-100 dark:bg-zinc-800 my-4" />
+                            {/* Total a cobrar */}
+                            <div className="py-2 bg-slate-50 dark:bg-zinc-800/50 rounded-lg border border-slate-200 dark:border-zinc-700 flex flex-col items-center text-center shrink-0">
+                                <span className="text-[9px] font-bold uppercase text-slate-400 tracking-widest">Total a Cobrar</span>
+                                <span className="text-2xl font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-tight">${totalFinal.toFixed(2)}</span>
+                            </div>
 
-                            <div className="space-y-2.5">
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-slate-500 font-medium">Subtotal</span>
-                                    <span className="font-mono font-medium">${subtotalCarrito.toFixed(2)}</span>
+                            {/* === PAGOS MÚLTIPLES === */}
+                            <div className="space-y-1.5 shrink-0">
+                                <div className="flex items-center justify-between">
+                                    <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1">
+                                        <CreditCard className="h-3 w-3" /> Métodos de Pago
+                                    </Label>
+                                    <Button type="button" variant="ghost" size="sm" onClick={agregarLineaPago} className="text-indigo-600 hover:text-indigo-700 text-[10px] h-6 px-1.5">
+                                        <Plus className="h-3 w-3 mr-0.5" /> Agregar
+                                    </Button>
                                 </div>
 
-                                <div className="flex justify-between items-center">
-                                    <span className="text-sm font-medium text-slate-500">Descuento Global (%)</span>
-                                    <div className="flex flex-col items-end">
-                                        <div className="relative">
-                                            <Input type="number" value={descuentoGlobal || ""} onChange={(e) => setDescuentoGlobal(Number(e.target.value))} className="w-20 h-8 pr-6 text-right font-medium bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
-                                            <span className="absolute right-2 top-1.5 text-slate-400 text-xs">%</span>
+                                {pagos.map((pago, i) => (
+                                    <div key={i} className="flex flex-col gap-1.5 p-1.5 bg-slate-50 dark:bg-zinc-800/10 rounded-lg border border-slate-100 dark:border-zinc-800/50">
+                                        <div className="flex gap-1.5 items-center">
+                                            <Select value={pago.metodo_pago} onValueChange={(val) => {
+                                                actualizarPago(i, "metodo_pago", val || "");
+                                                if (val === "SALDO_A_FAVOR" && resumenFinanciero?.saldo_a_favor > 0) {
+                                                    const sumaOtros = pagos.filter((_, idx) => idx !== i).reduce((a, b) => a + (Number(b.monto) || 0), 0);
+                                                    const maxAFavor = Math.min(resumenFinanciero.saldo_a_favor, Math.max(0, totalFinal - sumaOtros));
+                                                    actualizarPago(i, "monto", maxAFavor.toFixed(2));
+                                                }
+                                            }}>
+                                                <SelectTrigger className="bg-white dark:bg-zinc-900 h-8 font-semibold border-slate-200 dark:border-zinc-700 flex-1 text-[11px]">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="CONTADO">Efectivo</SelectItem>
+                                                    <SelectItem value="CUENTA_CORRIENTE" className="text-orange-600 font-bold">Cta. Corriente</SelectItem>
+                                                    <SelectItem value="TRANSFERENCIA">Transferencia</SelectItem>
+                                                    <SelectItem value="TARJETA">Tarjeta</SelectItem>
+                                                    <SelectItem value="CHEQUE">Cheque</SelectItem>
+                                                    {resumenFinanciero && resumenFinanciero.saldo_a_favor > 0 && (
+                                                        <SelectItem value="SALDO_A_FAVOR" className="text-emerald-600 font-bold">
+                                                            Usar Saldo a Favor (${resumenFinanciero.saldo_a_favor.toFixed(2)})
+                                                        </SelectItem>
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
+                                            <div className="relative w-24">
+                                                <span className="absolute left-1.5 top-1.5 text-slate-400 text-[11px]">$</span>
+                                                <Input type="number" step="0.01" placeholder={pagos.length === 1 ? totalFinal.toFixed(2) : "0.00"}
+                                                    value={pago.monto} onChange={(e) => actualizarPago(i, "monto", e.target.value)}
+                                                    className="h-8 pl-4 text-right text-xs font-bold bg-white dark:bg-zinc-900 border-slate-200" />
+                                            </div>
+                                            {pagos.length > 1 && (
+                                                <Button variant="ghost" size="icon" onClick={() => eliminarLineaPago(i)} className="h-7 w-7 text-red-400 hover:text-red-600 shrink-0">
+                                                    <X className="h-3 w-3" />
+                                                </Button>
+                                            )}
                                         </div>
-                                        {descuentoGlobal > 0 && (
-                                            <span className="text-[10px] text-emerald-600 font-semibold mt-1">- ${montoDescuentoGlobal.toFixed(2)}</span>
+                                        {pago.metodo_pago === 'TARJETA' && (
+                                            <div className="flex gap-2 items-center flex-wrap animate-in fade-in">
+                                                <div className="flex items-center gap-1 bg-white dark:bg-zinc-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-zinc-700">
+                                                    <Label className="text-[10px] uppercase font-bold text-slate-500">Cuotas</Label>
+                                                    <Input type="number" placeholder="1" className="h-6 w-14 text-center text-[11px] font-bold bg-slate-50 dark:bg-zinc-800 border-slate-200" value={pago.cuotas || ""} onChange={(e) => actualizarPago(i, "cuotas", e.target.value)} />
+                                                </div>
+                                                <div className="flex items-center gap-1 bg-white dark:bg-zinc-900 px-1.5 py-0.5 rounded border border-indigo-200 dark:border-indigo-500/20">
+                                                    <Label className="text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">%Rec</Label>
+                                                    <Input type="number" placeholder="0" className="h-6 w-14 text-center text-[11px] font-bold border-indigo-200 bg-white" value={pago.recargo_porcentaje || ""} onChange={(e) => actualizarPago(i, "recargo_porcentaje", e.target.value)} />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {pago.metodo_pago === 'CHEQUE' && (
+                                            <div className="bg-white dark:bg-zinc-900 px-2 py-1 rounded border border-slate-200 dark:border-zinc-700 animate-in fade-in">
+                                                <Input placeholder="Nro, Banco, Vto, CUIT..." className="h-7 text-[11px] font-medium bg-slate-50 dark:bg-zinc-800 border-slate-200" value={pago.detalle_cheque || ""} onChange={(e) => actualizarPago(i, "detalle_cheque", e.target.value)} />
+                                            </div>
                                         )}
                                     </div>
-                                </div>
-                            </div>
+                                ))}
 
-                            <div className="mt-4 space-y-4">
-                                <div className="p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center">
-                                    <span className="text-[10px] font-bold uppercase text-slate-500 tracking-widest mb-1">Total a Cobrar</span>
-                                    <span className="text-4xl font-black tracking-tighter text-indigo-600 dark:text-indigo-400">${totalFinal.toFixed(2)}</span>
-                                </div>
-
-                                {/* === PAGOS MÚLTIPLES === */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1">
-                                            <CreditCard className="h-3 w-3" /> Métodos de Pago
-                                        </Label>
-                                        <Button type="button" variant="ghost" size="sm" onClick={agregarLineaPago} className="text-indigo-600 hover:text-indigo-700 text-xs h-7">
-                                            <Plus className="h-3 w-3 mr-1" /> Agregar
-                                        </Button>
-                                    </div>
-
-                                    {pagos.map((pago, i) => (
-                                        <div key={i} className="flex flex-col gap-2 p-2 mb-2 bg-slate-50 dark:bg-zinc-800/10 rounded-lg border border-slate-100 dark:border-zinc-800/50">
-                                            <div className="flex gap-2 items-center">
-                                                <Select value={pago.metodo_pago} onValueChange={(val) => {
-                                                    actualizarPago(i, "metodo_pago", val || "");
-                                                    if (val === "SALDO_A_FAVOR" && resumenFinanciero?.saldo_a_favor > 0) {
-                                                        const sumaOtros = pagos.filter((_, idx) => idx !== i).reduce((a, b) => a + (Number(b.monto) || 0), 0);
-                                                        const maxAFavor = Math.min(resumenFinanciero.saldo_a_favor, Math.max(0, totalFinal - sumaOtros));
-                                                        actualizarPago(i, "monto", maxAFavor.toFixed(2));
-                                                    }
-                                                }}>
-                                                    <SelectTrigger className="bg-white dark:bg-zinc-900 h-9 font-semibold border-slate-200 dark:border-zinc-700 flex-1 text-xs">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="CONTADO">Efectivo</SelectItem>
-                                                        <SelectItem value="CUENTA_CORRIENTE" className="text-orange-600 font-bold">Cta. Corriente</SelectItem>
-                                                        <SelectItem value="TRANSFERENCIA">Transferencia</SelectItem>
-                                                        <SelectItem value="TARJETA">Tarjeta</SelectItem>
-                                                        <SelectItem value="CHEQUE">Cheque</SelectItem>
-                                                        {resumenFinanciero && resumenFinanciero.saldo_a_favor > 0 && (
-                                                            <SelectItem value="SALDO_A_FAVOR" className="text-emerald-600 font-bold">
-                                                                Usar Saldo a Favor (Disp: ${resumenFinanciero.saldo_a_favor.toFixed(2)})
-                                                            </SelectItem>
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
-                                                <div className="relative w-28">
-                                                    <span className="absolute left-2 top-2 text-slate-400 text-xs">$</span>
-                                                    <Input type="number" step="0.01" placeholder={pagos.length === 1 ? totalFinal.toFixed(2) : "0.00"}
-                                                        value={pago.monto} onChange={(e) => actualizarPago(i, "monto", e.target.value)}
-                                                        className="h-9 pl-5 text-right font-bold bg-white dark:bg-zinc-900 border-slate-200" />
-                                                </div>
-                                                {pagos.length > 1 && (
-                                                    <Button variant="ghost" size="icon" onClick={() => eliminarLineaPago(i)} className="h-8 w-8 text-red-400 hover:text-red-600 shrink-0">
-                                                        <X className="h-3 w-3" />
-                                                    </Button>
-                                                )}
-                                            </div>
-                                            {pago.metodo_pago === 'TARJETA' && (
-                                                <div className="flex gap-2 items-center flex-wrap pt-1 animate-in fade-in">
-                                                    <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-900 px-2 py-1 rounded-md border border-slate-200 dark:border-zinc-700">
-                                                        <Label className="text-[10px] uppercase font-bold text-slate-500">Cuotas</Label>
-                                                        <Input type="number" placeholder="1" className="h-7 w-16 text-center text-xs font-bold bg-slate-50 dark:bg-zinc-800 border-slate-200" value={pago.cuotas || ""} onChange={(e) => actualizarPago(i, "cuotas", e.target.value)} />
-                                                    </div>
-                                                    <div className="flex items-center gap-1.5 bg-white dark:bg-zinc-900 px-2 py-1 rounded-md border border-indigo-200 dark:border-indigo-500/20 bg-indigo-50/30">
-                                                        <Label className="text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">% Recargo</Label>
-                                                        <Input type="number" placeholder="0" className="h-7 w-16 text-center text-xs font-bold border-indigo-200 bg-white" value={pago.recargo_porcentaje || ""} onChange={(e) => actualizarPago(i, "recargo_porcentaje", e.target.value)} />
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {pago.metodo_pago === 'CHEQUE' && (
-                                                <div className="flex flex-col gap-1.5 bg-white dark:bg-zinc-900 px-2 py-1.5 rounded-md border border-slate-200 dark:border-zinc-700 animate-in fade-in">
-                                                    <Label className="text-[10px] uppercase font-bold text-slate-500">Detalles del Cheque</Label>
-                                                    <Input placeholder="Nro Cheque, Banco, Vencimiento, CUIT Titular..." className="h-8 text-xs font-medium bg-slate-50 dark:bg-zinc-800 border-slate-200" value={pago.detalle_cheque || ""} onChange={(e) => actualizarPago(i, "detalle_cheque", e.target.value)} />
-                                                </div>
-                                            )}
+                                {pagos.length >= 1 && (
+                                    <div className={`flex items-center justify-between px-2.5 py-2 rounded-lg border ${totalPagos > totalFinal + 0.01 ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20' : totalPagos < totalFinal - 0.01 ? 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20' : 'bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700'}`}>
+                                        <div>
+                                            <p className="text-[10px] uppercase font-bold text-slate-500">Ingresado</p>
+                                            <p className={`font-bold text-sm ${totalPagos > totalFinal + 0.01 ? 'text-emerald-700 dark:text-emerald-400' : totalPagos < totalFinal - 0.01 ? 'text-red-600 dark:text-red-400' : 'text-slate-700 dark:text-slate-200'}`}>${totalPagos.toFixed(2)}</p>
                                         </div>
-                                    ))}
-
-                                    {pagos.length >= 1 && (
-                                        <div className={`mt-2 flex items-center justify-between p-3 rounded-lg border ${totalPagos > totalFinal + 0.01 ? 'bg-emerald-50 border-emerald-200' : totalPagos < totalFinal - 0.01 ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200'}`}>
-                                            <div>
-                                                <p className="text-[10px] uppercase font-bold text-slate-500">Suma ingresada</p>
-                                                <p className={`font-bold ${totalPagos > totalFinal + 0.01 ? 'text-emerald-700' : totalPagos < totalFinal - 0.01 ? 'text-red-600' : 'text-slate-700'}`}>${totalPagos.toFixed(2)}</p>
-                                            </div>
-                                            <div className="text-right">
-                                                {totalPagos < totalFinal - 0.01 && (
+                                        <div className="text-right">
+                                            {totalPagos < totalFinal - 0.01 && (
+                                                <>
+                                                    <Label className="text-[10px] uppercase text-red-600 dark:text-red-400 font-bold tracking-wider">Falta</Label>
+                                                    <p className="text-lg font-black text-red-600 dark:text-red-400">${(totalFinal - totalPagos).toFixed(2)}</p>
+                                                </>
+                                            )}
+                                            {totalPagos > totalFinal + 0.01 && (
+                                                pagos.some(p => p.metodo_pago === 'CONTADO') ? (
                                                     <>
-                                                        <Label className="text-[10px] uppercase text-red-600 font-bold tracking-wider">Falta abonar</Label>
-                                                        <p className="text-xl font-black text-red-600">${(totalFinal - totalPagos).toFixed(2)}</p>
+                                                        <Label className="text-[10px] uppercase text-emerald-600 dark:text-emerald-400 font-bold tracking-wider">Vuelto</Label>
+                                                        <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">${(totalPagos - totalFinal).toFixed(2)}</p>
                                                     </>
-                                                )}
-                                                {totalPagos > totalFinal + 0.01 && (
-                                                    pagos.some(p => p.metodo_pago === 'CONTADO') ? (
-                                                        <>
-                                                            <Label className="text-[10px] uppercase text-emerald-600 font-bold tracking-wider">Vuelto</Label>
-                                                            <p className="text-xl font-black text-emerald-600">${(totalPagos - totalFinal).toFixed(2)}</p>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Label className="text-[10px] uppercase text-red-600 font-bold tracking-wider">Excede el total!</Label>
-                                                            <p className="text-sm font-bold text-red-600">No hay efectivo para vuelto</p>
-                                                        </>
-                                                    )
-                                                )}
-                                                {Math.abs(totalPagos - totalFinal) <= 0.01 && (
-                                                    <div className="flex items-center gap-1 text-emerald-600 font-bold">
-                                                        <CheckCircle2 className="h-5 w-5" /> Coincide
-                                                    </div>
-                                                )}
-                                            </div>
+                                                ) : (
+                                                    <>
+                                                        <Label className="text-[10px] uppercase text-red-600 font-bold tracking-wider">Excede!</Label>
+                                                        <p className="text-xs font-bold text-red-600">Sin efectivo p/vuelto</p>
+                                                    </>
+                                                )
+                                            )}
+                                            {Math.abs(totalPagos - totalFinal) <= 0.01 && (
+                                                <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                                                    <CheckCircle2 className="h-4 w-4" /> Coincide
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
+                                )}
 
-                                    {tieneCuentaCorriente && (
-                                        <div className="p-3 bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-lg mt-2 animate-in fade-in">
-                                            <Label className="text-[10px] uppercase text-orange-600 dark:text-orange-400 font-bold tracking-wider block mb-1">Plazo Congelado (Días)</Label>
-                                            <Input type="number" value={diasCongelamiento} onChange={(e) => setDiasCongelamiento(Number(e.target.value))} className="w-20 h-8 font-mono font-medium bg-white dark:bg-zinc-900 border-orange-200 dark:border-orange-500/30 text-center" />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex gap-2 mt-4">
-                                    <Button variant="outline" size="lg" onClick={() => { if(!confirm('¿Cancelar y vaciar pestaña?')) return; setClienteSeleccionado(null); setCarrito([]); setDescuentoGlobal(0); setPagos([{metodo_pago:'CONTADO', monto:''}]); setShowClienteModal(false); }} className="w-1/3 h-12 text-red-500 border-red-200 hover:bg-red-50 font-bold">
-                                        Cancelar
-                                    </Button>
-                                    <Button size="lg" onClick={handleProcesarVenta} disabled={isPending || carrito.length === 0 || !clienteSeleccionado}
-                                        className="w-2/3 h-12 text-base font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all">
-                                        {isPending ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : <CheckCircle2 className="h-5 w-5 mr-2" />}
-                                        Confirmar Venta
-                                    </Button>
-                                </div>
+                                {tieneCuentaCorriente && (
+                                    <div className="p-2 bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 rounded-lg animate-in fade-in">
+                                        <Label className="text-[10px] uppercase text-orange-600 dark:text-orange-400 font-bold tracking-wider block mb-1">Plazo Congelado (Días)</Label>
+                                        <Input type="number" value={diasCongelamiento} onChange={(e) => setDiasCongelamiento(Number(e.target.value))} className="w-20 h-7 font-mono font-medium bg-white dark:bg-zinc-900 border-orange-200 dark:border-orange-500/30 text-center text-xs" />
+                                    </div>
+                                )}
                             </div>
 
-                        </CardContent>
+                            {/* BOTONES */}
+                            <div className="flex gap-2 pt-1 shrink-0">
+                                <Button variant="outline" onClick={() => { if(!confirm('¿Cancelar y vaciar pestaña?')) return; setClienteSeleccionado(null); setCarrito([]); setDescuentoGlobal(0); setPagos([{metodo_pago:'CONTADO', monto:''}]); setShowClienteModal(false); }} className="w-1/3 h-10 text-red-500 border-red-200 hover:bg-red-50 dark:hover:bg-red-500/10 font-bold text-xs">
+                                    Cancelar
+                                </Button>
+                                <Button onClick={handleProcesarVenta} disabled={isPending || carrito.length === 0 || !clienteSeleccionado}
+                                    className="w-2/3 h-10 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all">
+                                    {isPending ? <Loader2 className="animate-spin h-4 w-4 mr-1.5" /> : <CheckCircle2 className="h-4 w-4 mr-1.5" />}
+                                    Confirmar Venta
+                                </Button>
+                            </div>
+                        </div>
                     </Card>
                 </div>
             </div>
@@ -1121,19 +1142,34 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                             aumProv, aumMarca, aumCat, margenFinal
                                         );
 
-                                        const sinStock = prod.stock_actual <= 0;
-                                        const noTieneLista = !pivot;
+                                        const depoPivot = prod.stocks?.find((s: any) => s.depositoId === depositoActivoId);
+                                        const stockFisico = depoPivot ? depoPivot.cantidad : 0;
+                                        
+                                        const cantEnOtrosCarritos = (allOtherCarts || [])
+                                            .filter((item:any) => item.productoId === prod.id)
+                                            .reduce((acc:any, item:any) => acc + item.cantidad, 0);
+                                            
+                                        const cantEnEsteCarrito = carrito
+                                            .filter((item:any) => item.productoId === prod.id)
+                                            .reduce((acc:any, item:any) => acc + item.cantidad, 0);
+                                            
+                                        const stockEfectivo = stockFisico - cantEnOtrosCarritos - cantEnEsteCarrito;
+                                        const sinStock = stockEfectivo <= 0;
+                                        const noTieneLista = false;
                                         const tipo = (prod.tipo_medicion || "UNIDAD") as TipoMedicionType;
 
                                         return (
                                             <div key={prod.id} className={`flex flex-col p-3 rounded-xl border transition-all bg-white dark:bg-zinc-900 shadow-sm gap-2 ${sinStock ? 'border-red-200 bg-red-50/50 opacity-75' : noTieneLista ? 'border-amber-200 bg-amber-50/50 opacity-75' : 'border-slate-200 dark:border-zinc-700 hover:border-indigo-200 hover:bg-white dark:hover:bg-zinc-800'}`}>
                                                 <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                                                     <div className="flex-1">
-                                                        <p className="font-semibold text-sm">{prod.nombre_producto}</p>
+                                                        <p className="font-semibold text-sm whitespace-normal">{prod.nombre_producto}</p>
+                                                        {prod.proveedor?.nombre && (
+                                                            <p className="text-xs text-slate-500 font-medium uppercase">{prod.proveedor.nombre}</p>
+                                                        )}
                                                     <div className="flex flex-wrap gap-2 mt-1.5">
                                                         <span className="text-[10px] font-mono text-slate-500 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Cód: {prod.codigo_barras !== "0" ? prod.codigo_barras : prod.codigo_articulo}</span>
-                                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${sinStock ? 'text-red-600 bg-red-100' : prod.stock_actual > prod.stock_recomendado ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'text-orange-600 bg-orange-50'}`}>
-                                                            Stock: {formatCantidad(prod.stock_actual, tipo)} {getUnidadLabel(tipo)}
+                                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${sinStock ? 'text-red-600 bg-red-100' : stockEfectivo > (prod.stock_recomendado || 0) ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'text-orange-600 bg-orange-50'}`}>
+                                                            Libres: {formatCantidad(stockEfectivo, tipo)} {getUnidadLabel(tipo)}
                                                         </span>
                                                         {sinStock && <Badge variant="destructive" className="text-[10px] h-5"><AlertTriangle className="h-3 w-3 mr-1" />SIN STOCK</Badge>}
                                                         {noTieneLista && <Badge variant="outline" className="text-[10px] h-5 border-amber-300 text-amber-700">NO EN ESTA LISTA</Badge>}
@@ -1183,6 +1219,9 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                                                     );
                                                                 })}
                                                             </div>
+                                                            <FastEditForm prod={prod} onSuccess={() => {
+                                                                buscarProductos(productoQuery).then(res => setProductosResultados(res));
+                                                            }} />
                                                         </div>
                                                     </div>
                                                 )}
@@ -1285,7 +1324,7 @@ function PuntoDeVentaTabsPage() {
     };
 
     return (
-        <div className="flex flex-col h-[calc(100vh-6rem)] relative">
+        <div className="flex flex-col flex-1 h-full min-h-0 relative">
             <div className="flex items-center gap-2 mb-2 overflow-x-auto pb-1 shrink-0">
                 {tabs.map(tab => (
                     <div key={tab.id} className={`flex items-center gap-2 px-4 py-2 rounded-t-xl border-t border-x cursor-pointer transition-colors ${activeTab === tab.id ? 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-indigo-600 font-bold shadow-sm' : 'bg-slate-50 dark:bg-zinc-900/50 border-transparent text-slate-500 hover:bg-slate-100 dark:hover:bg-zinc-800'}`} onClick={() => setActiveTab(tab.id)}>
@@ -1302,7 +1341,7 @@ function PuntoDeVentaTabsPage() {
 
             <div className="flex-1 bg-transparent overflow-hidden">
                 {tabs.map(tab => (
-                    <div key={tab.id} className={activeTab === tab.id ? "block h-full overflow-y-auto" : "hidden"}>
+                    <div key={tab.id} className={activeTab === tab.id ? "block h-full overflow-hidden" : "hidden"}>
                         <PosTerminal 
                            tabId={tab.id} 
                            updateCartInfo={(cart: any[]) => setCartsPerTab(prev => ({...prev, [tab.id]: cart}))}

@@ -78,7 +78,10 @@ export async function getConsumidorFinal() {
 // 3. GESTOR DE CORRELATIVIDAD DE FACTURAS
 // ==========================================
 
-export async function previsualizarProximoComprobante(tipo_comprobante: string, punto_venta: number = 1) {
+export async function previsualizarProximoComprobante(tipo_comprobante: string) {
+    const config = await prisma.empresaConfig.findUnique({ where: { id: 1 } });
+    const punto_venta = config?.punto_venta || 1;
+
     const secuencia = await prisma.secuenciaFactura.findUnique({
         where: { tipo_comprobante }
     });
@@ -124,18 +127,11 @@ export async function registrarVenta(data: any) {
                 }
 
                 // === VALIDACIÓN DE LISTA DE PRECIOS ===
-                const pivot = await tx.productoListaPrecio.findUnique({
-                    where: {
-                        productoId_listaPrecioId: {
-                            productoId: item.productoId,
-                            listaPrecioId: data.listaPrecioId
-                        }
-                    }
-                });
-                if (!pivot) {
-                    throw new Error(`LISTA_NO_ASIGNADA: El producto "${prod.nombre_producto}" no está habilitado para la lista de precios seleccionada.`);
-                }
+                // Removida: ahora todos los productos pertenecen a todas las listas.
             }
+
+            const config = await tx.empresaConfig.findUnique({ where: { id: 1 } });
+            const puntoVenta = config?.punto_venta || 1;
 
             let secuencia = await tx.secuenciaFactura.findUnique({
                 where: { tipo_comprobante: data.tipo_comprobante }
@@ -143,7 +139,12 @@ export async function registrarVenta(data: any) {
 
             if (!secuencia) {
                 secuencia = await tx.secuenciaFactura.create({
-                    data: { tipo_comprobante: data.tipo_comprobante, punto_venta: 1, numero_actual: 0 }
+                    data: { tipo_comprobante: data.tipo_comprobante, punto_venta: puntoVenta, numero_actual: 0 }
+                });
+            } else if (secuencia.punto_venta !== puntoVenta) {
+                secuencia = await tx.secuenciaFactura.update({
+                    where: { id: secuencia.id },
+                    data: { punto_venta: puntoVenta }
                 });
             }
 
