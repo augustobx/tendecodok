@@ -33,6 +33,7 @@ export default function CajaDiariaPage() {
     const [showModalMovimiento, setShowModalMovimiento] = useState(false);
     const [showModalCierre, setShowModalCierre] = useState(false);
     const [tipoMov, setTipoMov] = useState<"INGRESO_MANUAL" | "EGRESO_MANUAL">("EGRESO_MANUAL");
+    const [metodoPagoMov, setMetodoPagoMov] = useState<"CONTADO" | "TARJETA" | "TRANSFERENCIA">("CONTADO");
     const [montoMov, setMontoMov] = useState("");
     const [descMov, setDescMov] = useState("");
     
@@ -122,11 +123,12 @@ export default function CajaDiariaPage() {
     const handleMovimientoManual = () => {
         if (!montoMov || !descMov) return toast.error("Complete el monto y la descripción.");
         startTransition(async () => {
-            const res = await registrarMovimientoManual(caja.id, tipoMov, Number(montoMov), descMov, clienteSeleccionado?.id);
+            const res = await registrarMovimientoManual(caja.id, tipoMov, Number(montoMov), descMov, clienteSeleccionado?.id, metodoPagoMov);
             if (res.success) {
                 toast.success("Movimiento registrado correctamente.");
                 setShowModalMovimiento(false);
                 setMontoMov(""); setDescMov(""); setClienteQuery(""); setClienteSeleccionado(null);
+                setMetodoPagoMov("CONTADO");
                 cargarDatos(sucursalActivaId);
             } else toast.error(res.error);
         });
@@ -416,35 +418,35 @@ export default function CajaDiariaPage() {
         {/* MODAL RETIRO / INGRESO */}
         {showModalMovimiento && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
-                <Card className="w-full max-w-sm shadow-xl border border-slate-200 dark:border-zinc-800 overflow-visible">
-                    <CardHeader className="bg-slate-50/50 dark:bg-zinc-900 border-b border-slate-100 dark:border-zinc-800 p-4">
-                        <CardTitle className="text-base flex items-center gap-2">
+                <Card className="w-full max-w-sm shadow-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-visible">
+                    <CardHeader className="bg-slate-50/50 dark:bg-zinc-800/50 border-b border-slate-100 dark:border-zinc-800 p-4">
+                        <CardTitle className="text-base text-slate-900 dark:text-white flex items-center gap-2">
                             {tipoMov === 'INGRESO_MANUAL' ? <Plus className="text-emerald-500 h-4 w-4" /> : <Minus className="text-orange-500 h-4 w-4" />} 
                             {tipoMov === 'INGRESO_MANUAL' ? 'Registrar Ingreso' : 'Registrar Salida'}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                         <div className="space-y-1.5">
-                            <Label className="font-semibold text-sm">Monto ($)</Label>
-                            <Input type="number" autoFocus value={montoMov} onChange={e => setMontoMov(e.target.value)} className="h-11 text-lg font-bold text-center border-slate-200" />
+                            <Label className="font-semibold text-sm text-slate-700 dark:text-slate-300">Monto ($)</Label>
+                            <Input type="number" autoFocus value={montoMov} onChange={e => setMontoMov(e.target.value)} className="h-11 text-lg font-bold text-center bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700 text-slate-900 dark:text-white" />
                         </div>
                         {tipoMov === 'INGRESO_MANUAL' && (
                             <div className="space-y-1.5 relative">
-                                <Label className="font-semibold text-sm">Cliente (Opcional)</Label>
+                                <Label className="font-semibold text-sm text-slate-700 dark:text-slate-300">Cliente (Opcional)</Label>
                                 {!clienteSeleccionado ? (
                                     <>
                                         <Input 
                                             placeholder="Buscar cliente..." 
                                             value={clienteQuery} 
                                             onChange={e => setClienteQuery(e.target.value)} 
-                                            className="h-10" 
+                                            className="h-10 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700 text-slate-900 dark:text-white" 
                                         />
                                         {clientesResultados.length > 0 && (
-                                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 shadow-lg rounded-md max-h-40 overflow-y-auto z-[60]">
+                                            <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 shadow-lg rounded-md max-h-40 overflow-y-auto z-[60]">
                                                 {clientesResultados.map(c => (
                                                     <div 
                                                         key={c.id} 
-                                                        className="p-2 text-sm hover:bg-slate-100 cursor-pointer text-slate-800"
+                                                        className="p-2 text-sm hover:bg-slate-100 dark:hover:bg-zinc-700 cursor-pointer text-slate-800 dark:text-slate-200"
                                                         onClick={() => {
                                                             setClienteSeleccionado(c);
                                                             setClienteQuery("");
@@ -458,25 +460,38 @@ export default function CajaDiariaPage() {
                                         )}
                                     </>
                                 ) : (
-                                    <div className="flex items-center justify-between p-2 bg-indigo-50 border border-indigo-100 rounded-md">
-                                        <span className="text-sm font-medium text-indigo-700">{clienteSeleccionado.nombre_razon_social}</span>
-                                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-indigo-100" onClick={() => setClienteSeleccionado(null)}>
-                                            <X className="h-4 w-4 text-indigo-600" />
+                                    <div className="flex items-center justify-between p-2 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 rounded-md">
+                                        <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">{clienteSeleccionado.nombre_razon_social}</span>
+                                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-indigo-100 dark:hover:bg-indigo-500/20" onClick={() => setClienteSeleccionado(null)}>
+                                            <X className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
                                         </Button>
                                     </div>
                                 )}
                             </div>
                         )}
                         <div className="space-y-1.5">
-                            <Label className="font-semibold text-sm">Motivo / Descripción</Label>
-                            <Input value={descMov} onChange={e => setDescMov(e.target.value)} placeholder="Ej: Adelanto, pago deuda..." className="bg-slate-50 h-10" />
+                            <Label className="font-semibold text-sm text-slate-700 dark:text-slate-300">Medio de Pago</Label>
+                            <Select value={metodoPagoMov} onValueChange={(v: any) => setMetodoPagoMov(v)}>
+                                <SelectTrigger className="h-10 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700 text-slate-900 dark:text-white">
+                                    <SelectValue placeholder="Seleccione método" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-900 dark:text-white">
+                                    <SelectItem value="CONTADO">Efectivo</SelectItem>
+                                    <SelectItem value="TRANSFERENCIA">Transferencia</SelectItem>
+                                    <SelectItem value="TARJETA">Tarjeta</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="font-semibold text-sm text-slate-700 dark:text-slate-300">Motivo / Descripción</Label>
+                            <Input value={descMov} onChange={e => setDescMov(e.target.value)} placeholder="Ej: Adelanto, pago deuda..." className="bg-slate-50 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-700 text-slate-900 dark:text-white h-10" />
                         </div>
                         <div className="flex gap-2 pt-2">
                             <Button variant="ghost" onClick={() => {
                                 setShowModalMovimiento(false);
                                 setClienteQuery(""); setClienteSeleccionado(null);
-                            }} className="w-1/3">Cancelar</Button>
-                            <Button onClick={handleMovimientoManual} disabled={isPending} className="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-medium">Guardar</Button>
+                            }} className="w-1/3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800">Cancelar</Button>
+                            <Button onClick={handleMovimientoManual} disabled={isPending} className="w-2/3 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 dark:text-slate-900 text-white font-medium">Guardar</Button>
                         </div>
                     </CardContent>
                 </Card>
@@ -486,22 +501,22 @@ export default function CajaDiariaPage() {
         {/* MODAL CIERRE DE CAJA */}
         {showModalCierre && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in zoom-in-95">
-                <Card className="w-full max-w-sm shadow-xl border border-slate-200 dark:border-zinc-800">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 p-5 text-center">
-                        <div className="mx-auto bg-slate-200/50 w-12 h-12 rounded-full flex items-center justify-center mb-3">
-                            <Lock className="h-5 w-5 text-slate-700" />
+                <Card className="w-full max-w-sm shadow-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                    <CardHeader className="bg-slate-50/50 dark:bg-zinc-800/50 border-b border-slate-100 dark:border-zinc-800 p-5 text-center">
+                        <div className="mx-auto bg-slate-200/50 dark:bg-zinc-800 w-12 h-12 rounded-full flex items-center justify-center mb-3">
+                            <Lock className="h-5 w-5 text-slate-700 dark:text-slate-300" />
                         </div>
-                        <CardTitle className="text-xl font-bold">Cierre de Turno</CardTitle>
+                        <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Cierre de Turno</CardTitle>
                         <CardDescription className="text-xs">Declare el efectivo exacto que hay en el cajón.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                         <div className="space-y-1.5">
                             <Label className="font-bold uppercase tracking-wider text-[10px] text-slate-500">Efectivo Físico Contado ($)</Label>
-                            <Input type="number" autoFocus value={montoCierre} onChange={e => setMontoCierre(e.target.value)} className="h-14 text-2xl font-black text-center bg-white border-slate-300 focus-visible:ring-slate-400" />
+                            <Input type="number" autoFocus value={montoCierre} onChange={e => setMontoCierre(e.target.value)} className="h-14 text-2xl font-black text-center bg-white dark:bg-zinc-900 border-slate-300 dark:border-zinc-700 focus-visible:ring-slate-400 text-slate-900 dark:text-white" />
                         </div>
                         <div className="flex gap-2 pt-2">
-                            <Button variant="ghost" onClick={() => setShowModalCierre(false)} className="w-1/3 h-11">Volver</Button>
-                            <Button onClick={handleCerrarCaja} disabled={isPending} className="w-2/3 h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium">Finalizar Turno</Button>
+                            <Button variant="ghost" onClick={() => setShowModalCierre(false)} className="w-1/3 h-11 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800">Volver</Button>
+                            <Button onClick={handleCerrarCaja} disabled={isPending} className="w-2/3 h-11 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 dark:text-slate-900 text-white font-medium">Finalizar Turno</Button>
                         </div>
                     </CardContent>
                 </Card>
@@ -511,25 +526,25 @@ export default function CajaDiariaPage() {
         {/* MODAL DETALLES CAJA HISTÓRICA */}
         {showModalHistorial && cajaHistoricaSeleccionada && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in zoom-in-95">
-                <Card className="w-full max-w-3xl shadow-xl border border-slate-200 dark:border-zinc-800 flex flex-col max-h-[85vh] overflow-hidden">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 p-4 flex flex-row items-center justify-between">
+                <Card className="w-full max-w-3xl shadow-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col max-h-[85vh] overflow-hidden">
+                    <CardHeader className="bg-slate-50/50 dark:bg-zinc-800/50 border-b border-slate-100 dark:border-zinc-800 p-4 flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle className="text-lg font-bold">Detalle de Turno</CardTitle>
+                            <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Detalle de Turno</CardTitle>
                             <CardDescription className="text-xs">
                                 Apertura: {new Date(cajaHistoricaSeleccionada.fecha_apertura).toLocaleString('es-AR')} | 
                                 Cierre: {cajaHistoricaSeleccionada.fecha_cierre ? new Date(cajaHistoricaSeleccionada.fecha_cierre).toLocaleString('es-AR') : 'Sin cierre'}
                             </CardDescription>
                         </div>
-                        <Button variant="ghost" onClick={() => setShowModalHistorial(false)}>Cerrar</Button>
+                        <Button variant="ghost" onClick={() => setShowModalHistorial(false)} className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800">Cerrar</Button>
                     </CardHeader>
-                    <CardContent className="p-0 flex-1 overflow-auto bg-slate-50">
+                    <CardContent className="p-0 flex-1 overflow-auto bg-slate-50 dark:bg-zinc-900">
                         {/* Acá podríamos colocar los movimientos, pero requerirá un endpoint si no los trajimos.
                             Por simplicidad y dado que ya incluímos "movimientos" en la consulta si lo modificamos, lo renderizamos aquí. */}
                         {!cajaHistoricaSeleccionada.movimientos ? (
                             <div className="p-8 text-center text-slate-500">Los movimientos completos deben ser solicitados al servidor (cargar en actions).</div>
                         ) : (
                             <table className="w-full text-sm text-left">
-                                <thead className="text-[10px] uppercase tracking-wider bg-slate-100 sticky top-0 z-10 text-slate-500">
+                                <thead className="text-[10px] uppercase tracking-wider bg-slate-100 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
                                     <tr>
                                         <th className="px-6 py-3 font-semibold">Hora</th>
                                         <th className="px-6 py-3 font-semibold">Concepto</th>
@@ -538,25 +553,25 @@ export default function CajaDiariaPage() {
                                         <th className="px-6 py-3 font-semibold text-right">Monto</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100 bg-white">
+                                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
                                     {cajaHistoricaSeleccionada.movimientos.map((mov: any) => {
                                         const esIngreso = ['APERTURA', 'INGRESO_MANUAL', 'VENTA', 'COBRO_CC'].includes(mov.tipo);
                                         return (
-                                            <tr key={mov.id} className="hover:bg-slate-50">
+                                            <tr key={mov.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                                                 <td className="px-6 py-2 font-mono text-slate-400 text-xs">
                                                     {new Date(mov.fecha).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
                                                 </td>
                                                 <td className="px-6 py-2">
-                                                    <p className="font-semibold text-slate-700 text-xs">{mov.descripcion}</p>
-                                                    <Badge variant="outline" className="text-[9px] mt-0.5 text-slate-500">{mov.tipo.replace('_', ' ')}</Badge>
+                                                    <p className="font-semibold text-slate-700 dark:text-slate-300 text-xs">{mov.descripcion}</p>
+                                                    <Badge variant="outline" className="text-[9px] mt-0.5 text-slate-500 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700">{mov.tipo.replace('_', ' ')}</Badge>
                                                 </td>
                                                 <td className="px-6 py-2 text-center">
-                                                    <Badge variant="secondary" className="font-bold text-[9px] bg-slate-100">{mov.metodo_pago}</Badge>
+                                                    <Badge variant="secondary" className="font-bold text-[9px] bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300">{mov.metodo_pago}</Badge>
                                                 </td>
                                                 <td className="px-6 py-2 text-center font-mono text-[9px] text-slate-500 uppercase">
                                                     {mov.usuario?.nombre || 'SISTEMA'}
                                                 </td>
-                                                <td className={`px-6 py-2 text-right font-black text-sm ${esIngreso ? 'text-slate-900' : 'text-orange-600'}`}>
+                                                <td className={`px-6 py-2 text-right font-black text-sm ${esIngreso ? 'text-slate-900 dark:text-white' : 'text-orange-600'}`}>
                                                     {esIngreso ? '+' : '-'}${mov.monto.toFixed(2)}
                                                 </td>
                                             </tr>
@@ -569,6 +584,6 @@ export default function CajaDiariaPage() {
                 </Card>
             </div>
         )}
-        </>
+    </>
     );
 }

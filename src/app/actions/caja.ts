@@ -79,7 +79,7 @@ export async function abrirCaja(saldo_inicial: number, sucursalId: number) {
 }
 
 // 4. Retiros o Ingresos Manuales (Gastos)
-export async function registrarMovimientoManual(cajaId: number, tipo: "INGRESO_MANUAL" | "EGRESO_MANUAL", monto: number, descripcion: string, clienteId?: number) {
+export async function registrarMovimientoManual(cajaId: number, tipo: "INGRESO_MANUAL" | "EGRESO_MANUAL", monto: number, descripcion: string, clienteId?: number, metodo_pago: "CONTADO" | "TARJETA" | "TRANSFERENCIA" = "CONTADO") {
     try {
         if (monto <= 0) throw new Error("El monto debe ser mayor a 0.");
 
@@ -91,7 +91,7 @@ export async function registrarMovimientoManual(cajaId: number, tipo: "INGRESO_M
                 data: {
                     cajaId,
                     tipo,
-                    metodo_pago: 'CONTADO',
+                    metodo_pago,
                     monto,
                     descripcion,
                     usuarioId: usuarioId,
@@ -105,7 +105,7 @@ export async function registrarMovimientoManual(cajaId: number, tipo: "INGRESO_M
                         clienteId: clienteId,
                         tipo: 'ABONO',
                         monto: monto,
-                        metodo_pago: 'CONTADO',
+                        metodo_pago,
                         notas: descripcion || 'Abono en Caja Diaria',
                         usuarioId: usuarioId
                     }

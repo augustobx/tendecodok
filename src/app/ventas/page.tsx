@@ -175,6 +175,71 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
         }
     }, [sucursalActivaId, sucursales]);
 
+    // === PROTECCIÓN DE CARRITO (Navegación Accidental) ===
+    useEffect(() => {
+        // 1. Hard Reloads / Cierre de pestaña
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (carrito.length > 0 && !ventaExitosa) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
+        };
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        // 2. Soft Navigation (Next.js Link)
+        const handleLinkClick = (e: MouseEvent) => {
+            if (carrito.length > 0 && !ventaExitosa) {
+                const target = (e.target as HTMLElement).closest('a');
+                if (target && target.href) {
+                    const url = new URL(target.href);
+                    // Si el link va a otra página del sistema
+                    if (url.origin === window.location.origin && url.pathname !== window.location.pathname) {
+                        if (!window.confirm("Tienes una venta en curso. ¿Estás seguro de que deseas salir y perder los datos no guardados?")) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    }
+                }
+            }
+        };
+        document.addEventListener("click", handleLinkClick, { capture: true });
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            document.removeEventListener("click", handleLinkClick, { capture: true });
+        };
+    }, [carrito, ventaExitosa]);
+
+    // Guardar en localStorage para recuperación post-accidente
+    useEffect(() => {
+        if (!presupuestoOrigenId && !ventaExitosa) {
+            localStorage.setItem(`tendeco_cart_backup_${tabId}`, JSON.stringify({
+                carrito, clienteSeleccionado, tipoComprobante, pagos, descuentoGlobal
+            }));
+        }
+    }, [carrito, clienteSeleccionado, tipoComprobante, pagos, descuentoGlobal, presupuestoOrigenId, ventaExitosa, tabId]);
+
+    // Restaurar de localStorage (opcional si se monta vacío)
+    useEffect(() => {
+        if (carrito.length === 0 && !presupuestoOrigenId) {
+            const saved = localStorage.getItem(`tendeco_cart_backup_${tabId}`);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.carrito && data.carrito.length > 0) {
+                        setCarrito(data.carrito);
+                        if (data.clienteSeleccionado) setClienteSeleccionado(data.clienteSeleccionado);
+                        if (data.tipoComprobante) setTipoComprobante(data.tipoComprobante);
+                        if (data.pagos) setPagos(data.pagos);
+                        if (data.descuentoGlobal) setDescuentoGlobal(data.descuentoGlobal);
+                        toast("Carrito restaurado", { description: "Se ha recuperado tu última sesión de venta." });
+                    }
+                } catch (e) { }
+            }
+        }
+    }, []);
+    // =======================================================
+
     const fetchNumeros = async () => {
         const comp = await previsualizarProximoComprobante(tipoComprobante);
         setComprobanteNumeros({ punto_venta: comp.punto_venta, numero_str: comp.numero_str, proximoNumero: comp.proximoNumero });
@@ -793,7 +858,14 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                         <SelectValue placeholder="Lista de precios...">{listaSeleccionadaObj ? listaSeleccionadaObj.nombre : "Lista de precios..."}</SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {listasGlobales.map(l => (<SelectItem key={l.id} value={String(l.id)}>{l.nombre}</SelectItem>))}
+                                        {listasGlobales
+                                            .filter(l => {
+                                                if (!clienteSeleccionado) return true;
+                                                const permitidas = clienteSeleccionado.listas_permitidas || [];
+                                                // Siempre permitir Consumidor Final si no hay ninguna o por defecto
+                                                return l.nombre.toLowerCase() === "consumidor final" || permitidas.some((lp: any) => lp.listaPrecioId === l.id);
+                                            })
+                                            .map(l => (<SelectItem key={l.id} value={String(l.id)}>{l.nombre}</SelectItem>))}
                                     </SelectContent>
                                 </Select>
                             </div>

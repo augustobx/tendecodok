@@ -138,6 +138,13 @@ export async function actualizarCliente(id: number, formData: FormData) {
         const limite_credito = limite_credito_str && limite_credito_str.trim() !== "" ? parseFloat(limite_credito_str) : null;
         const dias_aviso_deuda = dias_aviso_deuda_str && dias_aviso_deuda_str.trim() !== "" ? parseInt(dias_aviso_deuda_str) : 30;
 
+        const listas_permitidas_str = formData.getAll("listas_permitidas") as string[];
+        const listas_permitidas = listas_permitidas_str.map(id => Number(id));
+
+        if (lista_default_id && !listas_permitidas.includes(Number(lista_default_id))) {
+            listas_permitidas.push(Number(lista_default_id));
+        }
+
         if (!nombre_razon_social) return { success: false, error: "La Razón Social es obligatoria." };
 
         if (dni_cuit) {
@@ -145,20 +152,31 @@ export async function actualizarCliente(id: number, formData: FormData) {
             if (existe) return { success: false, error: "Este DNI/CUIT ya pertenece a otro cliente." };
         }
 
-        await prisma.cliente.update({
-            where: { id },
-            data: {
-                nombre_razon_social,
-                dni_cuit: dni_cuit || null,
-                direccion,
-                telefono,
-                comentarios,
-                condicion_iva: condicion_iva || "Consumidor Final",
-                comprobante_default: comprobante_default || "COMPROBANTE_X",
-                lista_default_id: lista_default_id ? Number(lista_default_id) : null,
-                limite_credito,
-                dias_aviso_deuda,
-            }
+        const conexionesListas = listas_permitidas.map(listaId => ({
+            listaPrecioId: listaId
+        }));
+
+        await prisma.$transaction(async (tx) => {
+            await tx.clienteListaPrecio.deleteMany({ where: { clienteId: id } });
+            
+            await tx.cliente.update({
+                where: { id },
+                data: {
+                    nombre_razon_social,
+                    dni_cuit: dni_cuit || null,
+                    direccion,
+                    telefono,
+                    comentarios,
+                    condicion_iva: condicion_iva || "Consumidor Final",
+                    comprobante_default: comprobante_default || "COMPROBANTE_X",
+                    lista_default_id: lista_default_id ? Number(lista_default_id) : null,
+                    limite_credito,
+                    dias_aviso_deuda,
+                    listas_permitidas: {
+                        create: conexionesListas
+                    }
+                }
+            });
         });
 
         revalidatePath("/clientes");

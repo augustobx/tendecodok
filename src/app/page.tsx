@@ -237,20 +237,20 @@ export default function DashboardPage() {
           {widgets.alertasStock && (
             <Card className="shadow-sm border-red-100 dark:border-red-500/20 bg-white dark:bg-zinc-900 flex flex-col">
               <CardHeader className="bg-red-50/50 dark:bg-red-500/5 border-b border-red-100 dark:border-red-500/10 p-4">
-                <CardTitle className="text-sm flex items-center gap-2 text-red-600">
+                <CardTitle className="text-sm flex items-center gap-2 text-red-600 dark:text-red-400">
                   <AlertTriangle className="h-4 w-4" /> Reposición Urgente
                 </CardTitle>
               </CardHeader>
               <div className="p-0">
                 <div className="divide-y divide-slate-100 dark:divide-zinc-800">
                   {metrics.productosBajoStock.length === 0 ? (
-                    <div className="text-center py-6 text-emerald-600 font-medium text-sm flex flex-col items-center">
-                      <div className="bg-emerald-50 p-2 rounded-full mb-2"><Check className="h-5 w-5" /></div>
+                    <div className="text-center py-6 text-emerald-600 dark:text-emerald-400 font-medium text-sm flex flex-col items-center">
+                      <div className="bg-emerald-50 dark:bg-emerald-500/10 p-2 rounded-full mb-2"><Check className="h-5 w-5" /></div>
                       Stock en orden
                     </div>
                   ) : (
                     metrics.productosBajoStock.map((p: any) => (
-                      <div key={p.id} className="p-3 px-4 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                      <div key={p.id} className="p-3 px-4 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                         <p className="font-semibold text-xs text-slate-700 dark:text-slate-300 truncate max-w-[180px]" title={p.nombre_producto}>{p.nombre_producto}</p>
                         <Badge variant="destructive" className="font-mono text-[10px] px-1.5 py-0 h-5">Quedan {p.stock_actual}</Badge>
                       </div>
@@ -258,7 +258,7 @@ export default function DashboardPage() {
                   )}
                 </div>
                 {metrics.totalBajoStock > 5 && (
-                  <Link href="/inventario" className="block text-center text-xs font-semibold text-indigo-600 p-3 bg-slate-50 hover:bg-indigo-50 transition-colors border-t border-slate-100">
+                  <Link href="/inventario/faltantes" className="block text-center text-xs font-semibold text-indigo-600 dark:text-indigo-400 p-3 bg-slate-50 dark:bg-zinc-900/50 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-colors border-t border-slate-100 dark:border-zinc-800">
                     Ver los {metrics.totalBajoStock} productos
                   </Link>
                 )}
@@ -271,13 +271,13 @@ export default function DashboardPage() {
             <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
               <CardContent className="p-4 space-y-2">
                 <Link href="/ventas">
-                  <Button className="w-full justify-start h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm">
+                  <Button className="w-full justify-start h-11 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 dark:text-slate-900 text-white font-medium shadow-sm">
                     <Receipt className="h-4 w-4 mr-3 opacity-70" /> Ir a Facturar
                   </Button>
                 </Link>
                 <Link href="/inventario/nuevo">
-                  <Button variant="outline" className="w-full justify-start h-11 border-slate-200 text-slate-700 hover:bg-slate-50 font-medium">
-                    <Package className="h-4 w-4 mr-3 text-slate-400" /> Cargar Producto
+                  <Button variant="outline" className="w-full justify-start h-11 border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800 font-medium">
+                    <Package className="h-4 w-4 mr-3 text-slate-400 dark:text-slate-500" /> Cargar Producto
                   </Button>
                 </Link>
               </CardContent>

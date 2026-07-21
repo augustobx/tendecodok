@@ -56,8 +56,8 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
             
             {/* IZQUIERDA: FORMULARIO DE TRANSFERENCIA */}
             <div className="space-y-6">
-                <Card className="shadow-sm border-slate-200 dark:border-zinc-800">
-                    <CardHeader className="bg-slate-50 border-b border-slate-100 p-5">
+                <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                    <CardHeader className="bg-slate-50 dark:bg-zinc-800/50 border-b border-slate-100 dark:border-zinc-800 p-5">
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Replace className="h-5 w-5 text-indigo-500" /> Nueva Transferencia
                         </CardTitle>
@@ -74,21 +74,21 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                                             placeholder="Buscar producto por nombre o código..." 
                                             value={searchTerm} 
                                             onChange={e => setSearchTerm(e.target.value)}
-                                            className="pl-9 bg-slate-50"
+                                            className="pl-9 bg-slate-50 dark:bg-zinc-800/50"
                                             autoFocus
                                         />
                                     </div>
                                     {filteredProductos.length > 0 && (
-                                        <div className="border border-slate-200 rounded-lg bg-white shadow-sm divide-y max-h-[200px] overflow-y-auto">
+                                        <div className="border border-slate-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-900 shadow-sm divide-y divide-slate-100 dark:divide-zinc-800 max-h-[200px] overflow-y-auto">
                                             {filteredProductos.map(p => (
                                                 <div 
                                                     key={p.id} 
-                                                    className="p-3 hover:bg-slate-50 cursor-pointer flex justify-between items-center transition"
+                                                    className="p-3 hover:bg-slate-50 dark:hover:bg-zinc-800/50 cursor-pointer flex justify-between items-center transition"
                                                     onClick={() => setSelectedProducto(p)}
                                                 >
                                                     <div>
-                                                        <div className="text-sm font-bold text-slate-900">{p.nombre_producto}</div>
-                                                        <div className="text-xs text-slate-500">{p.codigo_articulo}</div>
+                                                        <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{p.nombre_producto}</div>
+                                                        <div className="text-xs text-slate-500 dark:text-slate-400">{p.codigo_articulo}</div>
                                                     </div>
                                                 </div>
                                             ))}
@@ -98,8 +98,8 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                             ) : (
                                 <div className="flex items-center justify-between p-3 border border-indigo-200 bg-indigo-50 rounded-lg">
                                     <div>
-                                        <div className="text-sm font-bold text-indigo-900">{selectedProducto.nombre_producto}</div>
-                                        <div className="text-xs text-indigo-700/70">{selectedProducto.codigo_articulo}</div>
+                                        <div className="text-sm font-bold text-indigo-900 dark:text-indigo-300">{selectedProducto.nombre_producto}</div>
+                                        <div className="text-xs text-indigo-700/70 dark:text-indigo-400">{selectedProducto.codigo_articulo}</div>
                                     </div>
                                     <Button variant="ghost" size="sm" onClick={() => setSelectedProducto(null)} className="h-7 text-xs text-indigo-600">Cambiar</Button>
                                 </div>
@@ -112,7 +112,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                                 <div className="space-y-3">
                                     <Label className="text-xs font-bold uppercase text-slate-500">Paso 2: Depósito Origen</Label>
                                     <Select value={origenId} onValueChange={(val) => setOrigenId(val as string)}>
-                                        <SelectTrigger className="bg-slate-50 h-12">
+                                        <SelectTrigger className="bg-slate-50 dark:bg-zinc-800/50 h-12">
                                             <SelectValue placeholder="Seleccione desde dónde envía..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -132,7 +132,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                                 <div className="space-y-3">
                                     <Label className="text-xs font-bold uppercase text-slate-500">Paso 3: Depósito Destino</Label>
                                     <Select value={destinoId} onValueChange={(val) => setDestinoId(val as string)}>
-                                        <SelectTrigger className="bg-slate-50 h-12">
+                                        <SelectTrigger className="bg-slate-50 dark:bg-zinc-800/50 h-12">
                                             <SelectValue placeholder="Seleccione hacia dónde envía..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -154,7 +154,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                                             type="number"
                                             value={cantidad} 
                                             onChange={e => setCantidad(e.target.value)}
-                                            className="pl-10 h-12 text-lg font-bold bg-slate-50"
+                                            className="pl-10 h-12 text-lg font-bold bg-slate-50 dark:bg-zinc-800/50"
                                             placeholder="Ej: 5"
                                         />
                                     </div>
@@ -183,8 +183,8 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
             {/* DERECHA: HISTORIAL */}
             <div>
                 <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 h-full">
-                    <CardHeader className="p-5 border-b border-slate-100">
-                        <CardTitle className="text-base font-bold text-slate-800">Últimos Movimientos</CardTitle>
+                    <CardHeader className="p-5 border-b border-slate-100 dark:border-zinc-800">
+                        <CardTitle className="text-base font-bold text-slate-800 dark:text-slate-200">Últimos Movimientos</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
                         {historial.length === 0 ? (
@@ -194,17 +194,17 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                         ) : (
                             <div className="divide-y divide-slate-100 dark:divide-zinc-800">
                                 {historial.map(mov => (
-                                    <div key={mov.id} className="p-4 hover:bg-slate-50 transition-colors">
+                                    <div key={mov.id} className="p-4 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
-                                                <div className="text-sm font-bold text-slate-900">{mov.producto.nombre_producto}</div>
+                                                <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{mov.producto.nombre_producto}</div>
                                                 <div className="text-xs text-slate-500 font-mono">{mov.producto.codigo_articulo}</div>
                                             </div>
-                                            <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200">
+                                            <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
                                                 {mov.cantidad} unid.
                                             </Badge>
                                         </div>
-                                        <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                                        <div className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400">
                                             <span className="truncate max-w-[120px]" title={mov.depositoOrigen?.nombre}>{mov.depositoOrigen?.nombre}</span>
                                             <ArrowRight className="h-3 w-3 text-slate-400 shrink-0" />
                                             <span className="truncate max-w-[120px]" title={mov.depositoDestino?.nombre}>{mov.depositoDestino?.nombre}</span>

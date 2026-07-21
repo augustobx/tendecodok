@@ -72,14 +72,14 @@ export function FastEditForm({ prod, onSuccess }: { prod: any, onSuccess: () => 
                 <div className="space-y-1.5">
                     <Label className="font-bold text-[10px] uppercase text-emerald-600 tracking-wider">Ajuste de Stock (+/-)</Label>
                     <Input type="number" step={stepStock} value={formRapido.cantidad_sumar} onChange={(e) => setFormRapido({ ...formRapido, cantidad_sumar: Number(e.target.value) })}
-                        className="h-9 font-black text-center border-emerald-200 bg-emerald-50 text-emerald-700 focus-visible:ring-emerald-500" />
+                        className="h-9 font-black text-center border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 focus-visible:ring-emerald-500" />
                 </div>
                 <div className="space-y-1.5">
                     <Label className="font-bold text-[10px] uppercase text-indigo-600 tracking-wider">Nuevo Costo Base</Label>
                     <div className="relative">
                         <span className="absolute left-2 top-2 text-indigo-400 font-bold">$</span>
                         <Input type="number" step="0.01" value={formRapido.precio_costo} onChange={(e) => setFormRapido({ ...formRapido, precio_costo: Number(e.target.value) })}
-                            className="h-9 pl-6 font-black text-indigo-700 border-indigo-200 bg-indigo-50 focus-visible:ring-indigo-500" />
+                            className="h-9 pl-6 font-black text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-500/10 focus-visible:ring-indigo-500" />
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@ export function FastEditForm({ prod, onSuccess }: { prod: any, onSuccess: () => 
                 <div className="space-y-1.5 animate-in fade-in duration-200">
                     <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Depósito Destino/Origen</Label>
                     <select
-                        className="w-full h-9 border border-slate-200 rounded-md bg-white px-2 text-sm"
+                        className="w-full h-9 border border-slate-200 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800 text-slate-900 dark:text-white px-2 text-sm"
                         value={formRapido.depositoId}
                         onChange={(e) => setFormRapido({ ...formRapido, depositoId: e.target.value })}
                     >

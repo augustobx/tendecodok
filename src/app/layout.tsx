@@ -71,7 +71,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <AppSidebar esAdmin={esAdmin} permisos={permisos} nombreUsuario={nombreUsuario} />
 
               {/* ÁREA DE CONTENIDO PRINCIPAL */}
-              <main className="flex-1 flex flex-col overflow-y-auto min-h-0 min-w-0 p-4 md:p-6 pb-28 md:pb-6 bg-slate-50/50 dark:bg-zinc-950 relative print:overflow-visible print:p-0 print:bg-white">
+              <main className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden min-h-0 min-w-0 p-4 md:p-6 pb-28 md:pb-6 bg-slate-50/50 dark:bg-zinc-950 relative print:overflow-visible print:p-0 print:bg-white">
                 {children}
               </main>
 

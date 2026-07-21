@@ -35,6 +35,7 @@ export default function ClientesPage() {
     const [comprobanteDefault, setComprobanteDefault] = useState<string>("COMPROBANTE_X");
     const [cuitDniAlta, setCuitDniAlta] = useState("");
     const [condicionIvaAlta, setCondicionIvaAlta] = useState("Consumidor Final");
+    const [listasPermitidasAlta, setListasPermitidasAlta] = useState<number[]>([]);
 
     const handleCuitChangeAlta = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
@@ -71,6 +72,7 @@ export default function ClientesPage() {
     const [comprobanteDefaultEdit, setComprobanteDefaultEdit] = useState<string>("");
     const [cuitDniEdit, setCuitDniEdit] = useState("");
     const [condicionIvaEdit, setCondicionIvaEdit] = useState("");
+    const [listasPermitidasEdit, setListasPermitidasEdit] = useState<number[]>([]);
 
     const handleCuitChangeEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
@@ -132,6 +134,8 @@ export default function ClientesPage() {
         formData.append("lista_default_id", listaDefault);
         formData.append("comprobante_default", comprobanteDefault);
         formData.append("condicion_iva", condicionIvaAlta);
+        
+        listasPermitidasAlta.forEach(id => formData.append("listas_permitidas", String(id)));
 
         startTransition(async () => {
             const res = await crearCliente(formData);
@@ -142,6 +146,7 @@ export default function ClientesPage() {
                 setComprobanteDefault("COMPROBANTE_X");
                 setCuitDniAlta("");
                 setCondicionIvaAlta("Consumidor Final");
+                setListasPermitidasAlta([]);
                 setShowAlta(false);
                 fetchData();
             } else {
@@ -157,11 +162,14 @@ export default function ClientesPage() {
         formData.append("comprobante_default", comprobanteDefaultEdit);
         formData.append("condicion_iva", condicionIvaEdit);
 
+        listasPermitidasEdit.forEach(id => formData.append("listas_permitidas", String(id)));
+
         startTransition(async () => {
             const res = await actualizarCliente(clienteEditando.id, formData);
             if (res.success) {
                 toast.success("Cliente actualizado");
                 setClienteEditando(null);
+                setListasPermitidasEdit([]);
                 fetchData();
             } else {
                 toast.error(res.error);
@@ -322,6 +330,26 @@ export default function ClientesPage() {
                                             </SelectContent>
                                         </Select>
                                     </div>
+                                    <div className="space-y-1.5 col-span-2">
+                                        <Label className="text-[11px] font-bold uppercase text-emerald-600 tracking-wider">Tarifas Permitidas</Label>
+                                        <div className="grid grid-cols-2 gap-2 mt-2 p-3 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-lg">
+                                            {listas.map(l => (
+                                                <div key={l.id} className="flex items-center space-x-2">
+                                                    <Checkbox 
+                                                        id={`lista_alta_${l.id}`} 
+                                                        checked={listasPermitidasAlta.includes(l.id)}
+                                                        onCheckedChange={(checked) => {
+                                                            if (checked) setListasPermitidasAlta([...listasPermitidasAlta, l.id]);
+                                                            else setListasPermitidasAlta(listasPermitidasAlta.filter(id => id !== l.id));
+                                                        }}
+                                                    />
+                                                    <label htmlFor={`lista_alta_${l.id}`} className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-none cursor-pointer">
+                                                        {l.nombre}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="space-y-1.5">
@@ -381,6 +409,7 @@ export default function ClientesPage() {
                                                         setComprobanteDefaultEdit(c.comprobante_default);
                                                         setCuitDniEdit(c.dni_cuit || "");
                                                         setCondicionIvaEdit(c.condicion_iva || "Consumidor Final");
+                                                        setListasPermitidasEdit(c.listas_permitidas?.map((lp: any) => lp.listaPrecioId) || []);
                                                     }} className="h-8 w-8 text-slate-400 hover:text-indigo-600"><Pencil className="h-4 w-4" /></Button>
                                                         <Button size="icon" variant="ghost" onClick={() => handleEliminar(c.id, c.nombre_razon_social)} className="h-8 w-8 text-slate-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
@@ -669,6 +698,26 @@ export default function ClientesPage() {
                                                 <SelectItem value="Exento">Exento</SelectItem>
                                             </SelectContent>
                                         </Select>
+                                    </div>
+                                    <div className="space-y-1.5 col-span-2">
+                                        <Label className="text-xs font-semibold">Tarifas Permitidas</Label>
+                                        <div className="grid grid-cols-2 gap-2 p-2 border border-slate-100 rounded-md">
+                                            {listas.map(l => (
+                                                <div key={l.id} className="flex items-center space-x-2">
+                                                    <Checkbox 
+                                                        id={`lista_edit_${l.id}`} 
+                                                        checked={listasPermitidasEdit.includes(l.id)}
+                                                        onCheckedChange={(checked) => {
+                                                            if (checked) setListasPermitidasEdit([...listasPermitidasEdit, l.id]);
+                                                            else setListasPermitidasEdit(listasPermitidasEdit.filter(id => id !== l.id));
+                                                        }}
+                                                    />
+                                                    <label htmlFor={`lista_edit_${l.id}`} className="text-xs font-medium cursor-pointer">
+                                                        {l.nombre}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 

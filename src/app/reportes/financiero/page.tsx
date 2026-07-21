@@ -117,42 +117,42 @@ export default function ReporteFinancieroPage() {
                 <>
                     {/* KPIs */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white">
+                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                             <CardContent className="p-4 flex items-center gap-4">
-                                <div className="p-2.5 bg-blue-50 rounded-lg"><DollarSign className="h-5 w-5 text-blue-600" /></div>
+                                <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg"><DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" /></div>
                                 <div>
                                     <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Ingresos Totales</p>
-                                    <h3 className="text-xl font-bold text-slate-900 mt-0.5">${(reporteData.kpis.ingresosTotales || 0).toFixed(2)}</h3>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.ingresosTotales || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
                         </Card>
                         
-                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white">
+                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                             <CardContent className="p-4 flex items-center gap-4">
-                                <div className="p-2.5 bg-red-50 rounded-lg"><TrendingUp className="h-5 w-5 text-red-600" /></div>
+                                <div className="p-2.5 bg-red-50 dark:bg-red-500/10 rounded-lg"><TrendingUp className="h-5 w-5 text-red-600 dark:text-red-400" /></div>
                                 <div>
                                     <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Costo (CMV)</p>
-                                    <h3 className="text-xl font-bold text-slate-900 mt-0.5">${(reporteData.kpis.costoTotal || 0).toFixed(2)}</h3>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.costoTotal || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
                         </Card>
 
-                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white">
+                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                             <CardContent className="p-4 flex items-center gap-4">
-                                <div className="p-2.5 bg-orange-50 rounded-lg"><Percent className="h-5 w-5 text-orange-600" /></div>
+                                <div className="p-2.5 bg-orange-50 dark:bg-orange-500/10 rounded-lg"><Percent className="h-5 w-5 text-orange-600 dark:text-orange-400" /></div>
                                 <div>
                                     <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Descuentos</p>
-                                    <h3 className="text-xl font-bold text-slate-900 mt-0.5">${(reporteData.kpis.descuentosTotales || 0).toFixed(2)}</h3>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.descuentosTotales || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
                         </Card>
 
-                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white">
+                        <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                             <CardContent className="p-4 flex items-center gap-4">
-                                <div className="p-2.5 bg-purple-50 rounded-lg"><Receipt className="h-5 w-5 text-purple-600" /></div>
+                                <div className="p-2.5 bg-purple-50 dark:bg-purple-500/10 rounded-lg"><Receipt className="h-5 w-5 text-purple-600 dark:text-purple-400" /></div>
                                 <div>
                                     <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Impuestos (IVA)</p>
-                                    <h3 className="text-xl font-bold text-slate-900 mt-0.5">${(reporteData.kpis.impuestosTotales || 0).toFixed(2)}</h3>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.impuestosTotales || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
                         </Card>
@@ -174,7 +174,7 @@ export default function ReporteFinancieroPage() {
                         </CardHeader>
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left">
-                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 text-slate-500 border-b border-slate-200">
+                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                                     <tr>
                                         <th className="px-4 py-3 font-semibold">Fecha</th>
                                         <th className="px-4 py-3 font-semibold">Comprobante</th>
@@ -182,24 +182,24 @@ export default function ReporteFinancieroPage() {
                                         <th className="px-4 py-3 font-semibold text-right">Ingreso Bruto</th>
                                         <th className="px-4 py-3 font-semibold text-right">Costo</th>
                                         <th className="px-4 py-3 font-semibold text-right">Impuestos</th>
-                                        <th className="px-4 py-3 font-semibold text-right text-emerald-600">Ganancia Neta</th>
+                                        <th className="px-4 py-3 font-semibold text-right text-emerald-600 dark:text-emerald-500">Ganancia Neta</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100 bg-white">
+                                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
                                     {reporteData.detalles.length === 0 ? (
                                         <tr>
-                                            <td colSpan={7} className="text-center py-8 text-slate-400">No hay ventas en este período para los filtros seleccionados.</td>
+                                            <td colSpan={7} className="text-center py-8 text-slate-400 dark:text-slate-500">No hay ventas en este período para los filtros seleccionados.</td>
                                         </tr>
                                     ) : (
                                         reporteData.detalles.map((v: any) => (
-                                            <tr key={v.id} className="hover:bg-slate-50 transition-colors">
-                                                <td className="px-4 py-3 font-mono text-xs text-slate-500">{new Date(v.fecha).toLocaleDateString('es-AR')}</td>
-                                                <td className="px-4 py-3 text-xs font-semibold text-slate-700">{v.comprobante}</td>
-                                                <td className="px-4 py-3 text-xs text-slate-600 truncate max-w-[150px]">{v.cliente}</td>
-                                                <td className="px-4 py-3 text-right font-medium text-slate-700">${v.total.toFixed(2)}</td>
-                                                <td className="px-4 py-3 text-right text-xs text-red-600">-${v.costo.toFixed(2)}</td>
-                                                <td className="px-4 py-3 text-right text-xs text-purple-600">-${v.impuestos.toFixed(2)}</td>
-                                                <td className="px-4 py-3 text-right font-bold text-emerald-600">${v.ganancia_neta.toFixed(2)}</td>
+                                            <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
+                                                <td className="px-4 py-3 font-mono text-xs text-slate-500 dark:text-slate-400">{new Date(v.fecha).toLocaleDateString('es-AR')}</td>
+                                                <td className="px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300">{v.comprobante}</td>
+                                                <td className="px-4 py-3 text-xs text-slate-600 dark:text-slate-400 truncate max-w-[150px]">{v.cliente}</td>
+                                                <td className="px-4 py-3 text-right font-medium text-slate-700 dark:text-slate-300">${v.total.toFixed(2)}</td>
+                                                <td className="px-4 py-3 text-right text-xs text-red-600 dark:text-red-400">-${v.costo.toFixed(2)}</td>
+                                                <td className="px-4 py-3 text-right text-xs text-purple-600 dark:text-purple-400">-${v.impuestos.toFixed(2)}</td>
+                                                <td className="px-4 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${v.ganancia_neta.toFixed(2)}</td>
                                             </tr>
                                         ))
                                     )}

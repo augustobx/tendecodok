@@ -244,9 +244,14 @@ export async function registrarVenta(data: any) {
             const finalDateCae = afipData ? parseCaeVtoDate(afipData.cae_vto) : null;
 
             // 2. CREAR LA VENTA MAESTRA
+            // Fix: Parsear fecha seleccionada + hora real del servidor para evitar desfase de timezone
+            const [anioEm, mesEm, diaEm] = data.fecha_emision.split('-').map(Number);
+            const ahoraServer = new Date();
+            const fechaEmisionConHora = new Date(anioEm, mesEm - 1, diaEm, ahoraServer.getHours(), ahoraServer.getMinutes(), ahoraServer.getSeconds());
+
             const nuevaVenta = await tx.venta.create({
                 data: {
-                    fecha_emision: new Date(data.fecha_emision),
+                    fecha_emision: fechaEmisionConHora,
                     tipo_comprobante: data.tipo_comprobante,
                     punto_venta: secuencia.punto_venta,
                     numero_comprobante: nuevoNumero,
