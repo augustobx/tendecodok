@@ -26,7 +26,8 @@ export default function FaltantesStockPage() {
         setLoading(true);
         startTransition(async () => {
             const catRes = await getCategorias();
-            setCategorias(catRes);
+            const uniqueCats = Array.from(new Map(catRes.map((c: any) => [c.nombre, c])).values());
+            setCategorias(uniqueCats);
             const provRes = await getProveedoresCompleto();
             setProveedores(Array.isArray(provRes) ? provRes : []);
 
@@ -109,7 +110,7 @@ export default function FaltantesStockPage() {
                             <SelectContent className="bg-white dark:bg-zinc-800 border-slate-200 dark:border-zinc-700">
                                 <SelectItem value="TODOS">Todos los proveedores</SelectItem>
                                 {proveedores.map((p: any) => (
-                                    <SelectItem key={p.id} value={String(p.id)}>{p.nombre_razon_social}</SelectItem>
+                                    <SelectItem key={p.id} value={String(p.id)}>{p.nombre}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -166,7 +167,7 @@ export default function FaltantesStockPage() {
                                                 <div className="text-[10px] text-slate-500">{prod.marca?.nombre || "-"}</div>
                                             </td>
                                             <td className="px-6 py-3 text-xs text-slate-600 dark:text-slate-400">
-                                                {prod.proveedor?.nombre_razon_social || "-"}
+                                                {prod.proveedor?.nombre || "-"}
                                             </td>
                                             <td className="px-6 py-3 text-center text-slate-700 dark:text-slate-300 font-medium">
                                                 {prod.stock_recomendado}
