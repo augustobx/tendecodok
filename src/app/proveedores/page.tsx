@@ -182,17 +182,17 @@ export default function ProveedoresPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Proveedores y Marcas</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Agenda comercial y control masivo de costos.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Agenda comercial y control masivo de costos.</p>
                     </div>
                 </div>
             </div>
 
             {/* PESTAÑAS */}
             <div className="flex gap-2 border-b border-slate-200 dark:border-zinc-800 pb-px">
-                <Button variant="ghost" onClick={() => setTabActiva("DIRECTORIO")} className={`rounded-none border-b-2 px-6 ${tabActiva === "DIRECTORIO" ? 'border-indigo-600 text-indigo-600 font-bold bg-indigo-50/50' : 'border-transparent text-slate-500 hover:bg-slate-50'}`}>
+                <Button variant="ghost" onClick={() => setTabActiva("DIRECTORIO")} className={`rounded-none border-b-2 px-6 ${tabActiva === "DIRECTORIO" ? 'border-indigo-600 text-indigo-600 font-bold bg-indigo-50/50' : 'border-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800'}`}>
                     <Users className="h-4 w-4 mr-2" /> Directorio
                 </Button>
-                <Button variant="ghost" onClick={() => setTabActiva("AUMENTOS")} className={`rounded-none border-b-2 px-6 ${tabActiva === "AUMENTOS" ? 'border-red-600 text-red-600 font-bold bg-red-50/50' : 'border-transparent text-slate-500 hover:bg-slate-50'}`}>
+                <Button variant="ghost" onClick={() => setTabActiva("AUMENTOS")} className={`rounded-none border-b-2 px-6 ${tabActiva === "AUMENTOS" ? 'border-red-600 text-red-600 font-bold bg-red-50/50' : 'border-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800'}`}>
                     <TrendingUp className="h-4 w-4 mr-2" /> Actualización Masiva
                 </Button>
             </div>
@@ -210,7 +210,7 @@ export default function ProveedoresPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {proveedores.map(p => (
-                            <Card key={p.id} className="shadow-sm border-slate-200 bg-white hover:border-indigo-200 transition-colors">
+                            <Card key={p.id} className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-indigo-200 transition-colors">
                                 <CardHeader className="p-4 pb-2 flex flex-row items-start justify-between">
                                     <div>
                                         <CardTitle className="text-base text-slate-900">{p.nombre}</CardTitle>
@@ -220,9 +220,9 @@ export default function ProveedoresPage() {
                                 </CardHeader>
                                 <CardContent className="p-4 pt-0 space-y-3">
                                     <div className="space-y-2 mt-2">
-                                        <div className="flex items-center text-xs text-slate-600"><Phone className="h-3.5 w-3.5 mr-2 text-slate-400" /> {p.telefono || "-"}</div>
-                                        <div className="flex items-center text-xs text-slate-600"><Mail className="h-3.5 w-3.5 mr-2 text-slate-400" /> {p.email || "-"}</div>
-                                        <div className="flex items-center text-xs text-slate-600 truncate"><MapPin className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0" /> {p.direccion || "-"}</div>
+                                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-300"><Phone className="h-3.5 w-3.5 mr-2 text-slate-400" /> {p.telefono || "-"}</div>
+                                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-300"><Mail className="h-3.5 w-3.5 mr-2 text-slate-400" /> {p.email || "-"}</div>
+                                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-300 truncate"><MapPin className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0" /> {p.direccion || "-"}</div>
                                     </div>
 
                                     {/* Aumento del Proveedor */}
@@ -238,10 +238,10 @@ export default function ProveedoresPage() {
                                         <div className="pt-2 mt-2 border-t border-slate-100 space-y-1">
                                             <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1"><Tag className="h-3 w-3" /> Marcas</p>
                                             {p.marcas.map((m: any) => (
-                                                <div key={m.id} className="bg-slate-50 rounded-md px-2 py-1 flex flex-col">
+                                                <div key={m.id} className="bg-slate-50 dark:bg-zinc-800 rounded-md px-2 py-1 flex flex-col">
                                                     <div className="flex items-center justify-between">
                                                         <div>
-                                                            <span className="text-xs font-semibold text-slate-700">{m.nombre}</span>
+                                                            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">{m.nombre}</span>
                                                             {m.aumento_porcentaje > 0 && <span className="text-[9px] text-purple-600 ml-1 font-bold">+{m.aumento_porcentaje}%</span>}
                                                             <span className="text-[9px] text-slate-400 ml-1">({m._count?.productos || 0} prod.)</span>
                                                         </div>
@@ -253,11 +253,11 @@ export default function ProveedoresPage() {
 
                                                     {/* Mostrar Categorías */}
                                                     {m.categorias && m.categorias.length > 0 && (
-                                                        <div className="pl-3 mt-1.5 border-l-2 border-slate-200 mb-1 space-y-0.5">
+                                                        <div className="pl-3 mt-1.5 border-l-2 border-slate-200 dark:border-zinc-800 mb-1 space-y-0.5">
                                                             {m.categorias.map((c: any) => (
                                                                 <div key={c.id} className="flex items-center justify-between group">
                                                                     <div>
-                                                                        <span className="text-[10px] font-medium text-slate-500">{c.nombre}</span>
+                                                                        <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">{c.nombre}</span>
                                                                         {c.aumento_porcentaje > 0 && <span className="text-[9px] text-indigo-600 ml-1 font-bold">+{c.aumento_porcentaje}%</span>}
                                                                         <span className="text-[9px] text-slate-400 ml-1">({c._count?.productos || 0} pr)</span>
                                                                     </div>
@@ -280,7 +280,7 @@ export default function ProveedoresPage() {
                                     )}
 
                                     <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                                        <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5"><Package className="h-3.5 w-3.5" /> {p._count.productos} productos</span>
+                                        <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5"><Package className="h-3.5 w-3.5" /> {p._count.productos} productos</span>
                                         <Button variant="ghost" size="sm" className="text-xs h-7 text-indigo-600 hover:bg-indigo-50" onClick={() => { setMarcaEditando(null); setMarcaProvId(p.id); setShowMarcaModal(true); }}>
                                             <Plus className="h-3 w-3 mr-1" /> Marca
                                         </Button>
@@ -289,7 +289,7 @@ export default function ProveedoresPage() {
                             </Card>
                         ))}
                         {proveedores.length === 0 && (
-                            <div className="col-span-full p-10 text-center text-slate-500 bg-white border border-dashed rounded-xl">No hay proveedores registrados.</div>
+                            <div className="col-span-full p-10 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-zinc-900 border border-dashed rounded-xl">No hay proveedores registrados.</div>
                         )}
                     </div>
                 </div>
@@ -314,13 +314,13 @@ export default function ProveedoresPage() {
 
                         <CardContent className="p-8 space-y-8 bg-white dark:bg-zinc-900">
                             
-                            <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4">
-                                <h4 className="font-bold text-slate-800 border-b pb-2">Paso 1: Filtro en Cascada (Elige a quién afectar)</h4>
+                            <div className="bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-800 p-5 rounded-xl space-y-4">
+                                <h4 className="font-bold text-slate-800 dark:text-slate-100 border-b pb-2">Paso 1: Filtro en Cascada (Elige a quién afectar)</h4>
                                 
                                 <div className="space-y-1.5">
-                                    <Label className="text-sm font-bold text-slate-700">1º Nivel: Seleccione Proveedor (Obligatorio)</Label>
+                                    <Label className="text-sm font-bold text-slate-700 dark:text-slate-200">1º Nivel: Seleccione Proveedor (Obligatorio)</Label>
                                     <Select value={provSeleccionadoMasivo} onValueChange={(v) => { setProvSeleccionadoMasivo(v || ""); setMarcaSeleccionadaMasiva(""); setCategoriaSeleccionadaMasiva(""); }}>
-                                        <SelectTrigger className="h-11 bg-white border-slate-200 font-medium">
+                                        <SelectTrigger className="h-11 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 font-medium">
                                             <SelectValue placeholder="Elegir proveedor...">
                                                 {provSeleccionadoMasivo ? proveedores.find(p => String(p.id) === provSeleccionadoMasivo)?.nombre : "Elegir proveedor..."}
                                             </SelectValue>
@@ -335,13 +335,13 @@ export default function ProveedoresPage() {
 
                                 {/* Cascada: Marca */}
                                 <div className="space-y-1.5">
-                                    <Label className="text-sm font-bold text-slate-700">2º Nivel: Restringir a una Marca (Opcional)</Label>
+                                    <Label className="text-sm font-bold text-slate-700 dark:text-slate-200">2º Nivel: Restringir a una Marca (Opcional)</Label>
                                     <Select 
                                         value={marcaSeleccionadaMasiva} 
                                         onValueChange={(val) => { setMarcaSeleccionadaMasiva(val || ""); setCategoriaSeleccionadaMasiva(""); }}
                                         disabled={!provSeleccionadoMasivo || marcasMasivo.length === 0}
                                     >
-                                        <SelectTrigger className="h-11 bg-white border-slate-200 font-medium disabled:opacity-50">
+                                        <SelectTrigger className="h-11 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 font-medium disabled:opacity-50">
                                             <SelectValue placeholder={!provSeleccionadoMasivo ? "Primero elija un proveedor" : marcasMasivo.length === 0 ? "Este proveedor no tiene marcas" : "Todas las marcas"}>
                                                 {marcaSeleccionadaMasiva ? marcaMasiva?.nombre : "Todas las marcas"}
                                             </SelectValue>
@@ -354,13 +354,13 @@ export default function ProveedoresPage() {
 
                                 {/* Cascada: Categoría */}
                                 <div className="space-y-1.5">
-                                    <Label className="text-sm font-bold text-slate-700">3º Nivel: Restringir a una Categoría (Opcional)</Label>
+                                    <Label className="text-sm font-bold text-slate-700 dark:text-slate-200">3º Nivel: Restringir a una Categoría (Opcional)</Label>
                                     <Select 
                                         value={categoriaSeleccionadaMasiva} 
                                         onValueChange={(v) => setCategoriaSeleccionadaMasiva(v || "")}
                                         disabled={!marcaSeleccionadaMasiva || categoriasMasivo.length === 0}
                                     >
-                                        <SelectTrigger className="h-11 bg-white border-slate-200 font-medium disabled:opacity-50">
+                                        <SelectTrigger className="h-11 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 font-medium disabled:opacity-50">
                                             <SelectValue placeholder={!marcaSeleccionadaMasiva ? "Primero elija una marca" : categoriasMasivo.length === 0 ? "Esta marca no tiene categorías" : "Todas las categorías"}>
                                                 {categoriaSeleccionadaMasiva ? categoriasMasivo.find((c: any) => String(c.id) === categoriaSeleccionadaMasiva)?.nombre : "Todas las categorías"}
                                             </SelectValue>
@@ -372,13 +372,13 @@ export default function ProveedoresPage() {
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4 mt-6">
-                                <h4 className="font-bold text-slate-800 border-b pb-2">Paso 2: Magnitud de la Inflación</h4>
+                            <div className="bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-800 p-5 rounded-xl space-y-4 mt-6">
+                                <h4 className="font-bold text-slate-800 dark:text-slate-100 border-b pb-2">Paso 2: Magnitud de la Inflación</h4>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-sm font-bold text-slate-700">Acción</Label>
+                                        <Label className="text-sm font-bold text-slate-700 dark:text-slate-200">Acción</Label>
                                         <Select value={accionMasiva} onValueChange={(val: any) => setAccionMasiva(val)}>
-                                            <SelectTrigger className="h-12 bg-white border-slate-200 text-base font-bold text-slate-700">
+                                            <SelectTrigger className="h-12 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-base font-bold text-slate-700 dark:text-slate-200">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -389,11 +389,11 @@ export default function ProveedoresPage() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-sm font-bold text-slate-700">Porcentaje (%)</Label>
+                                        <Label className="text-sm font-bold text-slate-700 dark:text-slate-200">Porcentaje (%)</Label>
                                         <div className="relative">
                                             <Input
                                                 type="number" step="0.1" value={porcentajeMasivo} onChange={(e) => setPorcentajeMasivo(e.target.value)}
-                                                className="h-12 pl-4 pr-10 bg-white border-slate-200 font-black text-xl text-slate-900"
+                                                className="h-12 pl-4 pr-10 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 font-black text-xl text-slate-900"
                                                 placeholder="Ej: 15"
                                             />
                                             <span className="absolute right-4 top-3 text-slate-400 font-bold text-lg">%</span>
@@ -423,24 +423,24 @@ export default function ProveedoresPage() {
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
                     <Card className="w-full max-w-lg shadow-2xl border-0 rounded-2xl flex flex-col">
-                        <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center shrink-0 rounded-t-2xl">
+                        <div className="p-4 border-b border-slate-100 bg-slate-50 dark:bg-zinc-800 flex justify-between items-center shrink-0 rounded-t-2xl">
                             <h3 className="font-bold flex items-center gap-2"><Building2 className="h-4 w-4 text-indigo-600" /> {provEditando ? "Editar Proveedor" : "Nuevo Proveedor"}</h3>
                             <Button variant="ghost" size="icon" onClick={() => setShowModal(false)} className="h-8 w-8 rounded-full text-slate-400"><X className="h-4 w-4" /></Button>
                         </div>
                         <form onSubmit={handleGuardarProveedor} className="p-5 space-y-4">
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-semibold">Razón Social / Marca <span className="text-red-500">*</span></Label>
-                                <Input name="nombre" defaultValue={provEditando?.nombre} required autoFocus className="h-10 bg-slate-50" />
+                                <Input name="nombre" defaultValue={provEditando?.nombre} required autoFocus className="h-10 bg-slate-50 dark:bg-zinc-800" />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1.5"><Label className="text-xs font-semibold">CUIT</Label><Input name="cuit" defaultValue={provEditando?.cuit} className="h-10 bg-slate-50" /></div>
-                                <div className="space-y-1.5"><Label className="text-xs font-semibold">Teléfono</Label><Input name="telefono" defaultValue={provEditando?.telefono} className="h-10 bg-slate-50" /></div>
+                                <div className="space-y-1.5"><Label className="text-xs font-semibold">CUIT</Label><Input name="cuit" defaultValue={provEditando?.cuit} className="h-10 bg-slate-50 dark:bg-zinc-800" /></div>
+                                <div className="space-y-1.5"><Label className="text-xs font-semibold">Teléfono</Label><Input name="telefono" defaultValue={provEditando?.telefono} className="h-10 bg-slate-50 dark:bg-zinc-800" /></div>
                             </div>
-                            <div className="space-y-1.5"><Label className="text-xs font-semibold">Email</Label><Input name="email" type="email" defaultValue={provEditando?.email} className="h-10 bg-slate-50" /></div>
-                            <div className="space-y-1.5"><Label className="text-xs font-semibold">Dirección</Label><Input name="direccion" defaultValue={provEditando?.direccion} className="h-10 bg-slate-50" /></div>
+                            <div className="space-y-1.5"><Label className="text-xs font-semibold">Email</Label><Input name="email" type="email" defaultValue={provEditando?.email} className="h-10 bg-slate-50 dark:bg-zinc-800" /></div>
+                            <div className="space-y-1.5"><Label className="text-xs font-semibold">Dirección</Label><Input name="direccion" defaultValue={provEditando?.direccion} className="h-10 bg-slate-50 dark:bg-zinc-800" /></div>
                             <div className="space-y-1.5 p-3 bg-orange-50 border border-orange-100 rounded-lg">
                                 <Label className="text-xs font-semibold text-orange-700 flex items-center gap-1"><Percent className="h-3 w-3" /> Aumento Propio del Proveedor (%)</Label>
-                                <Input name="aumento_porcentaje" type="number" step="0.1" defaultValue={provEditando?.aumento_porcentaje || 0} className="h-10 bg-white border-orange-200" />
+                                <Input name="aumento_porcentaje" type="number" step="0.1" defaultValue={provEditando?.aumento_porcentaje || 0} className="h-10 bg-white dark:bg-zinc-900 border-orange-200" />
                                 <p className="text-[10px] text-orange-600">Se aplica en cascada a todos los productos de este proveedor.</p>
                             </div>
                             <div className="pt-4 border-t flex justify-end gap-2">
@@ -456,18 +456,18 @@ export default function ProveedoresPage() {
             {showMarcaModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
                     <Card className="w-full max-w-sm shadow-2xl border-0 rounded-2xl flex flex-col">
-                        <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center shrink-0 rounded-t-2xl">
+                        <div className="p-4 border-b border-slate-100 bg-slate-50 dark:bg-zinc-800 flex justify-between items-center shrink-0 rounded-t-2xl">
                             <h3 className="font-bold flex items-center gap-2"><Tag className="h-4 w-4 text-purple-600" /> {marcaEditando ? "Editar Marca" : "Nueva Marca"}</h3>
                             <Button variant="ghost" size="icon" onClick={() => setShowMarcaModal(false)} className="h-8 w-8 rounded-full text-slate-400"><X className="h-4 w-4" /></Button>
                         </div>
                         <form onSubmit={handleGuardarMarca} className="p-5 space-y-4">
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-semibold">Nombre de la Marca <span className="text-red-500">*</span></Label>
-                                <Input name="nombre" defaultValue={marcaEditando?.nombre} required autoFocus className="h-10 bg-slate-50" />
+                                <Input name="nombre" defaultValue={marcaEditando?.nombre} required autoFocus className="h-10 bg-slate-50 dark:bg-zinc-800" />
                             </div>
                             <div className="space-y-1.5 p-3 bg-purple-50 border border-purple-100 rounded-lg">
                                 <Label className="text-xs font-semibold text-purple-700 flex items-center gap-1"><Percent className="h-3 w-3" /> Aumento Propio (%)</Label>
-                                <Input name="aumento_porcentaje" type="number" step="0.1" defaultValue={marcaEditando?.aumento_porcentaje || 0} className="h-10 bg-white border-purple-200" />
+                                <Input name="aumento_porcentaje" type="number" step="0.1" defaultValue={marcaEditando?.aumento_porcentaje || 0} className="h-10 bg-white dark:bg-zinc-900 border-purple-200" />
                             </div>
                             <div className="pt-4 border-t flex justify-end gap-2">
                                 <Button type="button" variant="outline" onClick={() => setShowMarcaModal(false)}>Cancelar</Button>
@@ -482,18 +482,18 @@ export default function ProveedoresPage() {
             {showCategoriaModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
                     <Card className="w-full max-w-sm shadow-2xl border-0 rounded-2xl flex flex-col">
-                        <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center shrink-0 rounded-t-2xl">
+                        <div className="p-4 border-b border-slate-100 bg-slate-50 dark:bg-zinc-800 flex justify-between items-center shrink-0 rounded-t-2xl">
                             <h3 className="font-bold flex items-center gap-2"><Tag className="h-4 w-4 text-indigo-600" /> {categoriaEditando ? "Editar Categoría" : "Nueva Categoría"}</h3>
                             <Button variant="ghost" size="icon" onClick={() => setShowCategoriaModal(false)} className="h-8 w-8 rounded-full text-slate-400"><X className="h-4 w-4" /></Button>
                         </div>
                         <form onSubmit={handleGuardarCategoria} className="p-5 space-y-4">
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-semibold">Nombre de la Categoría <span className="text-red-500">*</span></Label>
-                                <Input name="nombre" defaultValue={categoriaEditando?.nombre} required autoFocus className="h-10 bg-slate-50" />
+                                <Input name="nombre" defaultValue={categoriaEditando?.nombre} required autoFocus className="h-10 bg-slate-50 dark:bg-zinc-800" />
                             </div>
                             <div className="space-y-1.5 p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
                                 <Label className="text-xs font-semibold text-indigo-700 flex items-center gap-1"><Percent className="h-3 w-3" /> Aumento Propio (%)</Label>
-                                <Input name="aumento_porcentaje" type="number" step="0.1" defaultValue={categoriaEditando?.aumento_porcentaje || 0} className="h-10 bg-white border-indigo-200" />
+                                <Input name="aumento_porcentaje" type="number" step="0.1" defaultValue={categoriaEditando?.aumento_porcentaje || 0} className="h-10 bg-white dark:bg-zinc-900 border-indigo-200" />
                             </div>
                             <div className="pt-4 border-t flex justify-end gap-2">
                                 <Button type="button" variant="outline" onClick={() => setShowCategoriaModal(false)}>Cancelar</Button>

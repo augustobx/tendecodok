@@ -684,7 +684,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Terminal de Ventas</h2>
-                        <p className="text-sm text-slate-500 hidden sm:block">Facturación rápida</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block">Facturación rápida</p>
                     </div>
                 </div>
 
@@ -749,7 +749,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
 
                         <div className="flex-1 overflow-auto bg-slate-50/50 dark:bg-zinc-900/50">
                             <table className="w-full text-sm text-left">
-                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                                     <tr>
                                         <th className="px-4 py-3 w-[35%] font-semibold">Producto</th>
                                         <th className="px-4 py-3 w-[12%] font-semibold text-center">Cant.</th>
@@ -820,14 +820,14 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                         <div className="p-2.5 border-b border-slate-100 dark:border-zinc-800 shrink-0">
                             <p className="text-xs font-semibold flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-2"><User className="h-3.5 w-3.5" /> Cliente y Tarifario</p>
                             {!clienteSeleccionado ? (
-                                <Button onClick={() => setShowClienteModal(true)} variant="outline" className="w-full h-9 border-dashed hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 transition-all text-slate-500 font-medium text-xs">
+                                <Button onClick={() => setShowClienteModal(true)} variant="outline" className="w-full h-9 border-dashed hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 transition-all text-slate-500 dark:text-slate-400 font-medium text-xs">
                                     <Search className="w-3.5 h-3.5 mr-1.5" /> Buscar Cliente
                                 </Button>
                             ) : (
                                 <div className="bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-lg px-2.5 py-2 relative">
                                     <Button variant="ghost" size="sm" onClick={handleLimpiarCliente} className="absolute right-1 top-0.5 h-5 text-[10px] text-slate-400 hover:text-red-500 font-medium px-1.5">Cambiar</Button>
                                     <p className="font-bold text-sm text-slate-900 dark:text-slate-100 pr-14 truncate leading-tight">{clienteSeleccionado.nombre_razon_social}</p>
-                                    <p className="text-[11px] font-mono text-slate-500">{clienteSeleccionado.dni_cuit || "Consumidor Final"}</p>
+                                    <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">{clienteSeleccionado.dni_cuit || "Consumidor Final"}</p>
                                     {cargandoResumen ? (
                                         <div className="flex items-center gap-1.5 mt-1">
                                             <Loader2 className="h-3 w-3 animate-spin text-slate-400" />
@@ -884,7 +884,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                         <div className="p-2.5 flex-1 flex flex-col min-h-0 overflow-y-auto space-y-2">
 
                             <details className="group border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800/50 rounded-lg overflow-hidden shrink-0 [&::-webkit-details-marker]:hidden">
-                                <summary className="flex items-center justify-between px-2.5 py-2 font-semibold text-[10px] uppercase tracking-wider text-slate-500 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors list-none">
+                                <summary className="flex items-center justify-between px-2.5 py-2 font-semibold text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 cursor-pointer select-none hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors list-none">
                                     <div className="flex items-center gap-1.5"><Settings2 className="h-3.5 w-3.5 text-indigo-500" /> Envío, Notas y Detalles</div>
                                     <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
                                 </summary>
@@ -899,11 +899,11 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                         <Input placeholder="Dirección de entrega..." value={direccionEnvio} onChange={e => setDireccionEnvio(e.target.value)} className="h-8 text-xs bg-slate-50 dark:bg-zinc-800/50" />
                                     )}
                                     <div className="space-y-1">
-                                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1"><StickyNote className="h-3 w-3" /> Notas</Label>
+                                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider flex items-center gap-1"><StickyNote className="h-3 w-3" /> Notas</Label>
                                         <Textarea placeholder="Ej: Entregar por la tarde..." value={detallesVenta} onChange={e => setDetallesVenta(e.target.value)} className="resize-none h-12 bg-slate-50 dark:bg-zinc-800/50 text-xs border-slate-200 dark:border-zinc-700" />
                                     </div>
                                     <div className="space-y-1">
-                                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Comentario</Label>
+                                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider flex items-center gap-1"><MessageSquare className="h-3 w-3" /> Comentario</Label>
                                         <Input placeholder="Ej: Cliente frecuente, dio seña..." value={comentarioVenta} onChange={e => setComentarioVenta(e.target.value)} className="h-8 text-xs bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                                     </div>
                                 </div>
@@ -911,11 +911,11 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
 
                             {/* Subtotal + Descuento en linea */}
                             <div className="flex items-center justify-between text-xs shrink-0">
-                                <span className="text-slate-500 font-medium">Subtotal</span>
+                                <span className="text-slate-500 dark:text-slate-400 font-medium">Subtotal</span>
                                 <span className="font-mono font-semibold">${subtotalCarrito.toFixed(2)}</span>
                             </div>
                             <div className="flex items-center justify-between shrink-0">
-                                <span className="text-xs font-medium text-slate-500">Dto. %</span>
+                                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Dto. %</span>
                                 <div className="flex items-center gap-1.5">
                                     {descuentoGlobal > 0 && (
                                         <span className="text-[10px] text-emerald-600 font-semibold">-${montoDescuentoGlobal.toFixed(2)}</span>
@@ -936,7 +936,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                             {/* === PAGOS MÚLTIPLES === */}
                             <div className="space-y-1.5 shrink-0">
                                 <div className="flex items-center justify-between">
-                                    <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider flex items-center gap-1">
+                                    <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider flex items-center gap-1">
                                         <CreditCard className="h-3 w-3" /> Métodos de Pago
                                     </Label>
                                     <Button type="button" variant="ghost" size="sm" onClick={agregarLineaPago} className="text-indigo-600 hover:text-indigo-700 text-[10px] h-6 px-1.5">
@@ -975,7 +975,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                                 <span className="absolute left-1.5 top-1.5 text-slate-400 text-[11px]">$</span>
                                                 <Input type="number" step="0.01" placeholder={pagos.length === 1 ? totalFinal.toFixed(2) : "0.00"}
                                                     value={pago.monto} onChange={(e) => actualizarPago(i, "monto", e.target.value)}
-                                                    className="h-8 pl-4 text-right text-xs font-bold bg-white dark:bg-zinc-900 border-slate-200" />
+                                                    className="h-8 pl-4 text-right text-xs font-bold bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800" />
                                             </div>
                                             {pagos.length > 1 && (
                                                 <Button variant="ghost" size="icon" onClick={() => eliminarLineaPago(i)} className="h-7 w-7 text-red-400 hover:text-red-600 shrink-0">
@@ -986,18 +986,18 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                         {pago.metodo_pago === 'TARJETA' && (
                                             <div className="flex gap-2 items-center flex-wrap animate-in fade-in">
                                                 <div className="flex items-center gap-1 bg-white dark:bg-zinc-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-zinc-700">
-                                                    <Label className="text-[10px] uppercase font-bold text-slate-500">Cuotas</Label>
-                                                    <Input type="number" placeholder="1" className="h-6 w-14 text-center text-[11px] font-bold bg-slate-50 dark:bg-zinc-800 border-slate-200" value={pago.cuotas || ""} onChange={(e) => actualizarPago(i, "cuotas", e.target.value)} />
+                                                    <Label className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Cuotas</Label>
+                                                    <Input type="number" placeholder="1" className="h-6 w-14 text-center text-[11px] font-bold bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-800" value={pago.cuotas || ""} onChange={(e) => actualizarPago(i, "cuotas", e.target.value)} />
                                                 </div>
                                                 <div className="flex items-center gap-1 bg-white dark:bg-zinc-900 px-1.5 py-0.5 rounded border border-indigo-200 dark:border-indigo-500/20">
                                                     <Label className="text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">%Rec</Label>
-                                                    <Input type="number" placeholder="0" className="h-6 w-14 text-center text-[11px] font-bold border-indigo-200 bg-white" value={pago.recargo_porcentaje || ""} onChange={(e) => actualizarPago(i, "recargo_porcentaje", e.target.value)} />
+                                                    <Input type="number" placeholder="0" className="h-6 w-14 text-center text-[11px] font-bold border-indigo-200 bg-white dark:bg-zinc-900" value={pago.recargo_porcentaje || ""} onChange={(e) => actualizarPago(i, "recargo_porcentaje", e.target.value)} />
                                                 </div>
                                             </div>
                                         )}
                                         {pago.metodo_pago === 'CHEQUE' && (
                                             <div className="bg-white dark:bg-zinc-900 px-2 py-1 rounded border border-slate-200 dark:border-zinc-700 animate-in fade-in">
-                                                <Input placeholder="Nro, Banco, Vto, CUIT..." className="h-7 text-[11px] font-medium bg-slate-50 dark:bg-zinc-800 border-slate-200" value={pago.detalle_cheque || ""} onChange={(e) => actualizarPago(i, "detalle_cheque", e.target.value)} />
+                                                <Input placeholder="Nro, Banco, Vto, CUIT..." className="h-7 text-[11px] font-medium bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-800" value={pago.detalle_cheque || ""} onChange={(e) => actualizarPago(i, "detalle_cheque", e.target.value)} />
                                             </div>
                                         )}
                                     </div>
@@ -1006,7 +1006,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                 {pagos.length >= 1 && (
                                     <div className={`flex items-center justify-between px-2.5 py-2 rounded-lg border ${totalPagos > totalFinal + 0.01 ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20' : totalPagos < totalFinal - 0.01 ? 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20' : 'bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700'}`}>
                                         <div>
-                                            <p className="text-[10px] uppercase font-bold text-slate-500">Ingresado</p>
+                                            <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Ingresado</p>
                                             <p className={`font-bold text-sm ${totalPagos > totalFinal + 0.01 ? 'text-emerald-700 dark:text-emerald-400' : totalPagos < totalFinal - 0.01 ? 'text-red-600 dark:text-red-400' : 'text-slate-700 dark:text-slate-200'}`}>${totalPagos.toFixed(2)}</p>
                                         </div>
                                         <div className="text-right">
@@ -1073,18 +1073,18 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                         </div>
                         <CardContent className="p-6 space-y-3 bg-white dark:bg-zinc-900">
                             <p className="text-xs text-center font-bold text-slate-400 uppercase tracking-wider mb-2">Entregar Comprobante</p>
-                            <div onClick={() => setImprimirConDescuentos(!imprimirConDescuentos)} className="flex items-center justify-center gap-2 p-2.5 mb-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">
+                            <div onClick={() => setImprimirConDescuentos(!imprimirConDescuentos)} className="flex items-center justify-center gap-2 p-2.5 mb-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-800 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">
                                 {imprimirConDescuentos ? <CheckSquare className="h-4 w-4 text-indigo-600" /> : <Square className="h-4 w-4 text-slate-400" />}
-                                <span className="text-xs font-medium text-slate-700 select-none">Detallar descuentos en el papel</span>
+                                <span className="text-xs font-medium text-slate-700 dark:text-slate-200 select-none">Detallar descuentos en el papel</span>
                             </div>
                             <div onClick={() => window.location.href = `/imprimir/ticket/${ventaExitosa.id}?descuentos=${imprimirConDescuentos}`} className="block">
                                 <Button className="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold text-base shadow-sm"><Printer className="h-5 w-5 mr-2" /> Imprimir Ticket (80mm)</Button>
                             </div>
                             <div onClick={() => window.location.href = `/imprimir/a4/${ventaExitosa.id}?descuentos=${imprimirConDescuentos}`} className="block">
-                                <Button variant="outline" className="w-full h-12 border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-base"><FileText className="h-5 w-5 mr-2" /> Imprimir Hoja A4</Button>
+                                <Button variant="outline" className="w-full h-12 border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-zinc-800 font-bold text-base"><FileText className="h-5 w-5 mr-2" /> Imprimir Hoja A4</Button>
                             </div>
                             <div className="pt-4 mt-2 border-t border-slate-100 dark:border-zinc-800">
-                                <Button variant="ghost" onClick={() => setVentaExitosa(null)} className="w-full h-12 text-slate-500 hover:text-slate-900 dark:hover:text-white font-bold">
+                                <Button variant="ghost" onClick={() => setVentaExitosa(null)} className="w-full h-12 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold">
                                     Cerrar y Vender
                                 </Button>
                             </div>
@@ -1119,9 +1119,9 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                         <div key={cli.id} onClick={() => handleSeleccionarCliente(cli)} className="flex justify-between items-center p-3 hover:bg-slate-50 dark:hover:bg-zinc-800/50 rounded-lg cursor-pointer transition-colors">
                                             <div>
                                                 <p className="font-semibold text-sm">{cli.nombre_razon_social}</p>
-                                                <p className="text-[11px] text-slate-500 mt-0.5">DNI/CUIT: {cli.dni_cuit || "N/A"}</p>
+                                                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">DNI/CUIT: {cli.dni_cuit || "N/A"}</p>
                                             </div>
-                                            <span className="text-[10px] uppercase font-bold text-slate-500 bg-slate-100 dark:bg-zinc-800 px-2 py-1 rounded">{cli.lista_default ? cli.lista_default.nombre : "Sin Lista"}</span>
+                                            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 px-2 py-1 rounded">{cli.lista_default ? cli.lista_default.nombre : "Sin Lista"}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -1160,7 +1160,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                 </div>
                                 <input type="hidden" name="comprobante_default" value="COMPROBANTE_X" />
                                 <div className="flex gap-2 pt-2 border-t border-slate-100">
-                                    <Button type="button" variant="ghost" onClick={() => { setShowNuevoClienteModal(false); setShowClienteModal(true); }} className="w-1/3 text-slate-600 font-medium">Volver</Button>
+                                    <Button type="button" variant="ghost" onClick={() => { setShowNuevoClienteModal(false); setShowClienteModal(true); }} className="w-1/3 text-slate-600 dark:text-slate-300 font-medium">Volver</Button>
                                     <Button type="submit" disabled={isPending} className="w-2/3 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm">
                                         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar y Usar"}
                                     </Button>
@@ -1236,10 +1236,10 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                                     <div className="flex-1">
                                                         <p className="font-semibold text-sm whitespace-normal">{prod.nombre_producto}</p>
                                                         {prod.proveedor?.nombre && (
-                                                            <p className="text-xs text-slate-500 font-medium uppercase">{prod.proveedor.nombre}</p>
+                                                            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase">{prod.proveedor.nombre}</p>
                                                         )}
                                                     <div className="flex flex-wrap gap-2 mt-1.5">
-                                                        <span className="text-[10px] font-mono text-slate-500 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Cód: {prod.codigo_barras !== "0" ? prod.codigo_barras : prod.codigo_articulo}</span>
+                                                        <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Cód: {prod.codigo_barras !== "0" ? prod.codigo_barras : prod.codigo_articulo}</span>
                                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${sinStock ? 'text-red-600 bg-red-100' : stockEfectivo > (prod.stock_recomendado || 0) ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'text-orange-600 bg-orange-50'}`}>
                                                             Libres: {formatCantidad(stockEfectivo, tipo)} {getUnidadLabel(tipo)}
                                                         </span>
@@ -1252,7 +1252,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                                         <p className="text-[10px] uppercase font-bold text-slate-400">Precio Final</p>
                                                         <p className="font-black text-lg text-slate-900 dark:text-slate-100">{noTieneLista ? "-" : `$${precioPreview.toFixed(2)}`}</p>
                                                     </div>
-                                                    <Button variant="outline" size="icon" className="h-9 w-9 text-slate-500 hover:text-indigo-600" onClick={() => setExpandedProdId(expandedProdId === prod.id ? null : prod.id)}>
+                                                    <Button variant="outline" size="icon" className="h-9 w-9 text-slate-500 dark:text-slate-400 hover:text-indigo-600" onClick={() => setExpandedProdId(expandedProdId === prod.id ? null : prod.id)}>
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
                                                     <Button onClick={() => handleAgregarAlCarrito(prod)} size="sm" disabled={sinStock || noTieneLista}
@@ -1267,7 +1267,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                                     <div className="w-full mt-2 pt-3 border-t border-slate-100 dark:border-zinc-800 animate-in slide-in-from-top-2">
                                                         <div className="p-3 bg-slate-50 dark:bg-zinc-800/80 rounded-lg">
                                                             <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-200 dark:border-zinc-700">
-                                                                <span className="font-bold text-xs text-slate-500 uppercase tracking-wider">Precio Costo Base</span>
+                                                                <span className="font-bold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Precio Costo Base</span>
                                                                 <span className="font-mono font-bold text-sm text-slate-800 dark:text-slate-200">${prod.precio_costo.toFixed(2)}</span>
                                                             </div>
                                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1316,9 +1316,9 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                                 <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-200">
                                     Resumen de Cuenta
                                 </CardTitle>
-                                <p className="text-xs text-slate-500 mt-0.5">{clienteSeleccionado.nombre_razon_social}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{clienteSeleccionado.nombre_razon_social}</p>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={() => setShowResumenModal(false)} className="h-8 w-8 text-slate-500 hover:bg-slate-200 dark:hover:bg-zinc-800 rounded-full">
+                            <Button variant="ghost" size="icon" onClick={() => setShowResumenModal(false)} className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-zinc-800 rounded-full">
                                 <X className="h-4 w-4" />
                             </Button>
                         </CardHeader>
@@ -1337,15 +1337,15 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
 
                             <div className="space-y-3 pt-2">
                                 <div className="flex justify-between items-center text-sm">
-                                    <span className="text-slate-500 font-medium">Balance Neto Contable:</span>
-                                    <span className={`font-mono font-bold ${resumenFinanciero.balance > 0 ? 'text-emerald-600' : resumenFinanciero.balance < 0 ? 'text-red-600' : 'text-slate-600'}`}>
+                                    <span className="text-slate-500 dark:text-slate-400 font-medium">Balance Neto Contable:</span>
+                                    <span className={`font-mono font-bold ${resumenFinanciero.balance > 0 ? 'text-emerald-600' : resumenFinanciero.balance < 0 ? 'text-red-600' : 'text-slate-600 dark:text-slate-300'}`}>
                                         ${resumenFinanciero.balance.toFixed(2)}
                                     </span>
                                 </div>
 
                                 {resumenFinanciero.fecha_mas_antigua && resumenFinanciero.deuda > 0 && (
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-slate-500 font-medium">Deuda más antigua desde:</span>
+                                        <span className="text-slate-500 dark:text-slate-400 font-medium">Deuda más antigua desde:</span>
                                         <span className="font-medium text-slate-800 dark:text-slate-200">
                                             {new Date(resumenFinanciero.fecha_mas_antigua).toLocaleDateString('es-AR')}
                                         </span>
@@ -1354,7 +1354,7 @@ function PosTerminal({ tabId, allOtherCarts, updateCartInfo }: any) {
                             </div>
 
                             <div className="bg-slate-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-slate-200 dark:border-zinc-700">
-                                <p className="text-xs text-slate-500 italic text-center leading-snug">
+                                <p className="text-xs text-slate-500 dark:text-slate-400 italic text-center leading-snug">
                                     {resumenFinanciero.deuda > 0
                                         ? "El cliente presenta saldos atrasados. Operá a cuenta corriente dictando el riesgo."
                                         : "El cliente se encuentra al día con sus obligaciones o tiene crédito."}
@@ -1399,14 +1399,14 @@ function PuntoDeVentaTabsPage() {
         <div className="flex flex-col flex-1 h-full min-h-0 relative">
             <div className="flex items-center gap-2 mb-2 overflow-x-auto pb-1 shrink-0">
                 {tabs.map(tab => (
-                    <div key={tab.id} className={`flex items-center gap-2 px-4 py-2 rounded-t-xl border-t border-x cursor-pointer transition-colors ${activeTab === tab.id ? 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-indigo-600 font-bold shadow-sm' : 'bg-slate-50 dark:bg-zinc-900/50 border-transparent text-slate-500 hover:bg-slate-100 dark:hover:bg-zinc-800'}`} onClick={() => setActiveTab(tab.id)}>
+                    <div key={tab.id} className={`flex items-center gap-2 px-4 py-2 rounded-t-xl border-t border-x cursor-pointer transition-colors ${activeTab === tab.id ? 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-indigo-600 font-bold shadow-sm' : 'bg-slate-50 dark:bg-zinc-900/50 border-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800'}`} onClick={() => setActiveTab(tab.id)}>
                         <span>{tab.name}</span>
                         {tabs.length > 1 && (
                             <button onClick={(e) => { e.stopPropagation(); removeTab(tab.id); }} className="hover:text-red-500 rounded-full p-0.5"><X className="h-4 w-4" /></button>
                         )}
                     </div>
                 ))}
-                <button onClick={addTab} className="flex items-center gap-1 px-3 py-2 text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">
+                <button onClick={addTab} className="flex items-center gap-1 px-3 py-2 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors">
                     <Plus className="h-4 w-4" /> Nueva Pestaña
                 </button>
             </div>

@@ -195,7 +195,7 @@ export default function CajaDiariaPage() {
                 
                 {/* SELECTOR DE SUCURSAL PARA ADMIN */}
                 {usuarioSesion?.rol === 'ADMIN' && (
-                    <div className="absolute -top-14 right-0 w-[250px] z-10 bg-white/50 backdrop-blur-md rounded-xl p-1 shadow-sm border border-slate-200">
+                    <div className="absolute -top-14 right-0 w-[250px] z-10 bg-white dark:bg-zinc-900/50 backdrop-blur-md rounded-xl p-1 shadow-sm border border-slate-200 dark:border-zinc-800">
                         <Select value={String(sucursalActivaId || "")} onValueChange={(val) => setSucursalActivaId(Number(val))}>
                             <SelectTrigger className="border-none h-8 font-semibold shadow-none bg-transparent">
                                 <SelectValue placeholder="Sucursal..." />
@@ -216,12 +216,12 @@ export default function CajaDiariaPage() {
                             <Lock className="h-8 w-8 text-slate-400" />
                         </div>
                         <h2 className="text-3xl font-black text-slate-900 dark:text-white">Turno Cerrado</h2>
-                        <p className="text-slate-500 text-sm">El sistema de facturación está bloqueado. El horario y fecha de apertura quedarán registrados automáticamente al iniciar.</p>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">El sistema de facturación está bloqueado. El horario y fecha de apertura quedarán registrados automáticamente al iniciar.</p>
                     </div>
 
                     <div className="flex-1 space-y-4">
                         <div className="space-y-1.5">
-                            <Label className="font-bold text-xs uppercase text-slate-500 tracking-wider">Declarar Efectivo Inicial ($)</Label>
+                            <Label className="font-bold text-xs uppercase text-slate-500 dark:text-slate-400 tracking-wider">Declarar Efectivo Inicial ($)</Label>
                             <Input
                                 type="number" autoFocus value={montoApertura} onChange={e => setMontoApertura(e.target.value)}
                                 className="h-14 text-2xl font-black text-center bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" placeholder="Ej: 5000"
@@ -243,7 +243,7 @@ export default function CajaDiariaPage() {
                     </CardHeader>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
-                            <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                            <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                                 <tr>
                                     <th className="px-6 py-3 font-semibold">Apertura (Horario)</th>
                                     <th className="px-6 py-3 font-semibold">Cierre (Horario)</th>
@@ -263,15 +263,15 @@ export default function CajaDiariaPage() {
                                         <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                                             <td className="px-6 py-3">
                                                 <p className="font-semibold text-slate-700 dark:text-slate-300">{new Date(c.fecha_apertura).toLocaleDateString('es-AR')}</p>
-                                                <p className="text-xs text-slate-500 font-mono mt-0.5">{new Date(c.fecha_apertura).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">{new Date(c.fecha_apertura).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs</p>
                                             </td>
                                             <td className="px-6 py-3">
                                                 <p className="font-semibold text-slate-700 dark:text-slate-300">{new Date(c.fecha_cierre).toLocaleDateString('es-AR')}</p>
-                                                <p className="text-xs text-slate-500 font-mono mt-0.5">{new Date(c.fecha_cierre).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">{new Date(c.fecha_cierre).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs</p>
                                             </td>
                                             <td className="px-6 py-3 text-right font-mono font-medium">${c.saldo_real?.toFixed(2)}</td>
                                             <td className="px-6 py-3 text-right">
-                                                <Badge variant="outline" className={`font-mono ${c.diferencia === 0 ? 'text-slate-500 bg-slate-100' : c.diferencia && c.diferencia < 0 ? 'text-red-600 bg-red-50' : 'text-emerald-600 bg-emerald-50'}`}>
+                                                <Badge variant="outline" className={`font-mono ${c.diferencia === 0 ? 'text-slate-500 dark:text-slate-400 bg-slate-100' : c.diferencia && c.diferencia < 0 ? 'text-red-600 bg-red-50' : 'text-emerald-600 bg-emerald-50'}`}>
                                                     {c.diferencia && c.diferencia > 0 ? '+' : ''}{c.diferencia?.toFixed(2)}
                                                 </Badge>
                                             </td>
@@ -308,17 +308,17 @@ export default function CajaDiariaPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Caja en Operación</h2>
-                        <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500 mt-1">
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
                             <Clock className="h-3.5 w-3.5" />
                             Abierto a las {new Date(caja.fecha_apertura).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs
                         </div>
                     </div>
                 </div>
                 <div className="flex gap-3 w-full md:w-auto">
-                    <Button variant="outline" className="flex-1 md:w-auto border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium shadow-sm" onClick={() => { setTipoMov('EGRESO_MANUAL'); setShowModalMovimiento(true); }}>
+                    <Button variant="outline" className="flex-1 md:w-auto border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800 hover:text-slate-900 font-medium shadow-sm" onClick={() => { setTipoMov('EGRESO_MANUAL'); setShowModalMovimiento(true); }}>
                         <Minus className="h-4 w-4 mr-2 text-orange-500" /> Gasto
                     </Button>
-                    <Button variant="outline" className="flex-1 md:w-auto border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium shadow-sm" onClick={() => { setTipoMov('INGRESO_MANUAL'); setShowModalMovimiento(true); }}>
+                    <Button variant="outline" className="flex-1 md:w-auto border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800 hover:text-slate-900 font-medium shadow-sm" onClick={() => { setTipoMov('INGRESO_MANUAL'); setShowModalMovimiento(true); }}>
                         <Plus className="h-4 w-4 mr-2 text-emerald-500" /> Ingreso
                     </Button>
                     <Button className="flex-1 md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm" onClick={() => setShowModalCierre(true)}>
@@ -340,7 +340,7 @@ export default function CajaDiariaPage() {
                     <CardContent className="p-5 flex items-center gap-4">
                         <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg"><Landmark className="h-5 w-5 text-blue-600" /></div>
                         <div>
-                            <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Transferencias</p>
+                            <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Transferencias</p>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${totalTransferencia.toFixed(2)}</h3>
                         </div>
                     </CardContent>
@@ -348,9 +348,9 @@ export default function CajaDiariaPage() {
 
                 <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                     <CardContent className="p-5 flex items-center gap-4">
-                        <div className="p-2.5 bg-slate-100 dark:bg-zinc-800 rounded-lg"><CreditCard className="h-5 w-5 text-slate-600" /></div>
+                        <div className="p-2.5 bg-slate-100 dark:bg-zinc-800 rounded-lg"><CreditCard className="h-5 w-5 text-slate-600 dark:text-slate-300" /></div>
                         <div>
-                            <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Tarjetas</p>
+                            <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Tarjetas</p>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${totalTarjeta.toFixed(2)}</h3>
                         </div>
                     </CardContent>
@@ -360,7 +360,7 @@ export default function CajaDiariaPage() {
                     <CardContent className="p-5 flex items-center gap-4">
                         <div className="p-2.5 bg-orange-50 dark:bg-orange-500/10 rounded-lg"><Minus className="h-5 w-5 text-orange-500" /></div>
                         <div>
-                            <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Salidas / Gastos</p>
+                            <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Salidas / Gastos</p>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${totalEgresos.toFixed(2)}</h3>
                         </div>
                     </CardContent>
@@ -374,7 +374,7 @@ export default function CajaDiariaPage() {
                 </CardHeader>
                 <div className="flex-1 overflow-auto">
                     <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                             <tr>
                                 <th className="px-6 py-3 font-semibold">Hora</th>
                                 <th className="px-6 py-3 font-semibold">Concepto</th>
@@ -393,12 +393,12 @@ export default function CajaDiariaPage() {
                                         </td>
                                         <td className="px-6 py-3">
                                             <p className="font-semibold text-slate-700 dark:text-slate-300 text-sm">{mov.descripcion}</p>
-                                            <Badge variant="outline" className="text-[9px] mt-1 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500">{mov.tipo.replace('_', ' ')}</Badge>
+                                            <Badge variant="outline" className="text-[9px] mt-1 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700 text-slate-500 dark:text-slate-400">{mov.tipo.replace('_', ' ')}</Badge>
                                         </td>
                                         <td className="px-6 py-3 text-center">
-                                            <Badge variant="secondary" className="font-bold text-[10px] bg-slate-100 text-slate-600">{mov.metodo_pago}</Badge>
+                                            <Badge variant="secondary" className="font-bold text-[10px] bg-slate-100 text-slate-600 dark:text-slate-300">{mov.metodo_pago}</Badge>
                                         </td>
-                                        <td className="px-6 py-3 text-center font-mono text-[10px] text-slate-500 uppercase">
+                                        <td className="px-6 py-3 text-center font-mono text-[10px] text-slate-500 dark:text-slate-400 uppercase">
                                             {mov.usuario?.nombre || 'SISTEMA'}
                                         </td>
                                         <td className={`px-6 py-3 text-right font-black text-base ${esIngreso ? 'text-slate-900 dark:text-white' : 'text-orange-600'}`}>
@@ -511,7 +511,7 @@ export default function CajaDiariaPage() {
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                         <div className="space-y-1.5">
-                            <Label className="font-bold uppercase tracking-wider text-[10px] text-slate-500">Efectivo Físico Contado ($)</Label>
+                            <Label className="font-bold uppercase tracking-wider text-[10px] text-slate-500 dark:text-slate-400">Efectivo Físico Contado ($)</Label>
                             <Input type="number" autoFocus value={montoCierre} onChange={e => setMontoCierre(e.target.value)} className="h-14 text-2xl font-black text-center bg-white dark:bg-zinc-900 border-slate-300 dark:border-zinc-700 focus-visible:ring-slate-400 text-slate-900 dark:text-white" />
                         </div>
                         <div className="flex gap-2 pt-2">
@@ -541,10 +541,10 @@ export default function CajaDiariaPage() {
                         {/* Acá podríamos colocar los movimientos, pero requerirá un endpoint si no los trajimos.
                             Por simplicidad y dado que ya incluímos "movimientos" en la consulta si lo modificamos, lo renderizamos aquí. */}
                         {!cajaHistoricaSeleccionada.movimientos ? (
-                            <div className="p-8 text-center text-slate-500">Los movimientos completos deben ser solicitados al servidor (cargar en actions).</div>
+                            <div className="p-8 text-center text-slate-500 dark:text-slate-400">Los movimientos completos deben ser solicitados al servidor (cargar en actions).</div>
                         ) : (
                             <table className="w-full text-sm text-left">
-                                <thead className="text-[10px] uppercase tracking-wider bg-slate-100 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                                <thead className="text-[10px] uppercase tracking-wider bg-slate-100 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                                     <tr>
                                         <th className="px-6 py-3 font-semibold">Hora</th>
                                         <th className="px-6 py-3 font-semibold">Concepto</th>
@@ -563,12 +563,12 @@ export default function CajaDiariaPage() {
                                                 </td>
                                                 <td className="px-6 py-2">
                                                     <p className="font-semibold text-slate-700 dark:text-slate-300 text-xs">{mov.descripcion}</p>
-                                                    <Badge variant="outline" className="text-[9px] mt-0.5 text-slate-500 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700">{mov.tipo.replace('_', ' ')}</Badge>
+                                                    <Badge variant="outline" className="text-[9px] mt-0.5 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-700">{mov.tipo.replace('_', ' ')}</Badge>
                                                 </td>
                                                 <td className="px-6 py-2 text-center">
                                                     <Badge variant="secondary" className="font-bold text-[9px] bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300">{mov.metodo_pago}</Badge>
                                                 </td>
-                                                <td className="px-6 py-2 text-center font-mono text-[9px] text-slate-500 uppercase">
+                                                <td className="px-6 py-2 text-center font-mono text-[9px] text-slate-500 dark:text-slate-400 uppercase">
                                                     {mov.usuario?.nombre || 'SISTEMA'}
                                                 </td>
                                                 <td className={`px-6 py-2 text-right font-black text-sm ${esIngreso ? 'text-slate-900 dark:text-white' : 'text-orange-600'}`}>

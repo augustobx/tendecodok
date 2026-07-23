@@ -118,7 +118,7 @@ export default function GestionUsuariosPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Control de Accesos</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Gestioná tu equipo y decidí qué módulos pueden usar.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Gestioná tu equipo y decidí qué módulos pueden usar.</p>
                     </div>
                 </div>
                 <Button onClick={() => handleAbrirModal(null)} className="bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm h-10 px-5">
@@ -141,8 +141,8 @@ export default function GestionUsuariosPage() {
                     const esAdmin = u.rol === "ADMIN";
 
                     return (
-                        <Card key={u.id} className={`shadow-sm border-2 overflow-hidden ${esAdmin ? 'border-indigo-200 bg-indigo-50/10' : 'border-slate-200 bg-white'}`}>
-                            <CardHeader className="p-5 border-b border-slate-100 flex flex-row items-center justify-between bg-slate-50/50">
+                        <Card key={u.id} className={`shadow-sm border-2 overflow-hidden ${esAdmin ? 'border-indigo-200 bg-indigo-50/10' : 'border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900'}`}>
+                            <CardHeader className="p-5 border-b border-slate-100 flex flex-row items-center justify-between bg-slate-50 dark:bg-zinc-800/50">
                                 <div>
                                     <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                                         <Users className="h-4 w-4 text-slate-400" /> {u.nombre}
@@ -163,7 +163,7 @@ export default function GestionUsuariosPage() {
                                         <div className="flex flex-wrap gap-1.5">
                                             {permisosArray.length === 0 ? <span className="text-xs text-red-500">Ninguno (Bloqueado)</span> : null}
                                             {permisosArray.map((p: string) => (
-                                                <span key={p} className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-1 rounded">
+                                                <span key={p} className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 dark:text-slate-300 px-2 py-1 rounded">
                                                     {p.replace('_', ' ')}
                                                 </span>
                                             ))}
@@ -172,7 +172,7 @@ export default function GestionUsuariosPage() {
                                 </div>
 
                                 <div className="flex gap-2 pt-4 border-t border-slate-100">
-                                    <Button variant="outline" size="sm" onClick={() => handleAbrirModal(u)} className="flex-1 text-slate-600 font-medium">
+                                    <Button variant="outline" size="sm" onClick={() => handleAbrirModal(u)} className="flex-1 text-slate-600 dark:text-slate-300 font-medium">
                                         <Edit className="h-3.5 w-3.5 mr-2" /> Editar
                                     </Button>
                                     {!esAdmin && (
@@ -194,7 +194,7 @@ export default function GestionUsuariosPage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
                     <Card className="w-full max-w-2xl shadow-2xl border-0 rounded-2xl flex flex-col max-h-[90vh] overflow-hidden">
 
-                        <div className="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center shrink-0">
+                        <div className="p-5 border-b border-slate-100 bg-slate-50 dark:bg-zinc-800 flex justify-between items-center shrink-0">
                             <h3 className="text-lg font-bold flex items-center gap-2">
                                 <ShieldCheck className="h-5 w-5 text-indigo-600" />
                                 {usuarioEditando ? "Editar Usuario" : "Crear Nuevo Usuario"}
@@ -211,23 +211,23 @@ export default function GestionUsuariosPage() {
 
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold">Nombre del Empleado <span className="text-red-500">*</span></Label>
-                                        <Input name="nombre" defaultValue={usuarioEditando?.nombre} required className="h-10 bg-slate-50" placeholder="Ej: Marcos García" />
+                                        <Input name="nombre" defaultValue={usuarioEditando?.nombre} required className="h-10 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: Marcos García" />
                                     </div>
                                     <div className="space-y-1.5">
                                         <Label className="text-xs font-semibold">Usuario (Login) <span className="text-red-500">*</span></Label>
-                                        <Input name="username" defaultValue={usuarioEditando?.username} required className="h-10 bg-slate-50" placeholder="Ej: marcos" />
+                                        <Input name="username" defaultValue={usuarioEditando?.username} required className="h-10 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: marcos" />
                                     </div>
                                     <div className="space-y-1.5 pt-2">
                                         <Label className="text-xs font-semibold flex items-center gap-1">
                                             <KeyRound className="h-3.5 w-3.5 text-slate-400" /> Contraseña {usuarioEditando && <span className="text-[10px] text-slate-400 font-normal ml-1">(Dejar vacío para no cambiar)</span>}
                                         </Label>
-                                        <Input name="password" type="password" required={!usuarioEditando} className="h-10 bg-slate-50" placeholder="••••••••" />
+                                        <Input name="password" type="password" required={!usuarioEditando} className="h-10 bg-slate-50 dark:bg-zinc-800" placeholder="••••••••" />
                                     </div>
 
                                     <div className="space-y-1.5 pt-2">
                                         <Label className="text-xs font-semibold flex items-center gap-1">Sucursal Predeterminada (Punto de Venta)</Label>
                                         <Select value={sucursalSeleccionada} onValueChange={(val) => setSucursalSeleccionada(val as string)}>
-                                            <SelectTrigger className="h-10 bg-slate-50">
+                                            <SelectTrigger className="h-10 bg-slate-50 dark:bg-zinc-800">
                                                 <SelectValue placeholder="Sin Sucursal Fija (Preguntar)" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -237,7 +237,7 @@ export default function GestionUsuariosPage() {
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <p className="text-[10px] text-slate-500 leading-tight">Si seleccionás una, este usuario abrirá su caja y factura siempre directamente en ese lugar.</p>
+                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">Si seleccionás una, este usuario abrirá su caja y factura siempre directamente en ese lugar.</p>
                                     </div>
 
                                     {usuarios.length === 0 && (
@@ -252,10 +252,10 @@ export default function GestionUsuariosPage() {
                                     <h4 className="font-bold text-xs uppercase text-slate-400 tracking-wider mb-4">Permisos y Accesos</h4>
 
                                     {usuarioEditando?.rol === "ADMIN" || usuarios.length === 0 ? (
-                                        <div className="h-full flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl p-6 text-center">
+                                        <div className="h-full flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-xl p-6 text-center">
                                             <ShieldCheck className="h-12 w-12 text-slate-300 mb-2" />
-                                            <p className="font-bold text-slate-700">Modo Dueño</p>
-                                            <p className="text-xs text-slate-500 mt-1">Los administradores tienen acceso irrestricto a todos los módulos por defecto.</p>
+                                            <p className="font-bold text-slate-700 dark:text-slate-200">Modo Dueño</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Los administradores tienen acceso irrestricto a todos los módulos por defecto.</p>
                                         </div>
                                     ) : (
                                         <div className="space-y-2">
@@ -265,14 +265,14 @@ export default function GestionUsuariosPage() {
                                                     <div
                                                         key={mod.id}
                                                         onClick={() => togglePermiso(mod.id)}
-                                                        className={`flex items-start gap-3 p-3 border rounded-xl cursor-pointer transition-colors ${tienePermiso ? 'bg-indigo-50/50 border-indigo-200' : 'bg-white border-slate-200 hover:border-indigo-200'}`}
+                                                        className={`flex items-start gap-3 p-3 border rounded-xl cursor-pointer transition-colors ${tienePermiso ? 'bg-indigo-50/50 border-indigo-200' : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 hover:border-indigo-200'}`}
                                                     >
                                                         <div className="mt-0.5">
                                                             {tienePermiso ? <CheckSquare className="h-5 w-5 text-indigo-600" /> : <Square className="h-5 w-5 text-slate-300" />}
                                                         </div>
                                                         <div>
-                                                            <p className={`font-bold text-sm ${tienePermiso ? 'text-indigo-900' : 'text-slate-700'}`}>{mod.nombre}</p>
-                                                            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{mod.desc}</p>
+                                                            <p className={`font-bold text-sm ${tienePermiso ? 'text-indigo-900' : 'text-slate-700 dark:text-slate-200'}`}>{mod.nombre}</p>
+                                                            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">{mod.desc}</p>
                                                         </div>
                                                     </div>
                                                 )
@@ -283,8 +283,8 @@ export default function GestionUsuariosPage() {
 
                             </div>
 
-                            <div className="p-5 border-t border-slate-100 bg-slate-50 mt-auto flex justify-end gap-3 shrink-0">
-                                <Button type="button" variant="outline" onClick={() => setShowModal(false)} className="bg-white">Cancelar</Button>
+                            <div className="p-5 border-t border-slate-100 bg-slate-50 dark:bg-zinc-800 mt-auto flex justify-end gap-3 shrink-0">
+                                <Button type="button" variant="outline" onClick={() => setShowModal(false)} className="bg-white dark:bg-zinc-900">Cancelar</Button>
                                 <Button type="submit" disabled={isPending} className="bg-slate-900 hover:bg-slate-800 text-white font-medium px-8">
                                     {isPending ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : "Guardar Accesos"}
                                 </Button>

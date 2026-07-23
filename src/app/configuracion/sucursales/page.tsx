@@ -25,7 +25,7 @@ export default async function SucursalesConfigPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Sucursales y Depósitos</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Gestión de puntos de venta y almacenes de stock.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Gestión de puntos de venta y almacenes de stock.</p>
                     </div>
                 </div>
             </div>

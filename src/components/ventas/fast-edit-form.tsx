@@ -60,13 +60,13 @@ export function FastEditForm({ prod, onSuccess }: { prod: any, onSuccess: () => 
         });
     };
 
-    if (isLoading) return <div className="mt-4 p-4 text-center text-xs text-slate-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div>;
+    if (isLoading) return <div className="mt-4 p-4 text-center text-xs text-slate-500 dark:text-slate-400"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div>;
 
     const stepStock = getStepParaMedicion(prod.tipo_medicion);
 
     return (
         <div className="mt-4 border-t border-slate-200 dark:border-zinc-700 pt-4 space-y-4 animate-in fade-in">
-            <h4 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Actualización Rápida</h4>
+            <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Actualización Rápida</h4>
             
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
@@ -86,7 +86,7 @@ export function FastEditForm({ prod, onSuccess }: { prod: any, onSuccess: () => 
 
             {formRapido.cantidad_sumar !== 0 && (
                 <div className="space-y-1.5 animate-in fade-in duration-200">
-                    <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Depósito Destino/Origen</Label>
+                    <Label className="font-bold text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider">Depósito Destino/Origen</Label>
                     <select
                         className="w-full h-9 border border-slate-200 dark:border-zinc-700 rounded-md bg-white dark:bg-zinc-800 text-slate-900 dark:text-white px-2 text-sm"
                         value={formRapido.depositoId}

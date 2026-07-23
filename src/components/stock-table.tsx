@@ -69,7 +69,7 @@ export const getColumns = (
     {
       accessorKey: "codigo_articulo",
       header: "Cód. Artículo",
-      cell: ({ row }) => <div className="font-mono text-slate-500 text-xs">{row.getValue("codigo_articulo")}</div>,
+      cell: ({ row }) => <div className="font-mono text-slate-500 dark:text-slate-400 text-xs">{row.getValue("codigo_articulo")}</div>,
     },
     {
       accessorKey: "codigo_barras",
@@ -80,7 +80,7 @@ export const getColumns = (
       accessorKey: "nombre_producto",
       header: ({ column }) => (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="text-slate-500 hover:text-slate-900 font-bold px-0 bg-transparent hover:bg-transparent">
+          className="text-slate-500 dark:text-slate-400 hover:text-slate-900 font-bold px-0 bg-transparent hover:bg-transparent">
           Producto <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -89,7 +89,7 @@ export const getColumns = (
     {
       accessorKey: "proveedor",
       header: "Proveedor",
-      cell: ({ row }) => <div className="text-slate-600 text-sm">{row.getValue("proveedor")}</div>,
+      cell: ({ row }) => <div className="text-slate-600 dark:text-slate-300 text-sm">{row.getValue("proveedor")}</div>,
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
     },
     {
@@ -115,14 +115,14 @@ export const getColumns = (
             <div className="flex justify-end items-center gap-2">
               {isZero && <span title="Sin stock global"><AlertTriangle className="h-4 w-4 text-red-600 fill-red-100" /></span>}
               {!isZero && isLowStock && <span title="Stock global bajo"><AlertTriangle className="h-4 w-4 text-orange-500" /></span>}
-              <Badge variant="outline" className={`font-mono font-bold text-sm ${isZero ? 'bg-red-100 text-red-700 border-red-300' : isLowStock ? 'bg-orange-50 text-orange-600 border-orange-200' : 'bg-slate-100 text-slate-700 border-slate-200'}`}>
+              <Badge variant="outline" className={`font-mono font-bold text-sm ${isZero ? 'bg-red-100 text-red-700 border-red-300' : isLowStock ? 'bg-orange-50 text-orange-600 border-orange-200' : 'bg-slate-100 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-zinc-800'}`}>
                 {formatted} {label}
               </Badge>
             </div>
             {stocksArray.length > 0 && (
               <div className="flex flex-col items-end gap-0.5 mt-1">
                 {stocksArray.map((s: any) => (
-                  <span key={s.depositoId} className="text-[10px] text-slate-500 font-medium">
+                  <span key={s.depositoId} className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
                     {s.deposito?.sucursal?.nombre ? `${s.deposito.sucursal.nombre} (${s.deposito.nombre})` : s.deposito?.nombre}: <span className="font-bold">{formatCantidad(s.cantidad, tipo)}</span>
                   </span>
                 ))}
@@ -174,11 +174,11 @@ export const getColumns = (
             <Zap className="h-3.5 w-3.5 mr-1.5" /> Stock/Precio
           </Button>
           <DropdownMenu>
-            <DropdownMenuTrigger className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0 text-slate-400 hover:text-slate-600 hover:bg-slate-100" })}>
+            <DropdownMenuTrigger className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0 text-slate-400 hover:text-slate-600 dark:text-slate-300 hover:bg-slate-100" })}>
               <span className="sr-only">Menú</span>
               <MoreHorizontal className="h-4 w-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-white border-slate-200">
+            <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800">
               <DropdownMenuGroup>
                 <DropdownMenuLabel className="text-xs text-slate-400 uppercase tracking-wider font-bold">Acciones</DropdownMenuLabel>
                 <DropdownMenuItem className="p-0 cursor-pointer mb-1">
@@ -187,13 +187,13 @@ export const getColumns = (
                   </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="p-0 cursor-pointer">
-                  <Link href={`/inventario/${producto.id}/editar`} className="flex items-center w-full px-2 py-1.5 text-slate-700 hover:bg-slate-100 font-medium rounded-sm transition-colors">
+                  <Link href={`/inventario/${producto.id}/editar`} className="flex items-center w-full px-2 py-1.5 text-slate-700 dark:text-slate-200 hover:bg-slate-100 font-medium rounded-sm transition-colors">
                     <Pencil className="mr-2 h-4 w-4 text-slate-400" /> Edición Completa
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="bg-slate-100" />
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(producto.codigo_barras)} className="text-slate-600 font-medium cursor-pointer hover:bg-slate-100">
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(producto.codigo_barras)} className="text-slate-600 dark:text-slate-300 font-medium cursor-pointer hover:bg-slate-100">
                 Copiar Cód. Barras
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -318,12 +318,12 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <DropdownMenu>
-            <DropdownMenuTrigger className={buttonVariants({ variant: "outline", className: "h-10 bg-white border-slate-200 text-slate-600 font-medium" })}>
+            <DropdownMenuTrigger className={buttonVariants({ variant: "outline", className: "h-10 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 font-medium" })}>
               Columnas <ChevronDown className="ml-2 h-4 w-4 text-slate-400" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-white border-slate-200">
+            <DropdownMenuContent align="end" className="bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800">
               {table.getAllColumns().filter(c => c.getCanHide()).map(column => (
-                <DropdownMenuCheckboxItem key={column.id} className="capitalize font-medium text-slate-600" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+                <DropdownMenuCheckboxItem key={column.id} className="capitalize font-medium text-slate-600 dark:text-slate-300" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
                   {column.id.replace(/_/g, " ")}
                 </DropdownMenuCheckboxItem>
               ))}
@@ -345,7 +345,7 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
               {table.getHeaderGroups().map(hg => (
                 <TableRow key={hg.id} className="hover:bg-transparent border-none">
                   {hg.headers.map(header => (
-                    <TableHead key={header.id} className="text-[10px] uppercase font-bold text-slate-500 tracking-wider h-11">
+                    <TableHead key={header.id} className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider h-11">
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   ))}
@@ -380,12 +380,12 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
 
       {/* PAGINACIÓN */}
       <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-slate-500">
+        <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
           Mostrando <span className="text-slate-900">{table.getRowModel().rows.length}</span> de {table.getFilteredRowModel().rows.length} productos
         </div>
         <div className="space-x-2">
-          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="bg-white border-slate-200 text-slate-600 font-medium">Anterior</Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="bg-white border-slate-200 text-slate-600 font-medium">Siguiente</Button>
+          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 font-medium">Anterior</Button>
+          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 font-medium">Siguiente</Button>
         </div>
       </div>
 
@@ -398,25 +398,25 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
                 <div className="bg-indigo-50 text-indigo-600 p-2 rounded-lg"><Zap className="h-4 w-4 fill-indigo-600/20" /></div>
                 <div>
                   <CardTitle className="text-base text-slate-900">Ajuste Rápido</CardTitle>
-                  <CardDescription className="text-xs text-slate-500 truncate max-w-[200px]" title={productoEditando.nombre_producto}>{productoEditando.nombre_producto}</CardDescription>
+                  <CardDescription className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[200px]" title={productoEditando.nombre_producto}>{productoEditando.nombre_producto}</CardDescription>
                 </div>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setProductoEditando(null)} className="h-8 w-8 rounded-full text-slate-400 hover:bg-slate-200"><X className="h-4 w-4" /></Button>
             </CardHeader>
             <CardContent className="p-5 space-y-5">
               <div className="flex justify-between bg-slate-50 dark:bg-zinc-800/50 p-3 rounded-xl border border-slate-100 dark:border-zinc-700">
-                <div><p className="text-[10px] uppercase font-bold text-slate-500">Último Costo</p><p className="text-sm font-black text-slate-900">${productoEditando.precio_costo.toFixed(2)}</p></div>
+                <div><p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Último Costo</p><p className="text-sm font-black text-slate-900">${productoEditando.precio_costo.toFixed(2)}</p></div>
                 <div className="text-right">
-                  <p className="text-[10px] uppercase font-bold text-slate-500">Unidad</p>
-                  <p className="text-sm font-bold text-slate-700">{getUnidadLabel(tipoMedicionActual)}</p>
+                  <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Unidad</p>
+                  <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{getUnidadLabel(tipoMedicionActual)}</p>
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
                 <div className="flex gap-3">
                   <div className="w-1/3 space-y-1.5">
-                    <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Stock Global</Label>
-                    <div className="h-10 border border-slate-200 rounded-lg bg-slate-50 flex items-center justify-center text-base font-black text-slate-400 cursor-not-allowed">
+                    <Label className="font-bold text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider">Stock Global</Label>
+                    <div className="h-10 border border-slate-200 dark:border-zinc-800 rounded-lg bg-slate-50 dark:bg-zinc-800 flex items-center justify-center text-base font-black text-slate-400 cursor-not-allowed">
                       {formatCantidad(productoEditando.stock_actual, tipoMedicionActual)}
                     </div>
                   </div>
@@ -426,17 +426,17 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
                       className="h-10 text-lg font-black text-center border-emerald-200 bg-emerald-50 text-emerald-700 focus-visible:ring-emerald-500" />
                   </div>
                   <div className="w-1/3 space-y-1.5">
-                    <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Mínimo global</Label>
+                    <Label className="font-bold text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider">Mínimo global</Label>
                     <Input type="number" step={stepStock} value={formRapido.stock_recomendado} onChange={(e) => setFormRapido({ ...formRapido, stock_recomendado: Number(e.target.value) })}
-                      className="h-10 text-sm font-bold text-center bg-slate-50 border-slate-200" />
+                      className="h-10 text-sm font-bold text-center bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-800" />
                   </div>
                 </div>
                 
                 {formRapido.cantidad_sumar !== 0 && (
                   <div className="space-y-1.5 animate-in fade-in duration-200">
-                    <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Depósito Destino/Origen</Label>
+                    <Label className="font-bold text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider">Depósito Destino/Origen</Label>
                     <select
-                      className="w-full h-10 border border-slate-200 rounded-lg bg-white px-3 text-sm"
+                      className="w-full h-10 border border-slate-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-900 px-3 text-sm"
                       value={formRapido.depositoId}
                       onChange={(e) => setFormRapido({ ...formRapido, depositoId: e.target.value })}
                     >
@@ -455,13 +455,13 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-indigo-400 font-bold">$</span>
                   <Input type="number" autoFocus value={formRapido.precio_costo} onChange={(e) => setFormRapido({ ...formRapido, precio_costo: Number(e.target.value) })}
-                    className="h-11 pl-8 text-lg font-black text-indigo-700 bg-white border-indigo-200 focus-visible:ring-indigo-500" />
+                    className="h-11 pl-8 text-lg font-black text-indigo-700 bg-white dark:bg-zinc-900 border-indigo-200 focus-visible:ring-indigo-500" />
                 </div>
                 <p className="text-[10px] text-indigo-600/70 font-medium leading-tight">Actualizará automáticamente todas las listas de mostrador.</p>
               </div>
 
               <div className="flex gap-2 pt-2 border-t border-slate-100">
-                <Button variant="ghost" onClick={() => setProductoEditando(null)} className="w-1/3 text-slate-600">Cancelar</Button>
+                <Button variant="ghost" onClick={() => setProductoEditando(null)} className="w-1/3 text-slate-600 dark:text-slate-300">Cancelar</Button>
                 <Button onClick={handleGuardarRapido} disabled={isPending} className="w-2/3 bg-indigo-600 hover:bg-indigo-700 font-bold text-white shadow-sm">
                   {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar Ajuste"}
                 </Button>
@@ -474,15 +474,15 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
       {/* MODAL HISTORIAL */}
       {productoHistorial && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <Card className="w-full max-w-2xl shadow-2xl flex flex-col max-h-[85vh] border border-slate-200 rounded-2xl">
-            <CardHeader className="bg-slate-50/50 border-b border-slate-100 p-5 shrink-0 flex flex-row justify-between items-center rounded-t-2xl">
+          <Card className="w-full max-w-2xl shadow-2xl flex flex-col max-h-[85vh] border border-slate-200 dark:border-zinc-800 rounded-2xl">
+            <CardHeader className="bg-slate-50 dark:bg-zinc-800/50 border-b border-slate-100 p-5 shrink-0 flex flex-row justify-between items-center rounded-t-2xl">
               <div>
                 <CardTitle className="text-lg flex items-center gap-2 text-slate-900"><History className="text-indigo-600 h-5 w-5" /> Auditoría de Producto</CardTitle>
-                <CardDescription className="text-xs mt-1">Métricas de <span className="font-bold text-slate-700">{productoHistorial.nombre_producto}</span></CardDescription>
+                <CardDescription className="text-xs mt-1">Métricas de <span className="font-bold text-slate-700 dark:text-slate-200">{productoHistorial.nombre_producto}</span></CardDescription>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setProductoHistorial(null)} className="h-8 w-8 rounded-full text-slate-400 hover:bg-slate-200"><X className="h-5 w-5" /></Button>
             </CardHeader>
-            <CardContent className="p-6 overflow-y-auto flex-1 bg-white">
+            <CardContent className="p-6 overflow-y-auto flex-1 bg-white dark:bg-zinc-900">
               {loadingHistorial ? (
                 <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-indigo-500" /></div>
               ) : historialData.length === 0 ? (
@@ -504,24 +504,24 @@ export function StockTable({ data, proveedores, listasGlobales, depositos, usuar
                           {esPrecio && <TrendingUp className="h-4 w-4" />}
                           {esAmbos && <ArrowRightLeft className="h-4 w-4" />}
                         </div>
-                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl border border-slate-100 bg-white shadow-sm">
+                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl border border-slate-100 bg-white dark:bg-zinc-900 shadow-sm">
                           <div className="flex justify-between items-start mb-3 border-b border-slate-100 pb-3">
                             <div>
-                              <p className="font-bold text-sm uppercase text-slate-800 tracking-tight">
+                              <p className="font-bold text-sm uppercase text-slate-800 dark:text-slate-100 tracking-tight">
                                 {esIngreso ? "Ingreso de Mercadería" : esPrecio ? "Actualización de Precio" : "Ajuste General"}
                               </p>
                               <div className="flex items-center gap-2 mt-1">
                                 <time className="font-mono text-[11px] text-slate-400 block">{new Date(item.fecha).toLocaleString('es-AR')}</time>
                                 {item.usuario?.nombre && (
-                                  <Badge variant="outline" className="text-[9px] text-slate-500 bg-slate-50">{item.usuario.nombre}</Badge>
+                                  <Badge variant="outline" className="text-[9px] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-zinc-800">{item.usuario.nombre}</Badge>
                                 )}
                               </div>
                             </div>
                           </div>
                           <div className="space-y-2">
                             {(esIngreso || esAmbos) && (
-                              <div className="flex justify-between items-center bg-slate-50 border border-slate-100 p-2.5 rounded-lg">
-                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Stock:</span>
+                              <div className="flex justify-between items-center bg-slate-50 dark:bg-zinc-800 border border-slate-100 p-2.5 rounded-lg">
+                                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock:</span>
                                 <div className="text-right flex items-center gap-2">
                                   <span className="text-xs text-slate-400 line-through">{item.stock_anterior}</span>
                                   <ArrowUpRight className="h-3 w-3 text-emerald-500" />

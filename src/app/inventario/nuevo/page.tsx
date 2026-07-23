@@ -17,7 +17,7 @@ export default async function NuevoProductoPage() {
       <div className="flex items-center justify-between bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-5 rounded-2xl shadow-sm sticky top-0 z-20">
         <div className="flex items-center gap-4">
           <Link href="/inventario">
-            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-zinc-800">
+            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-zinc-800">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
@@ -27,7 +27,7 @@ export default async function NuevoProductoPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Alta de Producto</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Cargue un nuevo producto al inventario y configure sus listas.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Cargue un nuevo producto al inventario y configure sus listas.</p>
             </div>
           </div>
         </div>

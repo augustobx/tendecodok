@@ -52,7 +52,7 @@ export default function FaltantesStockPage() {
         return (
             <div className="flex flex-col items-center justify-center h-[70vh] gap-4">
                 <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
-                <p className="text-slate-500 font-medium animate-pulse">Analizando inventario...</p>
+                <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Analizando inventario...</p>
             </div>
         );
     }
@@ -67,7 +67,7 @@ export default function FaltantesStockPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Faltantes de Stock</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Productos por debajo del stock recomendado.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Productos por debajo del stock recomendado.</p>
                     </div>
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
@@ -120,7 +120,7 @@ export default function FaltantesStockPage() {
                             <Button 
                                 variant="ghost" 
                                 onClick={() => { setFiltroCategoria("TODOS"); setFiltroProveedor("TODOS"); }}
-                                className="h-10 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                                className="h-10 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                             >
                                 <X className="h-4 w-4 mr-2" /> Limpiar Filtros
                             </Button>
@@ -149,7 +149,7 @@ export default function FaltantesStockPage() {
                                     <td colSpan={6} className="text-center py-12">
                                         <div className="flex flex-col items-center justify-center text-slate-400">
                                             <PackageSearch className="h-12 w-12 mb-3 opacity-20" />
-                                            <p className="font-medium text-slate-500">No se encontraron productos faltantes con estos filtros.</p>
+                                            <p className="font-medium text-slate-500 dark:text-slate-400">No se encontraron productos faltantes con estos filtros.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -160,11 +160,11 @@ export default function FaltantesStockPage() {
                                         <tr key={prod.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                                             <td className="px-6 py-3">
                                                 <div className="font-bold text-slate-900 dark:text-white">{prod.nombre_producto}</div>
-                                                <div className="text-[10px] text-slate-500 font-mono mt-0.5">{prod.codigo_articulo}</div>
+                                                <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">{prod.codigo_articulo}</div>
                                             </td>
                                             <td className="px-6 py-3">
                                                 <div className="text-xs font-medium text-slate-700 dark:text-slate-300">{prod.categoria?.nombre || "-"}</div>
-                                                <div className="text-[10px] text-slate-500">{prod.marca?.nombre || "-"}</div>
+                                                <div className="text-[10px] text-slate-500 dark:text-slate-400">{prod.marca?.nombre || "-"}</div>
                                             </td>
                                             <td className="px-6 py-3 text-xs text-slate-600 dark:text-slate-400">
                                                 {prod.proveedor?.nombre || "-"}

@@ -48,7 +48,7 @@ function TicketContent({ id }: { id: string }) {
     const createFormat = presupuesto.createdAt ? new Date(presupuesto.createdAt) : new Date();
 
     return (
-        <div className="w-[80mm] min-h-[100px] bg-white text-black font-mono text-[12px] leading-tight mx-auto print:mx-auto pb-10">
+        <div className="w-[80mm] min-h-[100px] bg-white dark:bg-zinc-900 text-black font-mono text-[12px] leading-tight mx-auto print:mx-auto pb-10">
 
             {/* BOTÓN VOLVER (Oculto al imprimir) */}
             <div className="print:hidden text-center mb-4 pt-4">
@@ -71,7 +71,7 @@ function TicketContent({ id }: { id: string }) {
             {/* 2. CABECERA: DATOS DEL COMPROBANTE NO FISCAL */}
             <div className="flex justify-center relative my-4">
                 <div className="absolute w-full border-t-2 border-black border-dashed top-1/2 -translate-y-1/2 z-0"></div>
-                <div className="bg-white px-3 py-1 border-2 border-black flex flex-col items-center z-10">
+                <div className="bg-white dark:bg-zinc-900 px-3 py-1 border-2 border-black flex flex-col items-center z-10">
                     <span className="text-xl font-black leading-none">X</span>
                     <span className="text-[8px] font-bold leading-tight mt-0.5">PRESUPUESTO</span>
                 </div>

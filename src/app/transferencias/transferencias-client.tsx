@@ -65,7 +65,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                     <CardContent className="p-5 space-y-6">
                         {/* 1. Seleccionar Producto */}
                         <div className="space-y-3">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Paso 1: Producto a transferir</Label>
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Paso 1: Producto a transferir</Label>
                             {!selectedProducto ? (
                                 <div className="space-y-2">
                                     <div className="relative">
@@ -110,7 +110,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                             <div className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-300">
                                 {/* 2. Depósito Origen */}
                                 <div className="space-y-3">
-                                    <Label className="text-xs font-bold uppercase text-slate-500">Paso 2: Depósito Origen</Label>
+                                    <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Paso 2: Depósito Origen</Label>
                                     <Select value={origenId} onValueChange={(val) => setOrigenId(val as string)}>
                                         <SelectTrigger className="bg-slate-50 dark:bg-zinc-800/50 h-12">
                                             <SelectValue placeholder="Seleccione desde dónde envía..." />
@@ -130,7 +130,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
 
                                 {/* 3. Depósito Destino */}
                                 <div className="space-y-3">
-                                    <Label className="text-xs font-bold uppercase text-slate-500">Paso 3: Depósito Destino</Label>
+                                    <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Paso 3: Depósito Destino</Label>
                                     <Select value={destinoId} onValueChange={(val) => setDestinoId(val as string)}>
                                         <SelectTrigger className="bg-slate-50 dark:bg-zinc-800/50 h-12">
                                             <SelectValue placeholder="Seleccione hacia dónde envía..." />
@@ -147,7 +147,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
 
                                 {/* 4. Cantidad */}
                                 <div className="space-y-3">
-                                    <Label className="text-xs font-bold uppercase text-slate-500">Paso 4: Cantidad a mover</Label>
+                                    <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Paso 4: Cantidad a mover</Label>
                                     <div className="relative">
                                         <PackageOpen className="absolute left-3 top-3.5 h-5 w-5 text-slate-400" />
                                         <Input 
@@ -159,7 +159,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                                         />
                                     </div>
                                     {origenId && (
-                                        <div className="text-xs font-bold text-slate-500 text-right">
+                                        <div className="text-xs font-bold text-slate-500 dark:text-slate-400 text-right">
                                             Máximo: {selectedProducto.stocks.find((s: any) => String(s.depositoId) === origenId)?.cantidad || 0}
                                         </div>
                                     )}
@@ -188,7 +188,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                     </CardHeader>
                     <CardContent className="p-0">
                         {historial.length === 0 ? (
-                            <div className="p-10 text-center text-slate-500 text-sm">
+                            <div className="p-10 text-center text-slate-500 dark:text-slate-400 text-sm">
                                 No se registran transferencias recientes.
                             </div>
                         ) : (
@@ -198,7 +198,7 @@ export function TransferenciasClient({ productos, depositos, historial }: { prod
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
                                                 <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{mov.producto.nombre_producto}</div>
-                                                <div className="text-xs text-slate-500 font-mono">{mov.producto.codigo_articulo}</div>
+                                                <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">{mov.producto.codigo_articulo}</div>
                                             </div>
                                             <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">
                                                 {mov.cantidad} unid.

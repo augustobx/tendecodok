@@ -55,7 +55,7 @@ export default function DashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center h-[70vh] gap-4">
         <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
-        <p className="text-slate-500 font-medium animate-pulse">Cargando tu centro de mando...</p>
+        <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Cargando tu centro de mando...</p>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function DashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center h-[70vh] gap-4">
         <AlertTriangle className="h-10 w-10 text-red-500" />
-        <p className="text-slate-500 font-medium">Error de conexión con la base de datos o métricas no disponibles.</p>
+        <p className="text-slate-500 dark:text-slate-400 font-medium">Error de conexión con la base de datos o métricas no disponibles.</p>
         <Button onClick={() => window.location.reload()} variant="outline">Reintentar</Button>
       </div>
     );
@@ -81,13 +81,13 @@ export default function DashboardPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Panel Principal</h2>
-            <p className="text-sm text-slate-500 mt-0.5">Resumen operativo de tu negocio al día de hoy.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Resumen operativo de tu negocio al día de hoy.</p>
           </div>
         </div>
         <Button
           variant="outline"
           onClick={() => setShowConfig(!showConfig)}
-          className={`h-10 border-slate-200 font-medium transition-colors ${showConfig ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'text-slate-600 hover:bg-slate-50'}`}
+          className={`h-10 border-slate-200 dark:border-zinc-800 font-medium transition-colors ${showConfig ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800'}`}
         >
           <Settings className="h-4 w-4 mr-2" /> Configurar Vista
         </Button>
@@ -141,12 +141,12 @@ export default function DashboardPage() {
             <CardContent className="p-5">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Efectivo en Caja</p>
+                  <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Efectivo en Caja</p>
                   <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-1">
                     {metrics.cajaAbierta ? `$${metrics.efectivoEnCaja.toFixed(2)}` : 'CERRADA'}
                   </h3>
                 </div>
-                <div className="p-2 bg-slate-100 dark:bg-zinc-800 rounded-lg text-slate-600"><Wallet className="h-5 w-5" /></div>
+                <div className="p-2 bg-slate-100 dark:bg-zinc-800 rounded-lg text-slate-600 dark:text-slate-300"><Wallet className="h-5 w-5" /></div>
               </div>
               <p className="text-xs font-medium text-slate-400 mt-3">
                 {metrics.cajaAbierta ? "Turno actual operando" : "Abrí el turno para operar"}
@@ -199,7 +199,7 @@ export default function DashboardPage() {
             </CardHeader>
             <div className="p-0 overflow-x-auto">
               <table className="w-full text-sm text-left">
-                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                   <tr>
                     <th className="px-5 py-3 font-semibold">Cliente</th>
                     <th className="px-5 py-3 font-semibold">Comprobante</th>
@@ -214,7 +214,7 @@ export default function DashboardPage() {
                     metrics.ultimasVentas.map((v: any) => (
                       <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                         <td className="px-5 py-3 font-semibold text-slate-900 dark:text-white truncate max-w-[150px]">{v.cliente.nombre_razon_social}</td>
-                        <td className="px-5 py-3 text-slate-500 text-xs">{v.tipo_comprobante.replace('_', ' ')} 000{v.punto_venta}-{v.numero_comprobante}</td>
+                        <td className="px-5 py-3 text-slate-500 dark:text-slate-400 text-xs">{v.tipo_comprobante.replace('_', ' ')} 000{v.punto_venta}-{v.numero_comprobante}</td>
                         <td className="px-5 py-3 text-center">
                           <Badge variant="outline" className={`text-[9px] uppercase font-bold ${v.estado_pago === 'PAGADO' ? 'text-emerald-600 bg-emerald-50 border-emerald-200' : 'text-orange-600 bg-orange-50 border-orange-200'}`}>
                             {v.estado_pago}

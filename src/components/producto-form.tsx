@@ -340,8 +340,8 @@ export function ProductoForm({ initialData, providers: initialProviders, categor
                         if (!depo) return null;
                         return (
                           <div key={field.id} className="bg-indigo-50/50 border border-indigo-100 p-3 rounded-xl space-y-2">
-                            <Label className="text-xs font-semibold text-slate-700">{depo.nombre}</Label>
-                            <Input type="number" step={stockStep} {...register(`stocks.${index}.cantidad` as const)} className="bg-white" />
+                            <Label className="text-xs font-semibold text-slate-700 dark:text-slate-200">{depo.nombre}</Label>
+                            <Input type="number" step={stockStep} {...register(`stocks.${index}.cantidad` as const)} className="bg-white dark:bg-zinc-900" />
                           </div>
                         );
                       })}

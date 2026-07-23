@@ -68,6 +68,8 @@ export async function getPresupuestoById(id: number) {
                                 proveedor: true,
                                 marca: true,
                                 categoria: true,
+                                listas_precios: true,
+                                stocks: true
                             }
                         }
                     }

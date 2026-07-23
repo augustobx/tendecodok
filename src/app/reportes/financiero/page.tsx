@@ -75,22 +75,22 @@ export default function ReporteFinancieroPage() {
                         </div>
                         <div>
                             <CardTitle className="text-xl font-bold text-slate-900 dark:text-white">Módulo Financiero</CardTitle>
-                            <CardDescription className="text-xs font-medium text-slate-500 mt-0.5">Análisis de rentabilidad y márgenes de ganancia</CardDescription>
+                            <CardDescription className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Análisis de rentabilidad y márgenes de ganancia</CardDescription>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-5">
                     <form onSubmit={handleFiltrar} className="flex flex-col md:flex-row gap-4 items-end">
                         <div className="space-y-1.5 flex-1">
-                            <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Desde</Label>
+                            <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha Desde</Label>
                             <Input type="date" value={fechaDesde} onChange={e => setFechaDesde(e.target.value)} className="h-11" required />
                         </div>
                         <div className="space-y-1.5 flex-1">
-                            <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Hasta</Label>
+                            <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha Hasta</Label>
                             <Input type="date" value={fechaHasta} onChange={e => setFechaHasta(e.target.value)} className="h-11" required />
                         </div>
                         <div className="space-y-1.5 flex-1">
-                            <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Lista de Precios</Label>
+                            <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lista de Precios</Label>
                             <Select value={listaPrecioId} onValueChange={(val) => setListaPrecioId(val || "TODAS")}>
                                 <SelectTrigger className="h-11">
                                     <SelectValue placeholder="Todas las listas" />
@@ -121,7 +121,7 @@ export default function ReporteFinancieroPage() {
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg"><DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" /></div>
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Ingresos Totales</p>
+                                    <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Ingresos Totales</p>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.ingresosTotales || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
@@ -131,7 +131,7 @@ export default function ReporteFinancieroPage() {
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className="p-2.5 bg-red-50 dark:bg-red-500/10 rounded-lg"><TrendingUp className="h-5 w-5 text-red-600 dark:text-red-400" /></div>
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Costo (CMV)</p>
+                                    <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Costo (CMV)</p>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.costoTotal || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
@@ -141,7 +141,7 @@ export default function ReporteFinancieroPage() {
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className="p-2.5 bg-orange-50 dark:bg-orange-500/10 rounded-lg"><Percent className="h-5 w-5 text-orange-600 dark:text-orange-400" /></div>
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Descuentos</p>
+                                    <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Descuentos</p>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.descuentosTotales || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>
@@ -151,7 +151,7 @@ export default function ReporteFinancieroPage() {
                             <CardContent className="p-4 flex items-center gap-4">
                                 <div className="p-2.5 bg-purple-50 dark:bg-purple-500/10 rounded-lg"><Receipt className="h-5 w-5 text-purple-600 dark:text-purple-400" /></div>
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Impuestos (IVA)</p>
+                                    <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Impuestos (IVA)</p>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">${(reporteData.kpis.impuestosTotales || 0).toFixed(2)}</h3>
                                 </div>
                             </CardContent>

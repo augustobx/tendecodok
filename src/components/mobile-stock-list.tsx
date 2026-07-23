@@ -42,7 +42,7 @@ export function MobileStockList({ data, listasGlobales }: MobileStockListProps) 
                         className="pl-10 h-12 bg-white dark:bg-zinc-900 border-slate-300 dark:border-zinc-700 rounded-xl text-base shadow-sm focus-visible:ring-indigo-500"
                     />
                 </div>
-                <div className="mt-2 text-xs font-medium text-slate-500 text-right">
+                <div className="mt-2 text-xs font-medium text-slate-500 dark:text-slate-400 text-right">
                     {filteredData.length} productos
                 </div>
             </div>
@@ -72,7 +72,7 @@ export function MobileStockList({ data, listasGlobales }: MobileStockListProps) 
                                         <h3 className="font-bold text-slate-900 dark:text-white leading-tight text-lg">
                                             {producto.nombre_producto}
                                         </h3>
-                                        <p className="text-xs text-slate-500 mt-1 font-medium">
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
                                             Prov: <span className="text-slate-700 dark:text-slate-300">{producto.proveedor}</span> | Cód: {producto.codigo_barras}
                                         </p>
                                     </div>
@@ -89,7 +89,7 @@ export function MobileStockList({ data, listasGlobales }: MobileStockListProps) 
                                             {formatCantidad(producto.stock_actual, producto.tipo_medicion as any)} {getUnidadLabel(producto.tipo_medicion as any)}
                                         </Badge>
                                         {(isZero || isLowStock) && (
-                                            <span className="flex items-center text-[10px] mt-1 font-bold text-slate-500 uppercase">
+                                            <span className="flex items-center text-[10px] mt-1 font-bold text-slate-500 dark:text-slate-400 uppercase">
                                                 {isZero ? <AlertTriangle className="h-3 w-3 text-red-500 mr-1" /> : <AlertTriangle className="h-3 w-3 text-orange-500 mr-1" />}
                                                 {isZero ? "Sin Stock" : "Stock Bajo"}
                                             </span>
@@ -120,7 +120,7 @@ export function MobileStockList({ data, listasGlobales }: MobileStockListProps) 
 
                                             return (
                                                 <div key={lista.id} className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-3 flex flex-col border border-slate-100 dark:border-zinc-800">
-                                                    <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1 line-clamp-1">
+                                                    <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider mb-1 line-clamp-1">
                                                         {lista.nombre}
                                                     </span>
                                                     <span className="text-lg font-black text-indigo-700 dark:text-indigo-400">

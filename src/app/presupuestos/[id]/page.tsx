@@ -88,7 +88,7 @@ export default function PresupuestoDetallePage({ params }: { params: Promise<{ i
             <div className="flex items-center justify-between bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-5 rounded-2xl shadow-sm">
                 <div className="flex items-center gap-4">
                     <Link href="/presupuestos">
-                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100">
+                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-100">
                             <ArrowLeft className="h-5 w-5" />
                         </Button>
                     </Link>
@@ -97,7 +97,7 @@ export default function PresupuestoDetallePage({ params }: { params: Promise<{ i
                             <h2 className="text-xl font-bold text-slate-900 dark:text-white">Presupuesto Nº {String(presupuesto.numero).padStart(6, '0')}</h2>
                             <Badge variant="outline" className={`text-xs font-bold ${estado.color}`}>{estado.label}</Badge>
                         </div>
-                        <p className="text-sm text-slate-500 mt-0.5">Emitido: {fecha} — Vigencia hasta: {vigenciaFin.toLocaleDateString('es-AR')}</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Emitido: {fecha} — Vigencia hasta: {vigenciaFin.toLocaleDateString('es-AR')}</p>
                     </div>
                 </div>
                 <div className="flex gap-2">
@@ -108,7 +108,7 @@ export default function PresupuestoDetallePage({ params }: { params: Promise<{ i
                             </Button>
                         </Link>
                         <Link href={`/imprimir/presupuesto/${presupuesto.id}`} target="_blank" className="flex-1">
-                            <Button variant="outline" className="w-full border-slate-200 text-slate-700 font-medium hover:bg-slate-50 px-4">
+                            <Button variant="outline" className="w-full border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-zinc-800 px-4">
                                 <FileText className="h-4 w-4 mr-2" /> Hoja A4
                             </Button>
                         </Link>
@@ -129,25 +129,25 @@ export default function PresupuestoDetallePage({ params }: { params: Promise<{ i
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* INFO */}
-                <Card className="shadow-sm border-slate-200 bg-white">
+                <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                     <CardContent className="p-4 space-y-3">
-                        <div className="flex items-center gap-2 text-sm"><User className="h-4 w-4 text-slate-400" /><span className="font-bold text-slate-700">{presupuesto.cliente?.nombre_razon_social}</span></div>
-                        <div className="flex items-center gap-2 text-sm"><DollarSign className="h-4 w-4 text-slate-400" /><span className="text-slate-600">{presupuesto.listaPrecio?.nombre || 'N/A'}</span></div>
-                        <div className="flex items-center gap-2 text-sm"><Calendar className="h-4 w-4 text-slate-400" /><span className="text-slate-600">Vigencia: {presupuesto.vigencia_dias} días</span></div>
+                        <div className="flex items-center gap-2 text-sm"><User className="h-4 w-4 text-slate-400" /><span className="font-bold text-slate-700 dark:text-slate-200">{presupuesto.cliente?.nombre_razon_social}</span></div>
+                        <div className="flex items-center gap-2 text-sm"><DollarSign className="h-4 w-4 text-slate-400" /><span className="text-slate-600 dark:text-slate-300">{presupuesto.listaPrecio?.nombre || 'N/A'}</span></div>
+                        <div className="flex items-center gap-2 text-sm"><Calendar className="h-4 w-4 text-slate-400" /><span className="text-slate-600 dark:text-slate-300">Vigencia: {presupuesto.vigencia_dias} días</span></div>
                         {presupuesto.notas && (
                             <div className="pt-2 border-t border-slate-100">
                                 <p className="text-[10px] uppercase font-bold text-slate-400 mb-1">Notas</p>
-                                <p className="text-xs text-slate-600">{presupuesto.notas}</p>
+                                <p className="text-xs text-slate-600 dark:text-slate-300">{presupuesto.notas}</p>
                             </div>
                         )}
                     </CardContent>
                 </Card>
 
                 {/* TOTALES */}
-                <Card className="md:col-span-2 shadow-sm border-slate-200 bg-white">
+                <Card className="md:col-span-2 shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                     <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-3">
-                            <span className="text-sm text-slate-500">Subtotal</span>
+                            <span className="text-sm text-slate-500 dark:text-slate-400">Subtotal</span>
                             <span className="font-mono font-medium">${presupuesto.subtotal.toFixed(2)}</span>
                         </div>
                         {presupuesto.descuento_global > 0 && (
@@ -166,13 +166,13 @@ export default function PresupuestoDetallePage({ params }: { params: Promise<{ i
             </div>
 
             {/* DETALLE */}
-            <Card className="shadow-sm border-slate-200 bg-white overflow-hidden">
-                <CardHeader className="p-4 border-b border-slate-100 bg-slate-50/50">
+            <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+                <CardHeader className="p-4 border-b border-slate-100 bg-slate-50 dark:bg-zinc-800/50">
                     <CardTitle className="text-base flex items-center gap-2"><Package className="h-4 w-4 text-emerald-600" /> Ítems del Presupuesto ({presupuesto.detalles?.length || 0})</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                     <table className="w-full text-sm">
-                        <thead className="bg-slate-50 text-[10px] uppercase text-slate-500 tracking-wider border-b">
+                        <thead className="bg-slate-50 dark:bg-zinc-800 text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider border-b">
                             <tr>
                                 <th className="px-4 py-3 text-left font-semibold">Producto</th>
                                 <th className="px-4 py-3 text-center font-semibold">Cantidad</th>
@@ -184,7 +184,7 @@ export default function PresupuestoDetallePage({ params }: { params: Promise<{ i
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {presupuesto.detalles?.map((det: any) => (
-                                <tr key={det.id} className="hover:bg-slate-50 transition-colors">
+                                <tr key={det.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors">
                                     <td className="px-4 py-3">
                                         <p className="font-semibold text-slate-900">{det.producto?.nombre_producto || 'Producto eliminado'}</p>
                                         <p className="text-[11px] text-slate-400 font-mono">{det.producto?.codigo_articulo}</p>

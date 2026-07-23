@@ -50,13 +50,13 @@ export default function LoginPage() {
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Usuario</Label>
-                            <Input name="username" required autoFocus className="h-12 bg-slate-50" placeholder="Ej: marcos" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Usuario</Label>
+                            <Input name="username" required autoFocus className="h-12 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: marcos" />
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Contraseña</Label>
-                            <Input name="password" type="password" required className="h-12 bg-slate-50" placeholder="••••••••" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Contraseña</Label>
+                            <Input name="password" type="password" required className="h-12 bg-slate-50 dark:bg-zinc-800" placeholder="••••••••" />
                         </div>
 
                         {errorMsg && (

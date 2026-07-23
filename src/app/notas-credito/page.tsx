@@ -39,10 +39,10 @@ export default function HistorialNotasCreditoPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Historial de Notas de Crédito</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Consultá todas las devoluciones a Cuenta Corriente registradas en el sistema.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Consultá todas las devoluciones a Cuenta Corriente registradas en el sistema.</p>
                     </div>
                 </div>
-                <Button onClick={cargarHistorial} disabled={loading} variant="outline" className="h-10 text-slate-600">
+                <Button onClick={cargarHistorial} disabled={loading} variant="outline" className="h-10 text-slate-600 dark:text-slate-300">
                     <RefreshCcw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Actualizar
                 </Button>
             </div>
@@ -51,7 +51,7 @@ export default function HistorialNotasCreditoPage() {
             <Card className="flex-1 shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden flex flex-col">
                 <div className="flex-1 overflow-auto">
                     <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                             <tr>
                                 <th className="px-6 py-4 font-semibold">Fecha</th>
                                 <th className="px-6 py-4 font-semibold">Cliente</th>
@@ -77,13 +77,13 @@ export default function HistorialNotasCreditoPage() {
                                             <p className="font-medium text-slate-900 dark:text-white">
                                                 {new Date(n.fecha).toLocaleDateString('es-AR')}
                                             </p>
-                                            <p className="text-[10px] text-slate-500">
+                                            <p className="text-[10px] text-slate-500 dark:text-slate-400">
                                                 {new Date(n.fecha).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
                                             </p>
                                         </td>
                                         <td className="px-6 py-4">
                                             <p className="font-bold text-slate-900 dark:text-white">{n.cliente.nombre_razon_social}</p>
-                                            <p className="text-[11px] text-slate-500">DNI/CUIT: {n.cliente.dni_cuit || 'N/A'}</p>
+                                            <p className="text-[11px] text-slate-500 dark:text-slate-400">DNI/CUIT: {n.cliente.dni_cuit || 'N/A'}</p>
                                         </td>
                                         <td className="px-6 py-4">
                                             {n.venta ? (
@@ -95,7 +95,7 @@ export default function HistorialNotasCreditoPage() {
                                             )}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <p className="text-[11px] text-slate-600 italic whitespace-pre-wrap">{n.notas || '-'}</p>
+                                            <p className="text-[11px] text-slate-600 dark:text-slate-300 italic whitespace-pre-wrap">{n.notas || '-'}</p>
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <p className="font-black text-lg text-emerald-600">${n.monto.toFixed(2)}</p>

@@ -21,7 +21,7 @@ const ESTADO_BADGES: Record<string, { label: string; color: string }> = {
     PENDIENTE: { label: "Pendiente", color: "bg-amber-100 text-amber-700 border-amber-200" },
     CONVERTIDO: { label: "Convertido", color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
     CANCELADO: { label: "Cancelado", color: "bg-red-100 text-red-700 border-red-200" },
-    VENCIDO: { label: "Vencido", color: "bg-slate-100 text-slate-500 border-slate-200" },
+    VENCIDO: { label: "Vencido", color: "bg-slate-100 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-zinc-800" },
 };
 
 export default function PresupuestosPage() {
@@ -84,7 +84,7 @@ export default function PresupuestosPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Presupuestos</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Cotizaciones y presupuestos previos para clientes.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Cotizaciones y presupuestos previos para clientes.</p>
                     </div>
                 </div>
                 <Link href="/presupuestos/nuevo">
@@ -98,14 +98,14 @@ export default function PresupuestosPage() {
             <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                 <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-end">
                     <div className="flex-1 space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Buscar cliente</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Buscar cliente</Label>
                         <div className="relative">
                             <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                             <Input placeholder="Nombre o DNI..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-9 h-9 bg-slate-50 dark:bg-zinc-800/50" />
                         </div>
                     </div>
                     <div className="w-40 space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Estado</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Estado</Label>
                         <Select value={estadoFiltro} onValueChange={(v) => setEstadoFiltro(v || "")}>
                             <SelectTrigger className="h-9 bg-slate-50 dark:bg-zinc-800/50"><SelectValue /></SelectTrigger>
                             <SelectContent>
@@ -117,11 +117,11 @@ export default function PresupuestosPage() {
                         </Select>
                     </div>
                     <div className="w-36 space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Desde</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Desde</Label>
                         <Input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="h-9 bg-slate-50 dark:bg-zinc-800/50" />
                     </div>
                     <div className="w-36 space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Hasta</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Hasta</Label>
                         <Input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="h-9 bg-slate-50 dark:bg-zinc-800/50" />
                     </div>
                     <Button onClick={handleBuscar} disabled={isPending} className="bg-slate-900 text-white h-9 px-6">
@@ -160,7 +160,7 @@ export default function PresupuestosPage() {
                                                         {vencido ? "Vencido" : estado.label}
                                                     </Badge>
                                                 </div>
-                                                <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
+                                                <div className="flex items-center gap-3 mt-1 text-xs text-slate-500 dark:text-slate-400">
                                                     <span className="flex items-center gap-1"><User className="h-3 w-3" /> {p.cliente?.nombre_razon_social || 'N/A'}</span>
                                                     <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {fecha}</span>
                                                     <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Vigencia: {vigenciaStr}</span>
@@ -176,7 +176,7 @@ export default function PresupuestosPage() {
                                         </div>
                                         <div className="flex gap-1">
                                             <Link href={`/presupuestos/${p.id}`}>
-                                                <Button variant="outline" size="sm" className="h-8 text-xs border-slate-200">
+                                                <Button variant="outline" size="sm" className="h-8 text-xs border-slate-200 dark:border-zinc-800">
                                                     <Eye className="h-3 w-3 mr-1" /> Ver
                                                 </Button>
                                             </Link>

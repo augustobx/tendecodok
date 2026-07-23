@@ -145,7 +145,7 @@ export default function HistorialVentasPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Historial de Ventas</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Consultá comprobantes, reimprimí tickets y procesá devoluciones.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Consultá comprobantes, reimprimí tickets y procesá devoluciones.</p>
                     </div>
                 </div>
             </div>
@@ -154,22 +154,22 @@ export default function HistorialVentasPage() {
             <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                 <CardContent className="p-4 flex flex-col lg:flex-row gap-4 items-end">
                     <div className="flex-1 w-full space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Buscar Comprobante</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Buscar Comprobante</Label>
                         <div className="relative">
                             <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                             <Input placeholder="Nº Factura, Nombre de cliente o DNI..." value={termino} onChange={(e) => setTermino(e.target.value)} className="pl-9 h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                         </div>
                     </div>
                     <div className="w-full lg:w-[160px] space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Fecha Desde</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Fecha Desde</Label>
                         <Input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                     </div>
                     <div className="w-full lg:w-[160px] space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Fecha Hasta</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Fecha Hasta</Label>
                         <Input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                     </div>
                     <div className="w-full lg:w-[180px] space-y-1.5">
-                        <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Comprobante</Label>
+                        <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Comprobante</Label>
                         <Select
                             value={tipoComprobante}
                             onValueChange={(val) => setTipoComprobante(val ?? "")}>
@@ -186,7 +186,7 @@ export default function HistorialVentasPage() {
                             </SelectContent>
                         </Select>
                     </div>
-                    <Button variant="outline" onClick={() => { setTermino(""); setFechaDesde(""); setFechaHasta(""); setTipoComprobante("TODOS"); }} className="w-full lg:w-auto h-10 border-slate-200 text-slate-600 hover:bg-slate-50">Limpiar</Button>
+                    <Button variant="outline" onClick={() => { setTermino(""); setFechaDesde(""); setFechaHasta(""); setTipoComprobante("TODOS"); }} className="w-full lg:w-auto h-10 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800">Limpiar</Button>
                 </CardContent>
             </Card>
 
@@ -194,7 +194,7 @@ export default function HistorialVentasPage() {
             <Card className="flex-1 shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden flex flex-col">
                 <div className="flex-1 overflow-auto">
                     <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                             <tr>
                                 <th className="px-6 py-4 font-semibold">Comprobante y Fecha</th>
                                 <th className="px-6 py-4 font-semibold">Cliente</th>
@@ -223,12 +223,12 @@ export default function HistorialVentasPage() {
                                         <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors group">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="bg-slate-100 dark:bg-zinc-800 p-2 rounded-lg text-slate-500 hidden sm:block"><Receipt className="h-4 w-4" /></div>
+                                                    <div className="bg-slate-100 dark:bg-zinc-800 p-2 rounded-lg text-slate-500 dark:text-slate-400 hidden sm:block"><Receipt className="h-4 w-4" /></div>
                                                     <div>
                                                         <p className="font-bold text-sm text-slate-900 dark:text-white">
                                                             {v.tipo_comprobante.replace('_', ' ')} <span className="text-slate-400 font-normal ml-1">000{v.punto_venta}-{String(v.numero_comprobante).padStart(8, '0')}</span>
                                                         </p>
-                                                        <p className="text-[11px] text-slate-500 font-medium flex items-center gap-1 mt-1">
+                                                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 mt-1">
                                                             <CalendarDays className="h-3 w-3" /> {new Date(v.fecha_emision).toLocaleDateString('es-AR', { timeZone: 'UTC' })} a las {new Date(v.createdAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
                                                         </p>
                                                     </div>
@@ -236,10 +236,10 @@ export default function HistorialVentasPage() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <p className="font-semibold text-sm text-slate-900 dark:text-white line-clamp-1">{v.cliente.nombre_razon_social}</p>
-                                                <p className="text-[11px] text-slate-500 mt-0.5">DNI/CUIT: {v.cliente.dni_cuit || "Consumidor Final"}</p>
+                                                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">DNI/CUIT: {v.cliente.dni_cuit || "Consumidor Final"}</p>
                                             </td>
                                             <td className="px-6 py-4 text-center">
-                                                <p className="text-[10px] uppercase font-mono text-slate-500 font-bold bg-slate-100 dark:bg-zinc-800 rounded px-2 py-1 inline-block">
+                                                <p className="text-[10px] uppercase font-mono text-slate-500 dark:text-slate-400 font-bold bg-slate-100 dark:bg-zinc-800 rounded px-2 py-1 inline-block">
                                                     {v.usuario?.nombre || 'SISTEMA'}
                                                 </p>
                                             </td>
@@ -248,7 +248,7 @@ export default function HistorialVentasPage() {
                                                     <Badge variant="outline" className={`text-[10px] font-bold uppercase tracking-wider ${estaPagado ? 'text-emerald-600 bg-emerald-50 border-emerald-200' : esPendiente ? 'text-red-600 bg-red-50 border-red-200' : 'text-orange-600 bg-orange-50 border-orange-200'}`}>
                                                         {v.estado_pago}
                                                     </Badge>
-                                                    <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded">{v.metodo_pago.replace('_', ' ')}</span>
+                                                    <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded">{v.metodo_pago.replace('_', ' ')}</span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
@@ -285,7 +285,7 @@ export default function HistorialVentasPage() {
                                 <h3 className="text-lg font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                                     <FileText className="h-5 w-5 text-indigo-500" /> Detalle de Comprobante
                                 </h3>
-                                <div className="text-xs text-slate-500 mt-2 space-y-1">
+                                <div className="text-xs text-slate-500 dark:text-slate-400 mt-2 space-y-1">
                                     <p><span className="font-semibold text-slate-700 dark:text-slate-300">Comprobante:</span> {ventaSeleccionada.tipo_comprobante.replace('_', ' ')} Nº 000{ventaSeleccionada.punto_venta}-{String(ventaSeleccionada.numero_comprobante).padStart(8, '0')}</p>
                                     <p><span className="font-semibold text-slate-700 dark:text-slate-300">Emitido el:</span> {new Date(ventaSeleccionada.fecha_emision).toLocaleDateString('es-AR', { timeZone: 'UTC' })} a las {new Date(ventaSeleccionada.createdAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}</p>
                                     <p><span className="font-semibold text-slate-700 dark:text-slate-300">Cajero / Vendedor:</span> <span className="font-mono uppercase">{ventaSeleccionada.usuario?.nombre || 'SISTEMA'}</span></p>
@@ -309,7 +309,7 @@ export default function HistorialVentasPage() {
                                         <div key={det.id} className={`flex justify-between items-center p-3 rounded-xl border transition-colors ${modoDevolucion && cantidadesDevolver[det.id] > 0 ? 'bg-orange-50/50 border-orange-200' : 'bg-slate-50 dark:bg-zinc-800/30 border-slate-100 dark:border-zinc-800'}`}>
                                             <div className="flex-1">
                                                 <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">{det.producto.nombre_producto}</p>
-                                                <p className="text-xs text-slate-500 mt-0.5">
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                                                     Pagado: {det.cantidad} x ${det.precio_final.toFixed(2)}
                                                 </p>
                                             </div>
@@ -321,7 +321,7 @@ export default function HistorialVentasPage() {
                                                         type="number" min="0" max={det.cantidad}
                                                         value={cantidadesDevolver[det.id] || 0}
                                                         onChange={(e) => handleCambiarCantidadDevolucion(det.id, Number(e.target.value), det.cantidad)}
-                                                        className="h-9 w-20 text-center font-bold border-orange-200 focus-visible:ring-orange-500 text-orange-700 bg-white"
+                                                        className="h-9 w-20 text-center font-bold border-orange-200 focus-visible:ring-orange-500 text-orange-700 bg-white dark:bg-zinc-900"
                                                     />
                                                 </div>
                                             ) : (
@@ -335,7 +335,7 @@ export default function HistorialVentasPage() {
                                 {ventaSeleccionada.notas_venta && (
                                     <div className="mt-6 p-4 bg-yellow-50/50 border border-yellow-100 rounded-xl">
                                         <p className="text-[10px] uppercase font-bold text-yellow-600 mb-1">Notas del Sistema</p>
-                                        <p className="text-xs text-slate-700 whitespace-pre-wrap">{ventaSeleccionada.notas_venta}</p>
+                                        <p className="text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap">{ventaSeleccionada.notas_venta}</p>
                                     </div>
                                 )}
                             </div>
@@ -350,26 +350,26 @@ export default function HistorialVentasPage() {
                                             <h4 className="font-bold text-xs uppercase text-slate-400 tracking-wider mb-2 flex items-center gap-1"><User className="h-3.5 w-3.5" /> Cliente</h4>
                                             <div className="bg-white dark:bg-zinc-800 p-3 rounded-lg border border-slate-200 dark:border-zinc-700 shadow-sm">
                                                 <p className="font-bold text-sm">{ventaSeleccionada.cliente.nombre_razon_social}</p>
-                                                <p className="text-xs text-slate-500 mt-1">DNI/CUIT: {ventaSeleccionada.cliente.dni_cuit || "N/A"}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">DNI/CUIT: {ventaSeleccionada.cliente.dni_cuit || "N/A"}</p>
                                             </div>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <div className="flex justify-between text-sm text-slate-600"><span>Subtotal</span><span>${ventaSeleccionada.subtotal.toFixed(2)}</span></div>
+                                            <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300"><span>Subtotal</span><span>${ventaSeleccionada.subtotal.toFixed(2)}</span></div>
                                             {ventaSeleccionada.descuento_global > 0 && <div className="flex justify-between text-sm text-emerald-600 font-medium"><span>Desc. Global</span><span>-${ventaSeleccionada.descuento_global.toFixed(2)}</span></div>}
                                             <Separator className="bg-slate-200" />
                                             <div className="flex justify-between items-center"><span className="font-bold text-slate-900">TOTAL</span><span className="text-2xl font-black text-indigo-600">${ventaSeleccionada.total.toFixed(2)}</span></div>
                                         </div>
 
-                                        <div className="pt-4 space-y-2 border-t border-slate-200">
+                                        <div className="pt-4 space-y-2 border-t border-slate-200 dark:border-zinc-800">
 
                                             {/* TOGGLE PARA DESCUENTOS */}
                                             <div
                                                 onClick={() => setImprimirConDescuentos(!imprimirConDescuentos)}
-                                                className="flex items-center gap-2 p-2.5 mb-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors"
+                                                className="flex items-center gap-2 p-2.5 mb-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-800 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors"
                                             >
                                                 {imprimirConDescuentos ? <CheckSquare className="h-4 w-4 text-indigo-600" /> : <Square className="h-4 w-4 text-slate-400" />}
-                                                <span className="text-xs font-medium text-slate-700 select-none">Detallar descuentos en el ticket</span>
+                                                <span className="text-xs font-medium text-slate-700 dark:text-slate-200 select-none">Detallar descuentos en el ticket</span>
                                             </div>
 
                                             <div className="flex gap-2 mb-2">
@@ -379,7 +379,7 @@ export default function HistorialVentasPage() {
                                                     </Button>
                                                 </a>
                                                 <a href={`/imprimir/a4/${ventaSeleccionada.id}?descuentos=${imprimirConDescuentos}`} className="flex-1">
-                                                    <Button variant="outline" className="w-full bg-white border-slate-200 text-slate-700 font-medium hover:bg-slate-50 px-2">
+                                                    <Button variant="outline" className="w-full bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-zinc-800 px-2">
                                                         <FileText className="h-4 w-4 mr-2" /> A4
                                                     </Button>
                                                 </a>
@@ -395,33 +395,33 @@ export default function HistorialVentasPage() {
                                         <div>
                                             <h4 className="font-bold text-xs uppercase text-orange-500 tracking-wider mb-2 flex items-center gap-1"><ArrowLeftRight className="h-4 w-4" /> Reembolso</h4>
                                             <div className="bg-white dark:bg-zinc-800 p-4 rounded-xl border-2 border-orange-200 shadow-sm text-center">
-                                                <p className="text-[10px] uppercase font-bold text-slate-500 mb-1">Monto a devolver al cliente</p>
+                                                <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-1">Monto a devolver al cliente</p>
                                                 <p className="text-3xl font-black text-slate-900 dark:text-white">${montoTotalReembolso.toFixed(2)}</p>
                                             </div>
                                         </div>
 
                                         <div className="space-y-3">
-                                            <Label className="text-xs font-bold text-slate-700">¿Cómo se reintegra el valor?</Label>
+                                            <Label className="text-xs font-bold text-slate-700 dark:text-slate-200">¿Cómo se reintegra el valor?</Label>
                                             <div className="grid grid-cols-1 gap-2">
                                                 <div
                                                     onClick={() => setMetodoReembolso("CAJA")}
-                                                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${metodoReembolso === "CAJA" ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-indigo-200'}`}
+                                                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${metodoReembolso === "CAJA" ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-indigo-200'}`}
                                                 >
                                                     <p className="font-bold text-sm text-slate-900">Efectivo (Caja)</p>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5">Se retirará plata de la caja diaria operativa.</p>
+                                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Se retirará plata de la caja diaria operativa.</p>
                                                 </div>
                                                 <div
                                                     onClick={() => setMetodoReembolso("CUENTA_CORRIENTE")}
-                                                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${metodoReembolso === "CUENTA_CORRIENTE" ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-indigo-200'}`}
+                                                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${metodoReembolso === "CUENTA_CORRIENTE" ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-indigo-200'}`}
                                                 >
                                                     <p className="font-bold text-sm text-slate-900">Nota de Crédito (Cuenta)</p>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5">Se descontará de la deuda del cliente.</p>
+                                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Se descontará de la deuda del cliente.</p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="pt-4 space-y-2 border-t border-slate-200 flex gap-2">
-                                            <Button variant="outline" onClick={() => setModoDevolucion(false)} className="w-1/3 bg-white">Volver</Button>
+                                        <div className="pt-4 space-y-2 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                                            <Button variant="outline" onClick={() => setModoDevolucion(false)} className="w-1/3 bg-white dark:bg-zinc-900">Volver</Button>
                                             <Button onClick={handleConfirmarDevolucion} disabled={isPending || montoTotalReembolso <= 0} className="w-2/3 bg-orange-600 hover:bg-orange-700 text-white font-bold">
                                                 {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />} Confirmar
                                             </Button>

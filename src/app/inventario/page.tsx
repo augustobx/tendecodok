@@ -48,7 +48,7 @@ export default async function InventarioPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Control de Inventario</h2>
-            <p className="text-sm text-slate-500 mt-0.5">Administrá tu catálogo, actualizá precios y controlá el stock de tus productos.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Administrá tu catálogo, actualizá precios y controlá el stock de tus productos.</p>
           </div>
         </div>
       </div>

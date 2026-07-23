@@ -103,7 +103,7 @@ export default function ListasPrecioPage() {
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Tarifarios y Márgenes</h2>
-                    <p className="text-sm text-slate-500 mt-0.5">Creá múltiples listas de precios y definí su rentabilidad base.</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Creá múltiples listas de precios y definí su rentabilidad base.</p>
                 </div>
             </div>
 
@@ -145,7 +145,7 @@ export default function ListasPrecioPage() {
                                         />
                                         <Percent className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
                                     </div>
-                                    <p className="text-[10px] text-slate-500 leading-tight pt-1">
+                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight pt-1">
                                         Este % se aplicará automáticamente sobre el costo de los productos.
                                     </p>
                                 </div>
@@ -180,7 +180,7 @@ export default function ListasPrecioPage() {
                                 </div>
                             ) : (
                                 <table className="w-full text-sm text-left">
-                                    <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                                    <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                                         <tr>
                                             <th className="px-6 py-3 font-semibold">Nombre de la Lista</th>
                                             <th className="px-6 py-3 font-semibold text-right">Margen Base</th>
@@ -204,7 +204,7 @@ export default function ListasPrecioPage() {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            className="h-8 w-8 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10"
+                                                            className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10"
                                                             onClick={() => { setListaEditando(lista); setNombreEdicion(lista.nombre); setMargenEdicion(String(lista.margen_defecto)); }}
                                                         >
                                                             <Pencil className="h-4 w-4" />
@@ -212,7 +212,7 @@ export default function ListasPrecioPage() {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
+                                                            className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
                                                             onClick={() => handleEliminar(lista.id, lista.nombre)}
                                                         >
                                                             <Trash2 className="h-4 w-4" />
@@ -247,7 +247,7 @@ export default function ListasPrecioPage() {
                                     autoFocus
                                     value={nombreEdicion}
                                     onChange={e => setNombreEdicion(e.target.value)}
-                                    className="h-11 border-slate-200"
+                                    className="h-11 border-slate-200 dark:border-zinc-800"
                                 />
                             </div>
                             <div className="space-y-1.5">
@@ -257,7 +257,7 @@ export default function ListasPrecioPage() {
                                     step="0.1"
                                     value={margenEdicion}
                                     onChange={e => setMargenEdicion(e.target.value)}
-                                    className="h-11 font-bold border-slate-200"
+                                    className="h-11 font-bold border-slate-200 dark:border-zinc-800"
                                 />
                             </div>
                             <div className="flex gap-2 pt-2">

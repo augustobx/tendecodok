@@ -135,7 +135,7 @@ export default function CuentasCorrientesPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Cuentas Corrientes</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Gestiona saldos pendientes, cobra recibos y actualiza deudas.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Gestiona saldos pendientes, cobra recibos y actualiza deudas.</p>
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@ export default function CuentasCorrientesPage() {
                     </Card>
                     <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 h-full">
                         <CardContent className="p-5 flex flex-col justify-center h-full">
-                            <p className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Clientes con Deuda</p>
+                            <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Clientes con Deuda</p>
                             <h3 className="text-3xl font-black text-slate-900 dark:text-white mt-1">{deudores.length}</h3>
                         </CardContent>
                     </Card>
@@ -163,7 +163,7 @@ export default function CuentasCorrientesPage() {
                 <Card className="xl:col-span-8 shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 h-full">
                     <CardContent className="p-4 flex flex-col md:flex-row gap-4 items-end h-full">
                         <div className="flex-1 w-full space-y-1.5">
-                            <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Buscar Cliente</Label>
+                            <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Buscar Cliente</Label>
                             <div className="relative">
                                 <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                                 <Input
@@ -175,7 +175,7 @@ export default function CuentasCorrientesPage() {
                         </div>
 
                         <div className="w-full md:w-[220px] space-y-1.5">
-                            <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Estado de Cuenta</Label>
+                            <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Estado de Cuenta</Label>
                             <Select value={filtroEstado} onValueChange={(v) => setFiltroEstado(v || "")}>
                                 <SelectTrigger className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700">
                                     <SelectValue />
@@ -189,16 +189,16 @@ export default function CuentasCorrientesPage() {
                         </div>
 
                         <div className="w-full md:w-[140px] space-y-1.5">
-                            <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Desde</Label>
+                            <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Desde</Label>
                             <Input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                         </div>
 
                         <div className="w-full md:w-[140px] space-y-1.5">
-                            <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Hasta</Label>
+                            <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Hasta</Label>
                             <Input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                         </div>
 
-                        <Button variant="outline" onClick={() => { setTermino(""); setFiltroEstado("TODOS"); setFechaDesde(""); setFechaHasta(""); }} className="w-full md:w-auto h-10 text-slate-600 hover:bg-slate-50">
+                        <Button variant="outline" onClick={() => { setTermino(""); setFiltroEstado("TODOS"); setFechaDesde(""); setFechaHasta(""); }} className="w-full md:w-auto h-10 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800">
                             Limpiar
                         </Button>
                     </CardContent>
@@ -209,7 +209,7 @@ export default function CuentasCorrientesPage() {
             <Card className="flex-1 shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden flex flex-col">
                 <div className="flex-1 overflow-auto">
                     <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 z-10 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                             <tr>
                                 <th className="px-6 py-4 font-semibold">Cliente</th>
                                 <th className="px-6 py-4 font-semibold text-center">Facturas</th>
@@ -237,12 +237,12 @@ export default function CuentasCorrientesPage() {
                                     <tr key={d.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500 font-bold text-xs shrink-0">
+                                                <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-xs shrink-0">
                                                     {d.nombre.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
                                                     <p className="font-semibold text-sm text-slate-900 dark:text-white">{d.nombre}</p>
-                                                    <p className="text-[11px] text-slate-500 mt-0.5">{d.telefono ? `📞 ${d.telefono}` : "Sin teléfono registrado"}</p>
+                                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{d.telefono ? `📞 ${d.telefono}` : "Sin teléfono registrado"}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -288,7 +288,7 @@ export default function CuentasCorrientesPage() {
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         title="Enviar recordatorio por WhatsApp"
-                                                        className="h-8 w-8 inline-flex items-center justify-center rounded-md text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 bg-white border border-emerald-100 dark:border-emerald-900/50 transition-colors shrink-0"
+                                                        className="h-8 w-8 inline-flex items-center justify-center rounded-md text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-900/50 transition-colors shrink-0"
                                                     >
                                                         <MessageCircle className="h-4 w-4" />
                                                     </a>
@@ -318,7 +318,7 @@ export default function CuentasCorrientesPage() {
                                     <FileText className="h-5 w-5 text-indigo-500" />
                                     Ficha de Cuenta Corriente
                                 </h3>
-                                <p className="text-sm font-semibold text-slate-500 mt-0.5">{fichaCliente.cliente.nombre_razon_social}</p>
+                                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mt-0.5">{fichaCliente.cliente.nombre_razon_social}</p>
                             </div>
                             <Button variant="ghost" size="icon" onClick={() => setFichaCliente(null)} className="h-8 w-8 rounded-full text-slate-400 hover:bg-slate-200">
                                 <X className="h-5 w-5" />
@@ -328,13 +328,13 @@ export default function CuentasCorrientesPage() {
                         <div className="flex-1 overflow-y-auto p-0 flex flex-col md:flex-row">
 
                             {/* COLUMNA IZQUIERDA: FACTURAS PENDIENTES */}
-                            <div className="flex-1 p-5 border-b md:border-b-0 md:border-r border-slate-100 dark:border-zinc-800 bg-slate-50/30">
+                            <div className="flex-1 p-5 border-b md:border-b-0 md:border-r border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/30">
                                 <h4 className="font-bold text-xs uppercase text-slate-400 tracking-wider mb-4 flex items-center gap-1">
                                     <BadgeDollarSign className="h-3.5 w-3.5" /> Facturas por Cobrar
                                 </h4>
 
                                 {fichaCliente.ventasPendientes.length === 0 ? (
-                                    <div className="p-8 text-center border border-dashed border-slate-200 rounded-xl text-slate-400 text-sm font-medium">Este cliente no tiene deudas pendientes.</div>
+                                    <div className="p-8 text-center border border-dashed border-slate-200 dark:border-zinc-800 rounded-xl text-slate-400 text-sm font-medium">Este cliente no tiene deudas pendientes.</div>
                                 ) : (
                                     <div className="space-y-4">
                                         {fichaCliente.ventasPendientes.map((venta: any) => {
@@ -345,7 +345,7 @@ export default function CuentasCorrientesPage() {
                                                     <div className={`p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b ${estaVencida ? 'bg-red-50/50 dark:bg-red-500/5 border-red-100' : 'bg-slate-50/50 border-slate-100'}`}>
                                                         <div>
                                                             <p className="font-semibold text-sm text-slate-900 dark:text-white">Fac. {venta.tipo_comprobante.replace('_', ' ')} 000{venta.punto_venta}-{String(venta.numero_comprobante).padStart(8, '0')}</p>
-                                                            <p className="text-xs text-slate-500 mt-1">Emitida: {new Date(venta.fecha_emision).toLocaleDateString('es-AR')}</p>
+                                                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Emitida: {new Date(venta.fecha_emision).toLocaleDateString('es-AR')}</p>
                                                         </div>
                                                         <div className="text-left sm:text-right">
                                                             {estaVencida ? (
@@ -404,7 +404,7 @@ export default function CuentasCorrientesPage() {
                                                         <div className="font-bold text-sm text-emerald-600">+${mov.monto.toFixed(2)}</div>
                                                         <time className="font-mono text-[10px] text-slate-400">{new Date(mov.fecha).toLocaleDateString('es-AR')}</time>
                                                     </div>
-                                                    <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">{mov.metodo_pago}</p>
+                                                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{mov.metodo_pago}</p>
                                                     {mov.notas && <p className="text-[10px] text-slate-400 mt-2 italic leading-tight">{mov.notas}</p>}
                                                 </div>
                                             </div>
@@ -431,7 +431,7 @@ export default function CuentasCorrientesPage() {
                                     <div className="bg-emerald-50 text-emerald-600 p-2 rounded-lg"><DollarSign className="h-4 w-4" /></div>
                                     <div>
                                         <CardTitle className="text-base text-slate-900 dark:text-white">Ingresar Abono</CardTitle>
-                                        <CardDescription className="text-[11px] text-slate-500 mt-0.5">
+                                        <CardDescription className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                                             Fac. {ventaCobrar.tipo_comprobante.replace('_', ' ')} 000{ventaCobrar.punto_venta}-{ventaCobrar.numero_comprobante}
                                         </CardDescription>
                                     </div>
@@ -447,11 +447,11 @@ export default function CuentasCorrientesPage() {
                             {/* Deuda Actual vs Medio Pago */}
                             <div className="flex gap-4 items-center">
                                 <div className="p-3 bg-slate-50 dark:bg-zinc-800/50 border border-slate-100 dark:border-zinc-700 rounded-xl flex-1">
-                                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">Deuda Actual</p>
+                                    <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider mb-1">Deuda Actual</p>
                                     <p className="text-2xl font-black text-slate-900 dark:text-white">${ventaCobrar.saldo_pendiente.toFixed(2)}</p>
                                 </div>
                                 <div className="flex-1 space-y-1.5">
-                                    <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Medio de Pago</Label>
+                                    <Label className="font-bold text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider">Medio de Pago</Label>
                                     <Select value={metodoPago} onValueChange={(v) => setMetodoPago(v || "")}>
                                         <SelectTrigger className="bg-white dark:bg-zinc-900 h-10 border-slate-200 dark:border-zinc-700 font-medium text-sm">
                                             <SelectValue />
@@ -476,8 +476,8 @@ export default function CuentasCorrientesPage() {
                                         onChange={(e) => setMontoPago(e.target.value)}
                                         className="h-11 text-xl font-black text-emerald-700 dark:text-emerald-400 bg-white dark:bg-zinc-900 flex-1 text-center border-emerald-200 dark:border-emerald-500/30 focus-visible:ring-emerald-500"
                                     />
-                                    <Button variant="outline" className="h-11 px-4 text-xs font-semibold bg-white border-slate-200 text-slate-600 hover:bg-slate-50" onClick={() => setMontoPago(String(ventaCobrar.saldo_pendiente / 2))}>Mitad</Button>
-                                    <Button variant="outline" className="h-11 px-4 text-xs font-semibold bg-white border-slate-200 text-slate-600 hover:bg-slate-50" onClick={() => setMontoPago(String(ventaCobrar.saldo_pendiente))}>Total</Button>
+                                    <Button variant="outline" className="h-11 px-4 text-xs font-semibold bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800" onClick={() => setMontoPago(String(ventaCobrar.saldo_pendiente / 2))}>Mitad</Button>
+                                    <Button variant="outline" className="h-11 px-4 text-xs font-semibold bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-800" onClick={() => setMontoPago(String(ventaCobrar.saldo_pendiente))}>Total</Button>
                                 </div>
                             </div>
 
@@ -492,8 +492,8 @@ export default function CuentasCorrientesPage() {
                                         placeholder="Ej: 5"
                                         className="h-10 text-lg font-bold text-center text-purple-700 dark:text-purple-400 bg-white dark:bg-zinc-900 border-purple-200 dark:border-purple-500/30 focus-visible:ring-purple-500 flex-1"
                                     />
-                                    <Button variant="outline" className="h-10 px-3 text-xs font-semibold bg-white border-slate-200 text-slate-600" onClick={() => setDescuentoPago("5")}>5%</Button>
-                                    <Button variant="outline" className="h-10 px-3 text-xs font-semibold bg-white border-slate-200 text-slate-600" onClick={() => setDescuentoPago("10")}>10%</Button>
+                                    <Button variant="outline" className="h-10 px-3 text-xs font-semibold bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300" onClick={() => setDescuentoPago("5")}>5%</Button>
+                                    <Button variant="outline" className="h-10 px-3 text-xs font-semibold bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-300" onClick={() => setDescuentoPago("10")}>10%</Button>
                                 </div>
                                 {descuentoPago && Number(descuentoPago) > 0 && (
                                     <p className="text-xs text-purple-600 font-medium mt-1">
@@ -504,7 +504,7 @@ export default function CuentasCorrientesPage() {
 
                             {/* Notas */}
                             <div className="space-y-1.5">
-                                <Label className="font-bold text-[10px] uppercase text-slate-500 tracking-wider">Notas de Recibo (Opcional)</Label>
+                                <Label className="font-bold text-[10px] uppercase text-slate-500 dark:text-slate-400 tracking-wider">Notas de Recibo (Opcional)</Label>
                                 <Textarea
                                     value={notasPago}
                                     onChange={(e) => setNotasPago(e.target.value)}
@@ -515,7 +515,7 @@ export default function CuentasCorrientesPage() {
 
                             {/* Botones de acción */}
                             <div className="flex gap-2 pt-2 border-t border-slate-100 dark:border-zinc-800">
-                                <Button variant="ghost" onClick={() => setVentaCobrar(null)} className="w-1/3 h-11 text-slate-600 font-medium">Cancelar</Button>
+                                <Button variant="ghost" onClick={() => setVentaCobrar(null)} className="w-1/3 h-11 text-slate-600 dark:text-slate-300 font-medium">Cancelar</Button>
                                 <Button onClick={handleProcesarPago} disabled={isPending || !montoPago} className="w-2/3 h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm">
                                     {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirmar Recibo"}
                                 </Button>

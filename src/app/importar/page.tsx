@@ -103,7 +103,7 @@ export default function ImportadorPage() {
                 </div>
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Migración de Datos Excel</h1>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Sube tus archivos de catálogo viejo para transicionar rápidamente al ERP.
                     </p>
                 </div>
@@ -119,20 +119,20 @@ export default function ImportadorPage() {
                     PANEL DE PRODUCTOS 
                 ======================================================== */}
                 <TabsContent value="productos">
-                    <Card className="shadow-sm border-slate-200">
-                        <CardHeader className="bg-slate-50 border-b">
-                            <CardTitle className="text-lg text-slate-800 font-bold flex items-center gap-2">
+                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800">
+                        <CardHeader className="bg-slate-50 dark:bg-zinc-800 border-b">
+                            <CardTitle className="text-lg text-slate-800 dark:text-slate-100 font-bold flex items-center gap-2">
                                 <UploadCloud className="h-5 w-5 text-indigo-500" /> Importar Catálogo de Productos
                             </CardTitle>
                             <CardDescription>
                                 Respeta estrictamente el formato exacto de columnas: <br/>
-                                <strong className="text-slate-700">A: Código | B: Nombre | C: Costo | D: Stock | E: Marca | F: Categoría | H: Proveedor</strong>
+                                <strong className="text-slate-700 dark:text-slate-200">A: Código | B: Nombre | C: Costo | D: Stock | E: Marca | F: Categoría | H: Proveedor</strong>
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="pt-6">
                             <form onSubmit={handleSubirProductos} className="space-y-6">
                                 <div className="space-y-2">
-                                    <Label className="font-bold text-slate-700">1. ¿En qué depósito se alojará este listado?</Label>
+                                    <Label className="font-bold text-slate-700 dark:text-slate-200">1. ¿En qué depósito se alojará este listado?</Label>
                                     <Select value={depositoSeleccionado} onValueChange={(val) => setDepositoSeleccionado(val as string)}>
                                         <SelectTrigger className="h-11" disabled={loadingDeps || isPending}>
                                             <SelectValue placeholder="Seleccioná un depósito de destino..." />
@@ -145,17 +145,17 @@ export default function ImportadorPage() {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    <p className="text-xs text-slate-500">
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">
                                         Todos los productos nuevos o actualizados asignarán stock en este depósito particular.
                                     </p>
                                 </div>
 
                                 <div className="space-y-3 border-t pt-4">
-                                    <Label className="font-bold text-slate-700">2. ¿A qué Listas de Precios pertenecen?</Label>
-                                    <p className="text-xs text-slate-500 mb-2">Puedes seleccionar en qué listas se darán de alta para quedar disponibles en el POS.</p>
+                                    <Label className="font-bold text-slate-700 dark:text-slate-200">2. ¿A qué Listas de Precios pertenecen?</Label>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">Puedes seleccionar en qué listas se darán de alta para quedar disponibles en el POS.</p>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                         {listasPrecio.map(lista => (
-                                            <label key={lista.id} className={`flex items-start gap-2 p-3 border rounded-xl cursor-pointer transition-colors ${listasSeleccionadas.includes(lista.id) ? 'bg-indigo-50 border-indigo-200' : 'hover:bg-slate-50'}`}>
+                                            <label key={lista.id} className={`flex items-start gap-2 p-3 border rounded-xl cursor-pointer transition-colors ${listasSeleccionadas.includes(lista.id) ? 'bg-indigo-50 border-indigo-200' : 'hover:bg-slate-50 dark:hover:bg-zinc-800'}`}>
                                                 <input 
                                                     type="checkbox" 
                                                     className="w-4 h-4 mt-0.5 accent-indigo-600 rounded border-slate-300" 
@@ -169,7 +169,7 @@ export default function ImportadorPage() {
                                                     }}
                                                 />
                                                 <div className="flex flex-col">
-                                                    <span className={`text-sm font-semibold truncate ${listasSeleccionadas.includes(lista.id) ? 'text-indigo-900' : 'text-slate-700'}`}>{lista.nombre}</span>
+                                                    <span className={`text-sm font-semibold truncate ${listasSeleccionadas.includes(lista.id) ? 'text-indigo-900' : 'text-slate-700 dark:text-slate-200'}`}>{lista.nombre}</span>
                                                 </div>
                                             </label>
                                         ))}
@@ -177,7 +177,7 @@ export default function ImportadorPage() {
                                 </div>
 
                                 <div className="space-y-2 border-t pt-4">
-                                    <Label className="font-bold text-slate-700">3. Archivo Excel (.csv, .xls, .xlsx)</Label>
+                                    <Label className="font-bold text-slate-700 dark:text-slate-200">3. Archivo Excel (.csv, .xls, .xlsx)</Label>
                                     <Input 
                                         id="input-file-productos" 
                                         type="file" 
@@ -203,7 +203,7 @@ export default function ImportadorPage() {
                     PANEL DE CLIENTES 
                 ======================================================== */}
                 <TabsContent value="clientes">
-                    <Card className="shadow-sm border-slate-200">
+                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800">
                         <CardHeader className="bg-emerald-50 border-b border-emerald-100">
                             <CardTitle className="text-lg text-emerald-800 font-bold flex items-center gap-2">
                                 <UploadCloud className="h-5 w-5 text-emerald-600" /> Importar Listado de Clientes
@@ -216,7 +216,7 @@ export default function ImportadorPage() {
                         <CardContent className="pt-6">
                             <form onSubmit={handleSubirClientes} className="space-y-6">
                                 <div className="space-y-2">
-                                    <Label className="font-bold text-slate-700">Archivo Excel (.csv, .xls, .xlsx)</Label>
+                                    <Label className="font-bold text-slate-700 dark:text-slate-200">Archivo Excel (.csv, .xls, .xlsx)</Label>
                                     <Input 
                                         id="input-file-clientes" 
                                         type="file" 

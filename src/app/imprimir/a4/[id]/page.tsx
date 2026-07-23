@@ -64,7 +64,7 @@ export default function FacturaA4PrintPage({ params }: { params: Promise<{ id: s
                 }
             `}} />
 
-            <div className="w-[210mm] min-h-[297mm] bg-white text-black p-8 mx-auto font-sans text-sm print:m-0 print:p-8">
+            <div className="w-[210mm] min-h-[297mm] bg-white dark:bg-zinc-900 text-black p-8 mx-auto font-sans text-sm print:m-0 print:p-8">
 
             {/* BOTÓN VOLVER (Oculto al imprimir) */}
             <div className="print:hidden mb-4 relative z-50">
@@ -80,7 +80,7 @@ export default function FacturaA4PrintPage({ params }: { params: Promise<{ id: s
             <div className="relative border border-black p-4 mb-4 flex justify-between h-[150px]">
                 
                 {/* Cuadro Central Letra */}
-                <div className="absolute left-1/2 -translate-x-1/2 -top-[1px] bg-white border border-black w-[50px] h-[50px] flex flex-col items-center justify-center">
+                <div className="absolute left-1/2 -translate-x-1/2 -top-[1px] bg-white dark:bg-zinc-900 border border-black w-[50px] h-[50px] flex flex-col items-center justify-center">
                     <span className="text-3xl font-bold leading-none">{letraComprobante}</span>
                     <span className="text-[9px] font-bold mt-1 leading-none border-t border-black w-full text-center pt-1">COD {codComprobante}</span>
                 </div>
@@ -170,7 +170,7 @@ export default function FacturaA4PrintPage({ params }: { params: Promise<{ id: s
                                     <td className="py-2 px-3 border-r border-black text-center">{det.cantidad}</td>
                                     <td className="py-2 px-3 border-r border-black">
                                         {det.producto?.nombre_producto || 'Producto genérico'}
-                                        {det.descuento_individual > 0 && <span className="block text-[10px] text-slate-500 mt-1">*{det.descuento_individual}% OFF Aplicado</span>}
+                                        {det.descuento_individual > 0 && <span className="block text-[10px] text-slate-500 dark:text-slate-400 mt-1">*{det.descuento_individual}% OFF Aplicado</span>}
                                     </td>
                                     <td className="py-2 px-3 border-r border-black text-right">${itemUnitario.toFixed(2)}</td>
                                     {venta.tipo_comprobante === "FACTURA_A" && <td className="py-2 px-3 border-r border-black text-right">21%</td>}
@@ -184,7 +184,7 @@ export default function FacturaA4PrintPage({ params }: { params: Promise<{ id: s
 
             {/* TOTALES */}
             <div className="border border-t-0 border-black mb-4 flex">
-                <div className="w-[60%] border-r border-black p-2 flex flex-col text-xs text-slate-600 justify-end">
+                <div className="w-[60%] border-r border-black p-2 flex flex-col text-xs text-slate-600 dark:text-slate-300 justify-end">
                     {venta.tipo_comprobante === "FACTURA_A" ? (
                         <p>Los importes expresados son netos sujetos a la aplicación del IVA.</p>
                     ) : (
@@ -241,9 +241,9 @@ export default function FacturaA4PrintPage({ params }: { params: Promise<{ id: s
                         <div className="text-[12px] text-red-600 font-bold border border-red-600 p-2">COMPROBANTE SIN CAE FISCAL AUTORIZADO</div>
                     )}
                 </div>
-                <div className="text-right text-[10px] text-slate-500 max-w-sm flex flex-col justify-end">
+                <div className="text-right text-[10px] text-slate-500 dark:text-slate-400 max-w-sm flex flex-col justify-end">
                     {letraComprobante === "X" && (
-                        <p className="mb-1 font-bold text-slate-600">Las cotizaciones están sujetas a modificaciones sin previo aviso y a disponibilidad de stock al momento de confirmar la compra.</p>
+                        <p className="mb-1 font-bold text-slate-600 dark:text-slate-300">Las cotizaciones están sujetas a modificaciones sin previo aviso y a disponibilidad de stock al momento de confirmar la compra.</p>
                     )}
                     <span className="font-bold">Cajero: {venta.usuario ? venta.usuario.nombre_completo : "Sistema"}</span>
                     <span>Documento impreso desde Tendeco POS</span>

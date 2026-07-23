@@ -221,7 +221,7 @@ export default function ClientesPage() {
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Directorio de Clientes</h2>
-                    <p className="text-sm text-slate-500 mt-0.5">Administrá la información, asigná tarifas y consultá el historial de actividad.</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Administrá la información, asigná tarifas y consultá el historial de actividad.</p>
                 </div>
             </div>
 
@@ -250,34 +250,34 @@ export default function ClientesPage() {
                         <CardContent className="p-5">
                             <form onSubmit={handleSubmitNuevo} className="space-y-4">
                                 <div className="space-y-1.5">
-                                    <Label className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">Razón Social / Nombre <span className="text-red-500">*</span></Label>
+                                    <Label className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Razón Social / Nombre <span className="text-red-500">*</span></Label>
                                     <Input id="nombre_razon_social" name="nombre_razon_social" required className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
-                                        <Label className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">DNI o CUIT</Label>
+                                        <Label className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">DNI o CUIT</Label>
                                         <div className="flex gap-2">
                                             <Input name="dni_cuit" value={cuitDniAlta} onChange={handleCuitChangeAlta} className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700 flex-1" />
-                                            <Button type="button" onClick={handleBuscarAFIPAlta} variant="outline" className="h-10 px-3 bg-white border-slate-200"><Search className="h-4 w-4" /></Button>
+                                            <Button type="button" onClick={handleBuscarAFIPAlta} variant="outline" className="h-10 px-3 bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800"><Search className="h-4 w-4" /></Button>
                                         </div>
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">Teléfono</Label>
+                                        <Label className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Teléfono</Label>
                                         <Input name="telefono" className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                                     </div>
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">Dirección</Label>
+                                    <Label className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Dirección</Label>
                                     <Input id="direccion_alta" name="direccion" className="h-10 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700" />
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
-                                        <Label className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">Condición IVA</Label>
+                                        <Label className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Condición IVA</Label>
                                         <Select value={condicionIvaAlta} onValueChange={(val) => setCondicionIvaAlta(val || "")}>
-                                            <SelectTrigger className="h-10 bg-slate-50 border-slate-200 text-xs font-medium"><SelectValue /></SelectTrigger>
+                                            <SelectTrigger className="h-10 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-800 text-xs font-medium"><SelectValue /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="Consumidor Final">Consumidor Final</SelectItem>
                                                 <SelectItem value="Responsable Inscripto">Responsable Inscripto</SelectItem>
@@ -353,7 +353,7 @@ export default function ClientesPage() {
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">Notas Internas</Label>
+                                    <Label className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Notas Internas</Label>
                                     <Textarea name="comentarios" className="resize-none h-16 bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-zinc-700 text-sm" />
                                 </div>
 
@@ -370,7 +370,7 @@ export default function ClientesPage() {
                     <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col overflow-hidden">
                         <div className="p-0 overflow-x-auto">
                             <table className="w-full text-sm text-left">
-                                <thead className="bg-slate-50 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800 text-slate-500 uppercase text-[10px] tracking-wider font-bold">
+                                <thead className="bg-slate-50 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-slate-400 uppercase text-[10px] tracking-wider font-bold">
                                     <tr>
                                         <th className="px-6 py-4">Cliente / Razón Social</th>
                                         <th className="px-6 py-4">CUIT / DNI</th>
@@ -397,10 +397,10 @@ export default function ClientesPage() {
                                                 </td>
                                                 <td className="px-6 py-4 font-mono text-xs">{c.dni_cuit || "---"}</td>
                                                 <td className="px-6 py-4 hidden md:table-cell">
-                                                    <Badge variant="outline" className="bg-slate-50 dark:bg-zinc-800 text-slate-500">{c.condicion_iva}</Badge>
+                                                    <Badge variant="outline" className="bg-slate-50 dark:bg-zinc-800 text-slate-500 dark:text-slate-400">{c.condicion_iva}</Badge>
                                                 </td>
-                                                <td className="px-6 py-4 hidden lg:table-cell text-xs text-slate-500 font-mono">{c.comprobante_default?.replace('_', ' ')}</td>
-                                                <td className="px-6 py-4 text-center text-slate-500 text-xs">{c.telefono || "---"}</td>
+                                                <td className="px-6 py-4 hidden lg:table-cell text-xs text-slate-500 dark:text-slate-400 font-mono">{c.comprobante_default?.replace('_', ' ')}</td>
+                                                <td className="px-6 py-4 text-center text-slate-500 dark:text-slate-400 text-xs">{c.telefono || "---"}</td>
                                                 <td className="px-6 py-4 text-right">
                                                     <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
                                                         <Button size="icon" variant="ghost" onClick={() => {
@@ -427,7 +427,7 @@ export default function ClientesPage() {
                    CARPETA DEL CLIENTE (CRM)
                    ========================================================================= */
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-                    <Button variant="outline" onClick={() => setClienteAbierto(null)} className="mb-4 text-slate-600 hover:text-slate-900 bg-white">
+                    <Button variant="outline" onClick={() => setClienteAbierto(null)} className="mb-4 text-slate-600 dark:text-slate-300 hover:text-slate-900 bg-white dark:bg-zinc-900">
                         <ArrowRight className="h-4 w-4 mr-2 rotate-180" /> Volver al Directorio
                     </Button>
                     
@@ -441,7 +441,7 @@ export default function ClientesPage() {
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight">{clienteAbierto.nombre_razon_social}</h3>
-                                        <div className="flex items-center gap-3 mt-1 text-sm text-slate-500 font-medium">
+                                        <div className="flex items-center gap-3 mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">
                                             {clienteAbierto.telefono && <span>📞 {clienteAbierto.telefono}</span>}
                                             {clienteAbierto.dni_cuit && <span>📄 {clienteAbierto.dni_cuit}</span>}
                                         </div>
@@ -463,10 +463,10 @@ export default function ClientesPage() {
                                 </div>
                             ) : (
                                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                                    <TabsList className="bg-slate-100 dark:bg-zinc-800 p-1 mb-6 rounded-lg font-medium text-slate-600">
-                                        <TabsTrigger value="resumen" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">📉 Resumen & Deuda</TabsTrigger>
-                                        <TabsTrigger value="historial" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">📦 Historial Actividad</TabsTrigger>
-                                        <TabsTrigger value="notas" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">📝 Anotaciones</TabsTrigger>
+                                    <TabsList className="bg-slate-100 dark:bg-zinc-800 p-1 mb-6 rounded-lg font-medium text-slate-600 dark:text-slate-300">
+                                        <TabsTrigger value="resumen" className="rounded-md data-[state=active]:bg-white dark:bg-zinc-900 data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">📉 Resumen & Deuda</TabsTrigger>
+                                        <TabsTrigger value="historial" className="rounded-md data-[state=active]:bg-white dark:bg-zinc-900 data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">📦 Historial Actividad</TabsTrigger>
+                                        <TabsTrigger value="notas" className="rounded-md data-[state=active]:bg-white dark:bg-zinc-900 data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">📝 Anotaciones</TabsTrigger>
                                     </TabsList>
 
                                     <TabsContent value="resumen" className="space-y-6 mt-0">
@@ -485,8 +485,8 @@ export default function ClientesPage() {
                                                 </p>
                                             </div>
                                             <div className="bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 p-5 rounded-xl flex flex-col justify-center items-center">
-                                                <p className="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">Balance Neto</p>
-                                                <p className={`text-2xl font-black ${(resumenFinanciero?.balance || 0) > 0 ? 'text-emerald-600' : (resumenFinanciero?.balance || 0) < 0 ? 'text-red-600' : 'text-slate-600'}`}>
+                                                <p className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider mb-2">Balance Neto</p>
+                                                <p className={`text-2xl font-black ${(resumenFinanciero?.balance || 0) > 0 ? 'text-emerald-600' : (resumenFinanciero?.balance || 0) < 0 ? 'text-red-600' : 'text-slate-600 dark:text-slate-300'}`}>
                                                     ${resumenFinanciero?.balance?.toFixed(2) || "0.00"}
                                                 </p>
                                             </div>
@@ -498,7 +498,7 @@ export default function ClientesPage() {
                                                 <div className="flex justify-between items-center mb-4">
                                                     <div>
                                                         <h4 className="text-lg font-bold flex items-center gap-2"><CreditCard className="h-5 w-5 text-indigo-500" /> Ingresar Pago a Cuenta Corriente</h4>
-                                                        <p className="text-xs text-slate-500">Monto total adeudado: ${resumenFinanciero.deuda.toFixed(2)}</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400">Monto total adeudado: ${resumenFinanciero.deuda.toFixed(2)}</p>
                                                     </div>
                                                     <Button variant="outline" size="sm" onClick={handleAddPago} className="h-8 text-xs text-indigo-600 hover:text-indigo-700 font-semibold border-indigo-200 hover:bg-indigo-50">
                                                         <Plus className="h-3 w-3 mr-1" /> Otro Método
@@ -532,12 +532,12 @@ export default function ClientesPage() {
                                                 </div>
 
                                                 <div className="mt-4 space-y-2">
-                                                    <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Notas del Pago (Opcional)</Label>
+                                                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Notas del Pago (Opcional)</Label>
                                                     <Input value={notasPago} onChange={(e) => setNotasPago(e.target.value)} placeholder="Ej: Pago parcial, transferencia banco Galicia..." className="h-9 text-sm" />
                                                 </div>
 
                                                 <div className="mt-6 pt-4 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between">
-                                                    <p className="text-sm font-bold text-slate-500">
+                                                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400">
                                                         Total a Ingresar: <span className="text-lg font-black text-slate-900 dark:text-white">${pagos.reduce((acc, p) => acc + Number(p.monto) || 0, 0).toFixed(2)}</span>
                                                     </p>
                                                     <Button onClick={handleCobrarCtaCte} disabled={procesandoCobro || pagos.reduce((acc, p) => acc + Number(p.monto) || 0, 0) <= 0} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 px-8">
@@ -560,7 +560,7 @@ export default function ClientesPage() {
                                                 <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl max-h-[500px] overflow-y-auto">
                                                     {/* Usaremos el mismo mapeo que el modal viejo, simplificado */}
                                                     <table className="w-full text-sm text-left">
-                                                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 text-slate-500 border-b border-slate-200 dark:border-zinc-800 z-10">
+                                                        <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 sticky top-0 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800 z-10">
                                                             <tr>
                                                                 <th className="px-5 py-3 font-semibold">Fecha</th>
                                                                 <th className="px-5 py-3 font-semibold">Movimiento</th>
@@ -572,7 +572,7 @@ export default function ClientesPage() {
                                                         <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
                                                             {historial.map((item) => (
                                                                 <tr key={item.id_unico} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50">
-                                                                    <td className="px-5 py-3 text-slate-500 font-mono text-xs">{formatFechaHoraLocal(item.fecha)}</td>
+                                                                    <td className="px-5 py-3 text-slate-500 dark:text-slate-400 font-mono text-xs">{formatFechaHoraLocal(item.fecha)}</td>
                                                                     <td className="px-5 py-3 flex items-center gap-3">
                                                                         <div className={`h-8 w-8 rounded-full flex justify-center items-center text-white shrink-0 ${item.tipo === 'VENTA' ? 'bg-indigo-500' : item.tipo === 'DEVOLUCION' ? 'bg-amber-500' : item.tipo === 'CARGO_CC' ? 'bg-red-500' : 'bg-emerald-500'}`}>
                                                                             {item.tipo === 'VENTA' ? <Receipt className="h-3 w-3" /> : <DollarSign className="h-3 w-3" />}
@@ -582,7 +582,7 @@ export default function ClientesPage() {
                                                                             <Badge variant="outline" className={`mt-1 text-[9px] px-1 py-0 ${item.estado === 'PENDIENTE' ? 'border-red-200 text-red-600 bg-red-50' : item.estado === 'PARCIAL' ? 'border-orange-200 text-orange-600 bg-orange-50' : 'border-emerald-200 text-emerald-600 bg-emerald-50'}`}>{item.estado}</Badge>
                                                                         </div>
                                                                     </td>
-                                                                    <td className="px-5 py-3 text-center font-mono text-[9px] text-slate-500 uppercase">
+                                                                    <td className="px-5 py-3 text-center font-mono text-[9px] text-slate-500 dark:text-slate-400 uppercase">
                                                                         {item.cajero}
                                                                     </td>
                                                                     <td className={`px-5 py-3 text-right font-bold ${item.tipo === 'PAGO' || item.tipo === 'DEVOLUCION' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
@@ -606,7 +606,7 @@ export default function ClientesPage() {
 
                                     <TabsContent value="notas" className="mt-0">
                                         <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6">
-                                            <Label className="text-xs font-bold uppercase text-slate-500 mb-2 block">Anotaciones del Cliente</Label>
+                                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-2 block">Anotaciones del Cliente</Label>
                                             <Textarea className="min-h-[200px] text-sm leading-relaxed" readOnly value={clienteAbierto.comentarios || "No hay notas internas registradas para este cliente."} />
                                             <p className="text-xs text-slate-400 mt-2 italic">* Para editar las notas, regresá al directorio y usá el botón del lápiz de edición general.</p>
                                         </div>

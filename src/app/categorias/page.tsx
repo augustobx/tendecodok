@@ -105,7 +105,7 @@ export default function CategoriasPage() {
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Gestión de Categorías</h2>
-                    <p className="text-sm text-slate-500 mt-0.5">Organizá tu inventario en rubros para facilitar la búsqueda.</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Organizá tu inventario en rubros para facilitar la búsqueda.</p>
                 </div>
             </div>
 
@@ -134,7 +134,7 @@ export default function CategoriasPage() {
                                 <div className="space-y-1.5">
                                     <Label className="font-semibold text-sm text-slate-700 dark:text-slate-300">Seleccionar Marca Padre <span className="text-red-500">*</span></Label>
                                     <Select value={marcaId} onValueChange={(v) => setMarcaId(v || "")}>
-                                        <SelectTrigger className="h-11 bg-slate-50 border-slate-200">
+                                        <SelectTrigger className="h-11 bg-slate-50 dark:bg-zinc-800 border-slate-200 dark:border-zinc-800">
                                             <SelectValue placeholder="Elegir marca..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -155,7 +155,7 @@ export default function CategoriasPage() {
                                         type="number" step="0.1" 
                                         value={aumentoPorcentaje}
                                         onChange={(e) => setAumentoPorcentaje(e.target.value)}
-                                        className="h-10 bg-white border-purple-200" 
+                                        className="h-10 bg-white dark:bg-zinc-900 border-purple-200" 
                                         placeholder="Ej: 10"
                                     />
                                     <p className="text-[10px] text-purple-600">Este porcentaje de cascada es exclusivo para esta categoría.</p>
@@ -197,12 +197,12 @@ export default function CategoriasPage() {
                                         <div key={cat.id} className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors group">
                                             <div className="flex items-center gap-4">
                                                 <div className="bg-slate-100 dark:bg-zinc-800 p-2.5 rounded-md shrink-0">
-                                                    <FolderOpen className="h-5 w-5 text-slate-500" />
+                                                    <FolderOpen className="h-5 w-5 text-slate-500 dark:text-slate-400" />
                                                 </div>
                                                 <div>
                                                     <p className="font-bold text-slate-900 dark:text-white text-base">{cat.nombre}</p>
                                                     <div className="flex items-center gap-3 mt-1">
-                                                        <p className="text-xs font-medium text-slate-500 flex items-center gap-1">
+                                                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
                                                             <Tag className="h-3 w-3" /> {cat.marca?.nombre} 
                                                             <span className="text-slate-400 text-[10px]">({cat.marca?.proveedor?.nombre})</span>
                                                         </p>
@@ -220,7 +220,7 @@ export default function CategoriasPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-8 w-8 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10"
+                                                    className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-500/10"
                                                     onClick={() => { 
                                                         setCatEditando(cat); 
                                                         setNombreEdicion(cat.nombre); 
@@ -233,7 +233,7 @@ export default function CategoriasPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
+                                                    className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
                                                     onClick={() => handleEliminar(cat.id, cat.nombre)}
                                                 >
                                                     <Trash2 className="h-4 w-4" />
@@ -266,13 +266,13 @@ export default function CategoriasPage() {
                                     autoFocus
                                     value={nombreEdicion}
                                     onChange={e => setNombreEdicion(e.target.value)}
-                                    className="h-11 border-slate-200"
+                                    className="h-11 border-slate-200 dark:border-zinc-800"
                                 />
                             </div>
                             <div className="space-y-1.5">
                                 <Label className="font-semibold text-sm">Marca Perteneciente</Label>
                                 <Select value={marcaIdEdicion} onValueChange={(v) => setMarcaIdEdicion(v || "")}>
-                                    <SelectTrigger className="h-11 border-slate-200">
+                                    <SelectTrigger className="h-11 border-slate-200 dark:border-zinc-800">
                                         <SelectValue placeholder="Elegir marca..." />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -290,7 +290,7 @@ export default function CategoriasPage() {
                                     type="number" step="0.1" 
                                     value={aumentoPorcentajeEdicion}
                                     onChange={(e) => setAumentoPorcentajeEdicion(e.target.value)}
-                                    className="h-10 bg-white border-purple-200" 
+                                    className="h-10 bg-white dark:bg-zinc-900 border-purple-200" 
                                 />
                             </div>
                             <div className="flex gap-2 pt-2">

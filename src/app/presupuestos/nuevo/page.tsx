@@ -146,11 +146,11 @@ export default function NuevoPresupuestoPage() {
             <div className="flex items-center justify-between bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-5 rounded-2xl shadow-sm">
                 <div className="flex items-center gap-4">
                     <Link href="/presupuestos">
-                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100"><ArrowLeft className="h-5 w-5" /></Button>
+                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-100"><ArrowLeft className="h-5 w-5" /></Button>
                     </Link>
                     <div className="flex items-center gap-3">
                         <div className="bg-emerald-50 p-2 rounded-lg"><ClipboardList className="h-5 w-5 text-emerald-600" /></div>
-                        <div><h2 className="text-xl font-bold text-slate-900">Nuevo Presupuesto</h2><p className="text-sm text-slate-500">Cree una cotización para un cliente.</p></div>
+                        <div><h2 className="text-xl font-bold text-slate-900">Nuevo Presupuesto</h2><p className="text-sm text-slate-500 dark:text-slate-400">Cree una cotización para un cliente.</p></div>
                     </div>
                 </div>
             </div>
@@ -158,16 +158,16 @@ export default function NuevoPresupuestoPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* LEFT — Items */}
                 <div className="lg:col-span-2 space-y-4">
-                    <Card className="shadow-sm border-slate-200 bg-white overflow-hidden flex flex-col">
-                        <div className="p-4 border-b border-slate-200 flex justify-between items-center">
+                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden flex flex-col">
+                        <div className="p-4 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center">
                             <h3 className="font-semibold text-lg">Ítems del Presupuesto</h3>
                             <Button onClick={() => setShowProductoModal(true)} disabled={!listaPrecioSeleccionada} className="bg-emerald-600 hover:bg-emerald-700 text-white">
                                 <PackageSearch className="w-4 h-4 mr-2" /> Buscar Producto
                             </Button>
                         </div>
-                        <div className="overflow-auto bg-slate-50/50 flex-1">
+                        <div className="overflow-auto bg-slate-50 dark:bg-zinc-800/50 flex-1">
                             <table className="w-full text-sm">
-                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 text-slate-500 border-b sticky top-0">
+                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800 text-slate-500 dark:text-slate-400 border-b sticky top-0">
                                     <tr>
                                         <th className="px-4 py-3 text-left">Producto</th>
                                         <th className="px-4 py-3 text-center w-20">Cant.</th>
@@ -183,7 +183,7 @@ export default function NuevoPresupuestoPage() {
                                     ) : carrito.map((item, i) => {
                                         const tipo = (item.tipo_medicion || "UNIDAD") as TipoMedicionType;
                                         return (
-                                            <tr key={i} className="bg-white hover:bg-slate-50">
+                                            <tr key={i} className="bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800">
                                                 <td className="px-4 py-3"><p className="font-semibold text-sm">{item.nombre}</p><p className="text-[11px] text-slate-400 font-mono">{item.codigo}</p></td>
                                                 <td className="px-4 py-3"><Input type="number" step={getStepParaMedicion(tipo)} value={item.cantidad || ""} onChange={(e) => handleActualizarItem(i, "cantidad", e.target.value)} className="h-8 w-18 text-center mx-auto" /></td>
                                                 <td className="px-4 py-3"><Input type="number" step="0.1" value={item.descuento_individual || ""} onChange={(e) => handleActualizarItem(i, "descuento_individual", e.target.value)} className="h-8 w-18 text-center mx-auto" /></td>
@@ -201,31 +201,40 @@ export default function NuevoPresupuestoPage() {
 
                 {/* RIGHT — Config */}
                 <div className="space-y-4">
-                    <Card className="shadow-sm border-slate-200 bg-white">
+                    <Card className="shadow-sm border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
                         <CardHeader className="py-3 px-4 border-b"><CardTitle className="text-sm font-semibold flex items-center gap-2"><User className="h-4 w-4 text-slate-400" /> Cliente y Lista</CardTitle></CardHeader>
                         <CardContent className="p-4 space-y-4">
                             {!clienteSeleccionado ? (
-                                <Button onClick={() => setShowClienteModal(true)} variant="outline" className="w-full h-10 border-dashed hover:border-emerald-400 hover:bg-emerald-50 text-slate-500 font-medium"><Search className="w-4 h-4 mr-2" /> Buscar Cliente</Button>
+                                <Button onClick={() => setShowClienteModal(true)} variant="outline" className="w-full h-10 border-dashed hover:border-emerald-400 hover:bg-emerald-50 text-slate-500 dark:text-slate-400 font-medium"><Search className="w-4 h-4 mr-2" /> Buscar Cliente</Button>
                             ) : (
-                                <div className="bg-slate-50 border rounded-lg p-3 relative">
+                                <div className="bg-slate-50 dark:bg-zinc-800 border rounded-lg p-3 relative">
                                     <Button variant="ghost" size="sm" onClick={() => { setClienteSeleccionado(null); setCarrito([]); }} className="absolute right-1 top-1 h-6 text-[10px] text-slate-400">Cambiar</Button>
                                     <p className="font-bold text-sm pr-12 truncate">{clienteSeleccionado.nombre_razon_social}</p>
-                                    <p className="text-xs text-slate-500 mt-0.5">{clienteSeleccionado.dni_cuit || "S/D"}</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{clienteSeleccionado.dni_cuit || "S/D"}</p>
                                 </div>
                             )}
                             <div className="space-y-1.5">
-                                <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Lista de Precios</Label>
+                                <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Lista de Precios</Label>
                                 <Select value={listaPrecioSeleccionada} onValueChange={(v) => setListaPrecioSeleccionada(v || "")} disabled={!clienteSeleccionado}>
                                     <SelectTrigger className="h-9"><SelectValue placeholder="Seleccione...">{listaObj?.nombre || "Seleccione..."}</SelectValue></SelectTrigger>
-                                    <SelectContent>{listasGlobales.map(l => <SelectItem key={l.id} value={String(l.id)}>{l.nombre}</SelectItem>)}</SelectContent>
+                                    <SelectContent>
+                                        {listasGlobales
+                                            .filter(l => {
+                                                if (!clienteSeleccionado) return true;
+                                                const permitidas = clienteSeleccionado.listas_permitidas || [];
+                                                return l.nombre.toLowerCase() === "consumidor final" || permitidas.some((lp: any) => lp.listaPrecioId === l.id);
+                                            })
+                                            .map(l => <SelectItem key={l.id} value={String(l.id)}>{l.nombre}</SelectItem>)
+                                        }
+                                    </SelectContent>
                                 </Select>
                             </div>
                             <div className="space-y-1.5">
-                                <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Vigencia (días)</Label>
+                                <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Vigencia (días)</Label>
                                 <Input type="number" value={vigenciaDias} onChange={(e) => setVigenciaDias(Number(e.target.value))} className="h-9" />
                             </div>
                             <div className="space-y-1.5">
-                                <Label className="text-[10px] uppercase text-slate-500 font-bold tracking-wider">Notas</Label>
+                                <Label className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-bold tracking-wider">Notas</Label>
                                 <Textarea placeholder="Observaciones..." value={notas} onChange={(e) => setNotas(e.target.value)} className="resize-none h-16 text-sm" />
                             </div>
                         </CardContent>
@@ -233,15 +242,15 @@ export default function NuevoPresupuestoPage() {
 
                     <Card className="shadow-sm border-emerald-200 bg-emerald-50/30">
                         <CardContent className="p-4 space-y-3">
-                            <div className="flex justify-between text-sm"><span className="text-slate-500">Subtotal</span><span className="font-mono">${subtotalCarrito.toFixed(2)}</span></div>
+                            <div className="flex justify-between text-sm"><span className="text-slate-500 dark:text-slate-400">Subtotal</span><span className="font-mono">${subtotalCarrito.toFixed(2)}</span></div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-slate-500">Desc. Global %</span>
+                                <span className="text-sm text-slate-500 dark:text-slate-400">Desc. Global %</span>
                                 <Input type="number" value={descuentoGlobal || ""} onChange={(e) => setDescuentoGlobal(Number(e.target.value))} className="w-20 h-8 text-right" />
                             </div>
                             {descuentoGlobal > 0 && <p className="text-[10px] text-emerald-600 font-semibold text-right">- ${montoDescuento.toFixed(2)}</p>}
                             <Separator />
                             <div className="text-center">
-                                <span className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Total Presupuesto</span>
+                                <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-widest">Total Presupuesto</span>
                                 <p className="text-3xl font-black text-emerald-600">${totalFinal.toFixed(2)}</p>
                             </div>
                             <Button size="lg" onClick={handleGuardar} disabled={isPending || !clienteSeleccionado || carrito.length === 0}
@@ -257,8 +266,8 @@ export default function NuevoPresupuestoPage() {
             {/* MODAL CLIENTE */}
             {showClienteModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
-                    <div className="bg-white w-full max-w-2xl rounded-2xl shadow-xl border border-slate-200 flex flex-col max-h-[85vh]">
-                        <div className="p-4 border-b flex justify-between items-center bg-slate-50/50 rounded-t-2xl">
+                    <div className="bg-white dark:bg-zinc-900 w-full max-w-2xl rounded-2xl shadow-xl border border-slate-200 dark:border-zinc-800 flex flex-col max-h-[85vh]">
+                        <div className="p-4 border-b flex justify-between items-center bg-slate-50 dark:bg-zinc-800/50 rounded-t-2xl">
                             <h3 className="font-semibold flex items-center gap-2"><User className="h-5 w-5 text-emerald-500" /> Buscar Cliente</h3>
                             <Button variant="ghost" size="icon" onClick={() => setShowClienteModal(false)} className="h-8 w-8 rounded-full text-slate-400"><X className="h-4 w-4" /></Button>
                         </div>
@@ -268,8 +277,8 @@ export default function NuevoPresupuestoPage() {
                         <div className="overflow-y-auto p-2 flex-1">
                             {clientesResultados.length === 0 ? <div className="text-center py-12 text-slate-400 text-sm">Escriba para buscar...</div> : (
                                 <div className="space-y-1">{clientesResultados.map(cli => (
-                                    <div key={cli.id} onClick={() => handleSeleccionarCliente(cli)} className="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg cursor-pointer">
-                                        <div><p className="font-semibold text-sm">{cli.nombre_razon_social}</p><p className="text-[11px] text-slate-500">DNI: {cli.dni_cuit || "N/A"}</p></div>
+                                    <div key={cli.id} onClick={() => handleSeleccionarCliente(cli)} className="flex justify-between items-center p-3 hover:bg-slate-50 dark:hover:bg-zinc-800 rounded-lg cursor-pointer">
+                                        <div><p className="font-semibold text-sm">{cli.nombre_razon_social}</p><p className="text-[11px] text-slate-500 dark:text-slate-400">DNI: {cli.dni_cuit || "N/A"}</p></div>
                                         <Badge variant="outline" className="text-[10px]">{cli.lista_default?.nombre || "S/L"}</Badge>
                                     </div>
                                 ))}</div>
@@ -282,14 +291,14 @@ export default function NuevoPresupuestoPage() {
             {/* MODAL PRODUCTO */}
             {showProductoModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in">
-                    <div className="bg-white w-full max-w-4xl rounded-2xl shadow-xl border border-slate-200 flex flex-col max-h-[85vh]">
-                        <div className="p-4 border-b flex justify-between items-center bg-slate-50/50 rounded-t-2xl">
+                    <div className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-2xl shadow-xl border border-slate-200 dark:border-zinc-800 flex flex-col max-h-[85vh]">
+                        <div className="p-4 border-b flex justify-between items-center bg-slate-50 dark:bg-zinc-800/50 rounded-t-2xl">
                             <h3 className="font-semibold flex items-center gap-2"><PackageSearch className="h-5 w-5 text-emerald-500" /> Catálogo de Productos</h3>
                             <Button variant="ghost" size="icon" onClick={() => setShowProductoModal(false)} className="h-8 w-8 rounded-full text-slate-400"><X className="h-4 w-4" /></Button>
                         </div>
                         <div className="p-4 border-b flex gap-4">
                             <div className="relative flex-1"><Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" /><Input autoFocus placeholder="Buscar..." className="pl-9 h-10" value={productoQuery} onChange={(e) => setProductoQuery(e.target.value)} /></div>
-                            <div className="bg-slate-50 px-4 py-2 rounded-lg border text-right shrink-0"><span className="text-[10px] font-bold text-slate-400 block">Lista</span><span className="font-semibold text-sm">{listaObj?.nombre}</span></div>
+                            <div className="bg-slate-50 dark:bg-zinc-800 px-4 py-2 rounded-lg border text-right shrink-0"><span className="text-[10px] font-bold text-slate-400 block">Lista</span><span className="font-semibold text-sm">{listaObj?.nombre}</span></div>
                         </div>
                         <div className="overflow-y-auto p-3 flex-1">
                             {productosResultados.length === 0 ? <div className="text-center py-16 text-slate-400"><PackageSearch className="h-10 w-10 mx-auto mb-3 opacity-20" /><p className="text-sm">Escriba para buscar</p></div> : (
@@ -300,7 +309,7 @@ export default function NuevoPresupuestoPage() {
                                     const margenFinal = (pivot?.margen_personalizado ?? listaGlobal?.margen_defecto ?? 0);
                                     const precio = calcularPrecioConCascada(prod.precio_costo, prod.descuento_proveedor, prod.alicuota_iva, prod.proveedor?.aumento_porcentaje || 0, prod.marca?.aumento_porcentaje || 0, prod.categoria?.aumento_porcentaje || 0, margenFinal);
                                     return (
-                                        <div key={prod.id} className="flex justify-between items-center p-3 rounded-xl border bg-white shadow-sm border-slate-200 hover:border-emerald-200">
+                                        <div key={prod.id} className="flex justify-between items-center p-3 rounded-xl border bg-white dark:bg-zinc-900 shadow-sm border-slate-200 dark:border-zinc-800 hover:border-emerald-200">
                                             <div><p className="font-semibold text-sm">{prod.nombre_producto}</p><Badge variant="outline" className="text-[10px] mt-1">Stock: {formatCantidad(prod.stock_actual, prod.tipo_medicion)} {getUnidadLabel(prod.tipo_medicion)}</Badge></div>
                                             <div className="flex items-center gap-4">
                                                 <div className="text-right"><p className="text-[10px] text-slate-400 uppercase font-bold">Precio</p><p className="font-black text-lg">${precio.toFixed(2)}</p></div>

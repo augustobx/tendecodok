@@ -28,7 +28,7 @@ export default async function TransferenciasPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Movimientos y Transferencias</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Mueva mercadería entre depósitos físicos y audite el historial.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Mueva mercadería entre depósitos físicos y audite el historial.</p>
                     </div>
                 </div>
             </div>

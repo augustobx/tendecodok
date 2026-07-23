@@ -75,16 +75,16 @@ export default function ReportesMaestrosPage() {
                     </div>
                     <div>
                         <h2 className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">Inteligencia de Negocio</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Analíticas completas. Los números no mienten.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Analíticas completas. Los números no mienten.</p>
                     </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto bg-slate-50 dark:bg-zinc-800/50 p-2 rounded-xl border border-slate-200 dark:border-zinc-700">
                     <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-slate-400 ml-2" />
-                        <Input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="h-9 bg-white border-none shadow-sm text-xs font-bold" />
+                        <Input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="h-9 bg-white dark:bg-zinc-900 border-none shadow-sm text-xs font-bold" />
                         <span className="text-slate-400 font-medium text-xs">A</span>
-                        <Input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="h-9 bg-white border-none shadow-sm text-xs font-bold" />
+                        <Input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="h-9 bg-white dark:bg-zinc-900 border-none shadow-sm text-xs font-bold" />
                     </div>
                     <Button onClick={cargarDatos} disabled={isPending} className="w-full sm:w-auto h-9 bg-slate-900 text-white font-bold text-xs shadow-sm px-6">
                         {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : "Analizar"}
@@ -94,22 +94,22 @@ export default function ReportesMaestrosPage() {
 
             {/* 2. PESTAÑAS DE NAVEGACIÓN */}
             <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
-                <Button variant={tabActiva === "RESUMEN" ? "default" : "outline"} onClick={() => setTabActiva("RESUMEN")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "RESUMEN" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600'}`}>
+                <Button variant={tabActiva === "RESUMEN" ? "default" : "outline"} onClick={() => setTabActiva("RESUMEN")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "RESUMEN" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 dark:text-slate-300'}`}>
                     <TrendingUp className="h-4 w-4 mr-2" /> Visión Global
                 </Button>
-                <Button variant={tabActiva === "PRODUCTOS" ? "default" : "outline"} onClick={() => setTabActiva("PRODUCTOS")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "PRODUCTOS" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600'}`}>
+                <Button variant={tabActiva === "PRODUCTOS" ? "default" : "outline"} onClick={() => setTabActiva("PRODUCTOS")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "PRODUCTOS" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 dark:text-slate-300'}`}>
                     <Package className="h-4 w-4 mr-2" /> Productos y Stock
                 </Button>
-                <Button variant={tabActiva === "CLIENTES" ? "default" : "outline"} onClick={() => setTabActiva("CLIENTES")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "CLIENTES" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600'}`}>
+                <Button variant={tabActiva === "CLIENTES" ? "default" : "outline"} onClick={() => setTabActiva("CLIENTES")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "CLIENTES" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 dark:text-slate-300'}`}>
                     <Users className="h-4 w-4 mr-2" /> Top Clientes
                 </Button>
-                <Button variant={tabActiva === "FINANZAS" ? "default" : "outline"} onClick={() => setTabActiva("FINANZAS")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "FINANZAS" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600'}`}>
+                <Button variant={tabActiva === "FINANZAS" ? "default" : "outline"} onClick={() => setTabActiva("FINANZAS")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "FINANZAS" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 dark:text-slate-300'}`}>
                     <Wallet className="h-4 w-4 mr-2" /> Finanzas y Caja
                 </Button>
-                <Button variant={tabActiva === "INFLACION" ? "default" : "outline"} onClick={() => setTabActiva("INFLACION")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "INFLACION" ? 'bg-red-600 text-white' : 'bg-white text-slate-600 border-red-100 hover:bg-red-50 hover:text-red-700'}`}>
+                <Button variant={tabActiva === "INFLACION" ? "default" : "outline"} onClick={() => setTabActiva("INFLACION")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "INFLACION" ? 'bg-red-600 text-white' : 'bg-white text-slate-600 dark:text-slate-300 border-red-100 hover:bg-red-50 hover:text-red-700'}`}>
                     <LineChart className="h-4 w-4 mr-2" /> Auditoría de Inflación
                 </Button>
-                <Button variant={tabActiva === "VOLUMEN" ? "default" : "outline"} onClick={() => setTabActiva("VOLUMEN")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "VOLUMEN" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 border-indigo-100 hover:bg-indigo-50 hover:text-indigo-700'}`}>
+                <Button variant={tabActiva === "VOLUMEN" ? "default" : "outline"} onClick={() => setTabActiva("VOLUMEN")} className={`h-11 rounded-xl px-6 font-bold whitespace-nowrap ${tabActiva === "VOLUMEN" ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 dark:text-slate-300 border-indigo-100 hover:bg-indigo-50 hover:text-indigo-700'}`}>
                     <Droplets className="h-4 w-4 mr-2" /> Volumen Proveedores
                 </Button>
             </div>
@@ -125,7 +125,7 @@ export default function ReportesMaestrosPage() {
                             <CardContent className="p-6">
                                 <p className="text-xs font-bold uppercase text-indigo-600/80 dark:text-indigo-400 tracking-wider">Facturación Total</p>
                                 <h3 className="text-3xl font-black text-slate-900 dark:text-white mt-2">${kpis.ingresosTotales.toFixed(2)}</h3>
-                                <p className="text-xs font-semibold text-slate-500 mt-2">{kpis.ventasTotales} ventas concretadas</p>
+                                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2">{kpis.ventasTotales} ventas concretadas</p>
                             </CardContent>
                         </Card>
 
@@ -141,7 +141,7 @@ export default function ReportesMaestrosPage() {
                             <CardContent className="p-6">
                                 <p className="text-xs font-bold uppercase text-orange-600/80 dark:text-orange-400 tracking-wider flex items-center justify-between">Ticket Promedio <Tag className="h-4 w-4" /></p>
                                 <h3 className="text-3xl font-black text-slate-900 dark:text-white mt-2">${kpis.ticketPromedio.toFixed(2)}</h3>
-                                <p className="text-xs font-semibold text-slate-500 mt-2">Gasto promedio por cliente</p>
+                                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2">Gasto promedio por cliente</p>
                             </CardContent>
                         </Card>
 
@@ -386,7 +386,7 @@ export default function ReportesMaestrosPage() {
                             <CardContent className="p-6">
                                 <p className="text-xs font-bold uppercase text-red-600 dark:text-red-400 tracking-wider flex items-center gap-1"><ArrowUpCircle className="h-4 w-4" /> Inflación Promedio</p>
                                 <h3 className="text-3xl font-black text-slate-900 dark:text-white mt-2">{kpis.inflacionPromedio.toFixed(1)}%</h3>
-                                <p className="text-xs font-semibold text-slate-500 mt-2">Aumento medio en este período.</p>
+                                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2">Aumento medio en este período.</p>
                             </CardContent>
                         </Card>
                         <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 md:col-span-2">
@@ -400,7 +400,7 @@ export default function ReportesMaestrosPage() {
                     <Card className="shadow-sm border-slate-200 dark:border-zinc-800 overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left">
-                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 border-b border-slate-200 dark:border-zinc-800">
+                                <thead className="text-[10px] uppercase tracking-wider bg-slate-50 dark:bg-zinc-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-zinc-800">
                                     <tr>
                                         <th className="px-6 py-4 font-semibold">Fecha y Hora</th>
                                         <th className="px-6 py-4 font-semibold">Producto afectado</th>
@@ -418,7 +418,7 @@ export default function ReportesMaestrosPage() {
                                             const esAumento = hist.porcentaje_cambio > 0;
                                             return (
                                                 <tr key={hist.id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
-                                                    <td className="px-6 py-4 text-xs font-medium text-slate-500">
+                                                    <td className="px-6 py-4 text-xs font-medium text-slate-500 dark:text-slate-400">
                                                         {new Date(hist.fecha).toLocaleDateString('es-AR')} <span className="text-[10px] ml-1">{new Date(hist.fecha).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}</span>
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -426,7 +426,7 @@ export default function ReportesMaestrosPage() {
                                                         <p className="text-[10px] text-slate-400 font-mono">Cód: {hist.producto.codigo_articulo}</p>
                                                     </td>
                                                     <td className="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400">{hist.motivo}</td>
-                                                    <td className="px-6 py-4 text-right font-medium text-slate-500">${hist.precio_costo_anterior.toFixed(2)}</td>
+                                                    <td className="px-6 py-4 text-right font-medium text-slate-500 dark:text-slate-400">${hist.precio_costo_anterior.toFixed(2)}</td>
                                                     <td className="px-6 py-4 text-right font-black text-slate-900 dark:text-white">${hist.precio_costo_nuevo.toFixed(2)}</td>
                                                     <td className="px-6 py-4 text-center">
                                                         <Badge className={`${esAumento ? 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 hover:bg-red-100' : 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100'} font-black`}>

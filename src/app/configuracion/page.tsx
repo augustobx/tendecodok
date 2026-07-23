@@ -90,7 +90,7 @@ export default function ConfiguracionPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight">Configuración de Empresa</h2>
-                        <p className="text-sm text-slate-500 mt-0.5">Datos legales y comerciales para comprobantes e impresión.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Datos legales y comerciales para comprobantes e impresión.</p>
                     </div>
                 </div>
                 <Button onClick={handleSubmit} disabled={isPending} className="bg-slate-900 hover:bg-slate-800 text-white font-medium shadow-sm h-10 px-6 hidden sm:flex">
@@ -110,24 +110,24 @@ export default function ConfiguracionPage() {
                     </CardHeader>
                     <CardContent className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-1.5 sm:col-span-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Razón Social <span className="text-red-500">*</span></Label>
-                            <Input name="razon_social" value={formData.razon_social} onChange={handleChange} className="h-11 font-medium bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Razón Social <span className="text-red-500">*</span></Label>
+                            <Input name="razon_social" value={formData.razon_social} onChange={handleChange} className="h-11 font-medium bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Nombre de Fantasía (Comercial)</Label>
-                            <Input name="nombre_fantasia" value={formData.nombre_fantasia} onChange={handleChange} className="h-11 bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Nombre de Fantasía (Comercial)</Label>
+                            <Input name="nombre_fantasia" value={formData.nombre_fantasia} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">CUIT</Label>
-                            <Input name="cuit" value={formData.cuit} onChange={handleChange} className="h-11 bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">CUIT</Label>
+                            <Input name="cuit" value={formData.cuit} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Condición frente al IVA</Label>
-                            <Input name="condicion_iva" value={formData.condicion_iva} onChange={handleChange} className="h-11 bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Condición frente al IVA</Label>
+                            <Input name="condicion_iva" value={formData.condicion_iva} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Inicio de Actividades</Label>
-                            <Input name="inicio_actividad" value={formData.inicio_actividad} onChange={handleChange} className="h-11 bg-slate-50" placeholder="Ej: 01/01/2024" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Inicio de Actividades</Label>
+                            <Input name="inicio_actividad" value={formData.inicio_actividad} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: 01/01/2024" />
                         </div>
                     </CardContent>
                 </Card>
@@ -141,21 +141,21 @@ export default function ConfiguracionPage() {
                     </CardHeader>
                     <CardContent className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="space-y-1.5 sm:col-span-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Dirección Comercial</Label>
-                            <Input name="direccion" value={formData.direccion} onChange={handleChange} className="h-11 bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Dirección Comercial</Label>
+                            <Input name="direccion" value={formData.direccion} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Teléfono (WhatsApp)</Label>
-                            <Input name="telefono" value={formData.telefono} onChange={handleChange} className="h-11 bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Teléfono (WhatsApp)</Label>
+                            <Input name="telefono" value={formData.telefono} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Redes Sociales</Label>
-                            <Input name="redes_sociales" value={formData.redes_sociales} onChange={handleChange} className="h-11 bg-slate-50" placeholder="Ej: @tendeco.pinturas" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Redes Sociales</Label>
+                            <Input name="redes_sociales" value={formData.redes_sociales} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: @tendeco.pinturas" />
                         </div>
                         <div className="space-y-1.5 sm:col-span-2 pt-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">URL del Logo (Opcional)</Label>
-                            <Input name="logo_url" value={formData.logo_url} onChange={handleChange} className="h-11 bg-slate-50" placeholder="Ej: https://mi-sitio.com/logo.png" />
-                            <p className="text-[10px] text-slate-500 mt-1">Pegá aquí un enlace directo a la imagen de tu logo. Si lo dejás vacío, se mostrará el ícono de la tienda.</p>
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">URL del Logo (Opcional)</Label>
+                            <Input name="logo_url" value={formData.logo_url} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: https://mi-sitio.com/logo.png" />
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Pegá aquí un enlace directo a la imagen de tu logo. Si lo dejás vacío, se mostrará el ícono de la tienda.</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -173,25 +173,25 @@ export default function ConfiguracionPage() {
                                 <input type="checkbox" name="modo_produccion_afip" checked={formData.modo_produccion_afip} onChange={(e) => setFormData({...formData, modo_produccion_afip: e.target.checked})} className="h-5 w-5 accent-emerald-600 rounded" />
                                 <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Modo Producción (AFIP Real)</span>
                             </label>
-                            <p className="text-[10px] text-slate-500 mt-1 ml-7">Si está desactivado, usará el WSFE de Homologación (Pruebas).</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 ml-7">Si está desactivado, usará el WSFE de Homologación (Pruebas).</p>
                         </div>
                         <div className="space-y-1.5 flex flex-col justify-end pb-2">
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Punto de Venta</Label>
-                            <Input name="punto_venta" type="number" value={formData.punto_venta} onChange={handleChange} className="h-11 bg-slate-50" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Punto de Venta</Label>
+                            <Input name="punto_venta" type="number" value={formData.punto_venta} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" />
                         </div>
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-bold uppercase text-slate-500">CUIT Emisor (Facturación)</Label>
-                            <Input name="cuit_facturacion" value={formData.cuit_facturacion} onChange={handleChange} className="h-11 bg-slate-50" placeholder="Ej: 20123456780" />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">CUIT Emisor (Facturación)</Label>
+                            <Input name="cuit_facturacion" value={formData.cuit_facturacion} onChange={handleChange} className="h-11 bg-slate-50 dark:bg-zinc-800" placeholder="Ej: 20123456780" />
                         </div>
                         <div className="space-y-1.5 sm:col-span-2 pt-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Certificado CRT (Texto Completo)</Label>
-                            <textarea name="certificado_crt" value={formData.certificado_crt} onChange={(e: any) => handleChange(e)} className="w-full h-32 p-3 text-xs font-mono bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder={"-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"} />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Certificado CRT (Texto Completo)</Label>
+                            <textarea name="certificado_crt" value={formData.certificado_crt} onChange={(e: any) => handleChange(e)} className="w-full h-32 p-3 text-xs font-mono bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder={"-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"} />
                         </div>
                         <div className="space-y-1.5 sm:col-span-2">
-                            <Label className="text-xs font-bold uppercase text-slate-500">Clave Privada KEY (Texto Completo)</Label>
-                            <textarea name="clave_privada" value={formData.clave_privada} onChange={(e: any) => handleChange(e)} className="w-full h-32 p-3 text-xs font-mono bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder={"-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"} />
+                            <Label className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Clave Privada KEY (Texto Completo)</Label>
+                            <textarea name="clave_privada" value={formData.clave_privada} onChange={(e: any) => handleChange(e)} className="w-full h-32 p-3 text-xs font-mono bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-800 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder={"-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"} />
                         </div>
                     </CardContent>
                 </Card>
